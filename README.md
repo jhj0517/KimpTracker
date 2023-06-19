@@ -1,5 +1,5 @@
 # KimpTracker
-Android Practice Project
+This is an Android project that provides Kimchi-Premium.
 
 ## Technologies
 
