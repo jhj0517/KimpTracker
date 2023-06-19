@@ -10,7 +10,7 @@ This is an Android project that provides Kimchi-Premium.
 | Coroutine | Manages background tasks and makes the app more responsive |
 | Hilt | Manages dependency injection |
 | SharedFlow | Handles data sharing among multiple collectors |
-| Widget | Creates interactive UI elements |
+| Widget | Widget that displays prices right on the home screen |
 | MVVM (Model-View-ViewModel) | Separates the user interface logic from business logic |
 | AWS Lambda | Handles serverless back-end processes |
 | AWS API Gateway | Provides secure and scalable solutions for handling API calls |
