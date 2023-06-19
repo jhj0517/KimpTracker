@@ -1,5 +1,12 @@
 # KimpTracker
-This is an Android project that provides Kimchi-Premium.
+This is an practice Android project that provides cryptocurrency prices and Kimchi-Premium.
+
+## Demo Video
+https://github.com/jhj0517/KimpTracker/assets/97279763/d4a89977-5862-4f22-8631-461352f082e6
+
+## Feature
+- Provide cryptocurrency prices from different platforms and get KimChi-Premium based on the prices, in the form of `RecycleView`.
+- Place widget on home screen so users can see prices/Kimch-Premium directly on home screen without opening app
 
 ## Technologies
 
@@ -17,8 +24,9 @@ This is an Android project that provides Kimchi-Premium.
 
 ## What I learned
 
-- Navigation between fragments without registering icons in the NavBottomBar, achieved through the use of LiveData. This expanded my understanding of Android navigation components.
-- The proper use of SharedFlow for updating data periodically via REST API within the app. This allowed me to efficiently handle data sharing among multiple collectors in a reactive programming paradigm, improving the app's responsiveness and performance.
+- Navigation between fragments without registering icons in the NavBottomBar, achieved through the use of `LiveData`. This expanded my understanding of Android navigation components.
+- The correct use of `SharedFlow` to periodically update data via the REST API within the application. This allowed me to efficiently handle data sharing among multiple collectors in a reactive programming paradigm, improving the app's responsiveness and performance.
+- Using MongoDB Cloud for backend cloud-based database management. This gave me hands-on experience of setting up and managing a cloud-based MongoDB database.
 
-# PlayStore
+## PlayStore
 The app is available on the PlayStore. If you want to see how it works, you can download it here
