@@ -20,3 +20,6 @@ Android Practice Project
 
 - Navigation between fragments without registering icons in the NavBottomBar, achieved through the use of LiveData. This expanded my understanding of Android navigation components.
 - The proper use of SharedFlow for updating data periodically via REST API within the app. This allowed me to efficiently handle data sharing among multiple collectors in a reactive programming paradigm, improving the app's responsiveness and performance.
+
+# PlayStore
+The app is available on the PlayStore. If you want to see how it works, you can download it here
