@@ -13,7 +13,6 @@ This is an Android project that provides Kimchi-Premium.
 | Widget | Widget that displays prices right on the home screen |
 | MVVM (Model-View-ViewModel) | Separates the user interface logic from business logic |
 | AWS Lambda | Handles serverless back-end processes |
-| AWS API Gateway | Provides secure and scalable solutions for handling API calls |
 | MongoDB Cloud | Used for cloud-based database management |
 
 ## What I learned
