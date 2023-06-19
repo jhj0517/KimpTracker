@@ -26,6 +26,7 @@ https://github.com/jhj0517/KimpTracker/assets/97279763/d4a89977-5862-4f22-8631-4
 
 - Navigation between fragments without registering icons in the NavBottomBar, achieved through the use of `LiveData`. This expanded my understanding of Android navigation components.
 - The correct use of `SharedFlow` to periodically update data via the REST API within the application. This allowed me to efficiently handle data sharing among multiple collectors in a reactive programming paradigm, improving the app's responsiveness and performance.
+- What I need to do to make a widget in Android. I need to create `AppWidgetProvider` class and metadata `xml` for it.
 - Using MongoDB Cloud for backend cloud-based database management. This gave me hands-on experience of setting up and managing a cloud-based MongoDB database.
 
 ## PlayStore
