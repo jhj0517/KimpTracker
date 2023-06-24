@@ -4,8 +4,8 @@ from pymongo import MongoClient
 import schedule
 
 """
-This python file is designed to refresh coin price data in the mongodb cloud, and is running on EC2 24hours.
-If you want to clone this project, you will need to set up your own MongoDB Cloud and AWS EC2 instance.
+This python file is designed to update coin price data in the mongodb cloud and runs on EC2 24hours.
+If you want to clone this project, you will need to set up your own MongoDB cloud and AWS EC2 instance.
 """
 
 
