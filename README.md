@@ -6,6 +6,8 @@ https://github.com/jhj0517/KimpTracker/assets/97279763/d4a89977-5862-4f22-8631-4
 
 ## Feature
 - Provide cryptocurrency prices from different platforms and get KimChi-Premium based on the prices, in the form of `RecycleView`.
+
+  **This project has its own backend to store cryptocurrency price data, so if you want to clone this project, you need to set up your own MongoDB cloud and AWS.Check the `backend` folder to see what I've done in the backend!**
 - Place widget on home screen so users can see prices/Kimch-Premium directly on home screen without opening app
 
 ## Technologies
