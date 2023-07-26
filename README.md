@@ -2,7 +2,7 @@
 This is an practice Android project that provides cryptocurrency prices and Kimchi-Premium.
 
 ## Demo Video
-https://github.com/jhj0517/KimpTracker/assets/97279763/d4a89977-5862-4f22-8631-461352f082e6
+https://github.com/jhj0517/KimpTracker/assets/97279763/5d1bdc06-6c9e-4ebf-b0e9-50c6786dbd44
 
 ## Feature
 - Provide cryptocurrency prices from different platforms and get KimChi-Premium based on the prices, in the form of `RecycleView`.
