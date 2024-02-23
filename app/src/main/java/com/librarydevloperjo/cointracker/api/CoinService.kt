@@ -1,7 +1,7 @@
 package com.librarydevloperjo.cointracker.api
 
 import com.librarydevloperjo.cointracker.BuildConfig
-import com.librarydevloperjo.cointracker.data.gson.AllCoinResponse
+import com.librarydevloperjo.cointracker.data.gson.CoinResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,7 +11,7 @@ import retrofit2.http.GET
 interface CoinService {
 
     @GET("CoinTracker_PriceCheck")
-    suspend fun getAllCoin(): AllCoinResponse
+    suspend fun getAllCoin(): CoinResponse
 
     companion object {
         private const val BASE_URL = BuildConfig.BaseURL
