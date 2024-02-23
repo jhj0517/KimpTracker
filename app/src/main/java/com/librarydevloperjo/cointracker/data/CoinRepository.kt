@@ -26,7 +26,7 @@ class CoinRepository @Inject constructor(
                 try {
                     _coinPricesTickFlow.emit(service.getAllCoin().result)
                 } catch (e: Exception){
-                    Log.d("Error during getting coin prices","$e")
+                    Log.d("Error fetching coin prices","$e")
                 }
                 delay(refreshInterval)
             }
