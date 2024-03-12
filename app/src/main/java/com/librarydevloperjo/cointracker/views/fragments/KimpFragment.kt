@@ -6,35 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.MediatorLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.adapters.KpremiumAdapter
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.FragmentKimpBinding
-import com.librarydevloperjo.cointracker.util.MatchCoins
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import com.librarydevloperjo.cointracker.views.dialogfragments.WidgetMakerFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
 
-    private var adapter:KpremiumAdapter = KpremiumAdapter(this)
     private var _binding: FragmentKimpBinding? =null
     private val binding get() = _binding!!
     private val viewmodel: CoinsViewModel by activityViewModels()
     private val uiViewmodel: UIViewModel by activityViewModels()
-    @Inject
-    lateinit var matchcoins:MatchCoins
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,44 +32,47 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        val adapter = KpremiumAdapter(this)
         _binding = FragmentKimpBinding.inflate(inflater, container, false)
         binding.apply {
             rvKimp.layoutManager = LinearLayoutManager(requireActivity())
             rvKimp.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                val i = viewmodel.kPremiumSortState.value!!
-                when(i){
-                    PRICE_ASCENDING -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.upbitPrice })
-                        ivSortprice.setImageResource(R.drawable.sortdescending)
-                        ivSortkp.setImageResource(R.drawable.sort)}
-                    PRICE_DESCENDING -> {sortRV(PRICE_ASCENDING, adapter.currentList.sortedBy { it.upbitPrice })
-                        ivSortprice.setImageResource(R.drawable.sortascending)
-                        ivSortkp.setImageResource(R.drawable.sort)}
-                    else -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.upbitPrice })
-                        ivSortprice.setImageResource(R.drawable.sortdescending)
-                        ivSortkp.setImageResource(R.drawable.sort)}
+                when(viewmodel.kPremiumSortState.value){
+                    PRICE_ASCENDING -> {
+                        sortKimpByDesc = null
+                        sortPriceByDesc = true
+                        viewmodel.kPremiumSortState.value = PRICE_DESCENDING
+                    }
+                    else -> {
+                        sortKimpByDesc = null
+                        sortPriceByDesc = false
+                        viewmodel.kPremiumSortState.value = PRICE_ASCENDING
+                    }
                 }
             }
+
             rootTabkp.setOnClickListener {
-                val i = viewmodel.kPremiumSortState.value!!
-                when(i){
-                    CHANGE_RATE_ASCENDING -> {sortRV(CHANGE_RATE_DESCENDING, adapter.currentList.sortedByDescending { it.kPremium })
-                            ivSortkp.setImageResource(R.drawable.sortdescending)
-                            ivSortprice.setImageResource(R.drawable.sort)}
-                    CHANGE_RATE_DESCENDING -> {sortRV(CHANGE_RATE_ASCENDING, adapter.currentList.sortedBy { it.kPremium })
-                            ivSortkp.setImageResource(R.drawable.sortascending)
-                            ivSortprice.setImageResource(R.drawable.sort)}
-                    else -> {sortRV(CHANGE_RATE_DESCENDING, adapter.currentList.sortedByDescending { it.kPremium })
-                            ivSortkp.setImageResource(R.drawable.sortdescending)
-                            ivSortprice.setImageResource(R.drawable.sort)}
+                when(viewmodel.kPremiumSortState.value){
+                    KIMP_ASCENDING -> {
+                        sortPriceByDesc = null
+                        sortKimpByDesc = true
+                        viewmodel.kPremiumSortState.value = KIMP_DESCENDING
+                    }
+                    else -> {
+                        sortPriceByDesc = null
+                        sortKimpByDesc = false
+                        viewmodel.kPremiumSortState.value = KIMP_ASCENDING
+                    }
                 }
             }
+
             btnSetting.setOnClickListener {
                 uiViewmodel.isInfoFragment.value = true
             }
         }
-        subscribeUI()
+        subscribeUI(adapter)
         return binding.root
     }
 
@@ -95,65 +86,31 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
         dialog.show(requireActivity().supportFragmentManager,"dialog")
     }
 
-    private fun sortRV(state:Int, sorted:List<KPremiumData>){
-        viewmodel.kPremiumSortState.value = state
-        adapter.submitList(sorted){binding.rvKimp.scrollToPosition(0)}
-    }
-
-    private fun subscribeUI(){
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewmodel.coinPricesTickFlow.collectLatest {
-                    val exc = it.exc.get(0).deal_bas_r
-                    val binance = it.binance
-                    val upbits = it.upbit
-                    val list = matchcoins.match(upbits,binance,exc)
-                    viewmodel.kPremiumList.value = list
-                    viewmodel.excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
-                }
-            }
-        }
-
+    private fun subscribeUI(adapter:KpremiumAdapter){
         viewmodel.excRate.observe(viewLifecycleOwner){ exc->
-            binding.tvExcrate.text = getString(R.string.ExcRate) + " : " + exc
+            binding.exc = exc
         }
-        viewmodel.kPremiumList.observe(viewLifecycleOwner){ res ->
-            binding.isLoaded = !res.isNullOrEmpty()
 
-            val list = mutableListOf<KPremiumData>()
-            list.addAll(res)
+        val combined = MediatorLiveData<Pair<ArrayList<KPremiumData>, Int>>()
+        combined.addSource(viewmodel.kPremiumList){newValue ->
+            combined.value = Pair(newValue, viewmodel.kPremiumSortState.value!!)
+        }
+        combined.addSource(viewmodel.kPremiumSortState){newValue->
+            combined.value = Pair(viewmodel.kPremiumList.value!!, newValue)
+        }
 
-            when(viewmodel.kPremiumSortState.value){
-                PRICE_ASCENDING -> list.sortBy { it.upbitPrice }
-                PRICE_DESCENDING -> list.sortByDescending { it.upbitPrice }
-                CHANGE_RATE_ASCENDING -> list.sortBy { it.kPremium }
-                CHANGE_RATE_DESCENDING -> list.sortByDescending { it.kPremium }
-            }
+        combined.observe(viewLifecycleOwner){ (data, state) ->
+            binding.isLoaded = !data.isEmpty()
+            binding.count = "(${data.size})"
 
-            val bookmarks = viewmodel.getAllKData().toMutableList()
-
-            list.forEachIndexed { index,data ->
-                var isSame = false
-                bookmarks.forEach { b ->
-                    if(data.coinName == b.coinName){
-                        isSame = true
-                    }
-                }
-                data.isBookmark = isSame
-                list[index] = data
-            }
-            list.sortByDescending { it.isBookmark }
-
-            adapter.submitList(list)
-            binding.rvKimp.adapter!!.notifyDataSetChanged()
-            binding.tvTotalnum.text = "(${list.size})"
+            val unSorted = ArrayList(data)
+            val sorted = viewmodel.sortByState(state, unSorted)
+            adapter.submitList(sorted)
         }
     }
 
-    companion object {
-        private const val PRICE_ASCENDING = 0
-        private const val PRICE_DESCENDING = 1
-        private const val CHANGE_RATE_ASCENDING = 10
-        private const val CHANGE_RATE_DESCENDING = 11
-    }
 }
+const val PRICE_ASCENDING = 0
+const val PRICE_DESCENDING = 1
+const val KIMP_ASCENDING = 2
+const val KIMP_DESCENDING = 3

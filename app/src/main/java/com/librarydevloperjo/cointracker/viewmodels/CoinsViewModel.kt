@@ -9,9 +9,18 @@ import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.data.gson.Coins
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.data.room.KDataDAO
+import com.librarydevloperjo.cointracker.util.PremiumCalculator
+import com.librarydevloperjo.cointracker.views.fragments.KIMP_ASCENDING
+import com.librarydevloperjo.cointracker.views.fragments.KIMP_DESCENDING
+import com.librarydevloperjo.cointracker.views.fragments.KimpFragment
+import com.librarydevloperjo.cointracker.views.fragments.PRICE_ASCENDING
+import com.librarydevloperjo.cointracker.views.fragments.PRICE_DESCENDING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +39,41 @@ class CoinsViewModel @Inject constructor(
     val upbitList = MutableLiveData(mutableListOf<UpbitCoin>())
     val binanceList = MutableLiveData(mutableListOf<BinanceCoin>())
     val excRate = MutableLiveData<String>()
+
+    init {
+        collectCoinPrices()
+    }
+    private fun collectCoinPrices() {
+        viewModelScope.launch {
+            while (isActive) {
+                coinRepository.coinPricesTickFlow.collect {
+                    val exc = it.exc.get(0).deal_bas_r
+                    val binance = it.binance
+                    val upbits = it.upbit
+                    val unSorted = PremiumCalculator.calculate(upbits,binance,exc)
+                    val sorted = sortByState(kPremiumSortState.value!!, unSorted)
+                    kPremiumList.value = sorted
+                    excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
+                }
+            }
+        }
+    }
+
+    fun sortByState(state:Int, unSorted:ArrayList<KPremiumData>): ArrayList<KPremiumData>{
+        val sorted = when (state){
+            PRICE_DESCENDING -> unSorted.sortedByDescending { it.upbitPrice }
+            PRICE_ASCENDING -> unSorted.sortedBy { it.upbitPrice }
+            KIMP_DESCENDING -> unSorted.sortedByDescending { it.kPremium }
+            KIMP_ASCENDING -> unSorted.sortedBy { it.kPremium }
+            else -> unSorted.sortedByDescending { it.upbitPrice }
+        }
+        val bookmarks = getAllKData().onEach { it.isBookmark = true }
+        val array = ArrayList(sorted)
+        array.removeIf { data ->
+            bookmarks.any { bookmark -> bookmark.coinName == data.coinName}
+        }
+        return ArrayList(bookmarks+array)
+    }
 
     fun insertKData(data: KPremiumData){
         viewModelScope.launch {
