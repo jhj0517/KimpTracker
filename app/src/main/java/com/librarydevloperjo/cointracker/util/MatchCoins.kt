@@ -8,36 +8,36 @@ import javax.inject.Inject
 class MatchCoins @Inject constructor(
     private val preference: PreferenceManager
 ) {
-    // This class is a util class for calculating KPremium and is used in KimpFragment.
+    fun match(upbits:List<UpbitCoin>, binances:List<BinanceCoin>, exc:Double) : ArrayList<KPremiumData>{
 
-    fun match(upbit:List<UpbitCoin>, binance:List<BinanceCoin>, exc:Double) : ArrayList<KPremiumData>{
         val list = arrayListOf<KPremiumData>()
-        upbit.forEach { upbitcoin ->
-            val upbitTicker = upbitcoin.coin.replace("KRW-","")
-            binance.forEach { binancecoin ->
-                val binanceTicker = binancecoin.coin.replace("BUSD","")
-                if(binanceTicker.equals(upbitTicker)){
-                    val upbitKRW = upbitcoin.trade_price
-                    val binanceKRW = binancecoin.price * exc
-                    val kPremium =  (upbitKRW/binanceKRW)*100-100
-                    var name = ""
-                    name = if(preference.getInt(LOCALE_KEY)== LOCALE_KOREAN) upbitcoin.korean_name else upbitcoin.english_name
-                    if(name.isNullOrEmpty()) name = upbitcoin.coin.replace("KRW-","")
 
-                    val data = KPremiumData(
-                        textview_name=name,
-                        coinName = binanceTicker,
-                        korean_name = upbitcoin.korean_name,
-                        english_name = upbitcoin.english_name,
-                        upbitPrice = upbitKRW,
-                        binancePrice = binanceKRW,
-                        kPremium = kPremium,
-                    )
-                    list.add(data)
-                }
-            }
+        val upbitMap = upbits.associateBy { it.coin.replace("KRW-","") }
+        val binanceMap = binances.associateBy { it.coin.replace("BUSD","") }
+
+        val sameKeys = upbitMap.keys.intersect(binanceMap.keys)
+
+        val combinedMap = sameKeys.associateWith { ticker ->
+            Pair(upbitMap[ticker], binanceMap[ticker])
+        }
+
+        combinedMap.forEach { (key, pair) ->
+            val upbit = pair.first!!
+            val binance = pair.second!!
+            val premium = (upbit.trade_price)/(binance.price*exc)*100-100
+            val data = KPremiumData(
+                textview_name = upbit.korean_name,
+                coinName = key,
+                korean_name = upbit.korean_name,
+                english_name = upbit.english_name,
+                upbitPrice = upbit.trade_price,
+                binancePrice = binance.price * exc,
+                kPremium = premium
+            )
+            list.add(data)
         }
         return list
+
     }
 
 }
