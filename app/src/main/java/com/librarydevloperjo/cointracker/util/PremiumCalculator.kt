@@ -3,13 +3,9 @@ package com.librarydevloperjo.cointracker.util
 import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
-import javax.inject.Inject
 
-class MatchCoins @Inject constructor(
-    private val preference: PreferenceManager
-) {
-    fun match(upbits:List<UpbitCoin>, binances:List<BinanceCoin>, exc:Double) : ArrayList<KPremiumData>{
-
+object PremiumCalculator {
+    fun calculate(upbits:List<UpbitCoin>, binances:List<BinanceCoin>, exc:Double) : ArrayList<KPremiumData>{
         val list = arrayListOf<KPremiumData>()
 
         val upbitMap = upbits.associateBy { it.coin.replace("KRW-","") }
@@ -37,7 +33,6 @@ class MatchCoins @Inject constructor(
             list.add(data)
         }
         return list
-
     }
 
 }
