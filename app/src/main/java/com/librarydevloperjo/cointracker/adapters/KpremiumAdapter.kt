@@ -58,10 +58,10 @@ Filterable {
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<KPremiumData>() {
             override fun areContentsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
-                oldItem.ticker == newItem.ticker
+                oldItem == newItem
 
             override fun areItemsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
-                oldItem.ticker == newItem.ticker
+                oldItem == newItem
         }
     }
 
