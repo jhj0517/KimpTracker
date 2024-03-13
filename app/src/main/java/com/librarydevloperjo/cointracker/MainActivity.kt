@@ -33,12 +33,15 @@ class MainActivity : AppCompatActivity() {
             navigation.menu.findItem(R.id.infoFragment).isVisible = false
             navigation.setupWithNavController(navController)
         }
-        if(Locale.getDefault().language.equals("ko")){
-            preference.setInt(LOCALE_KEY, LOCALE_KOREAN)
-        }else{
-            preference.setInt(LOCALE_KEY, LOCALE_ENGLISH)
-        }
+        setLocale()
         setContentView(binding.root)
+    }
+
+    private fun setLocale(){
+        when(Locale.getDefault().language){
+            "ko" -> preference.setInt(LOCALE_KEY, LOCALE_KOREAN)
+            else -> preference.setInt(LOCALE_KEY, LOCALE_ENGLISH)
+        }
     }
 
     override fun onResume() {
