@@ -37,13 +37,13 @@ class CoinsViewModel @Inject constructor(
     private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumData>())
     val kPremiumList get() = _kPremiumList
 
-    val _upbitList = MutableLiveData(mutableListOf<UpbitCoin>())
+    private val _upbitList = MutableLiveData(mutableListOf<UpbitCoin>())
     val upbitList get() = _upbitList
 
-    val _binanceList = MutableLiveData(mutableListOf<BinanceCoin>())
+    private val _binanceList = MutableLiveData(mutableListOf<BinanceCoin>())
     val binanceList get()= _binanceList
 
-    val _excRate = MutableLiveData<String>()
+    private val _excRate = MutableLiveData<String>()
     val excRate get() = _excRate
 
     init {
