@@ -9,12 +9,11 @@ import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.data.gson.Coins
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.data.room.KDataDAO
+import com.librarydevloperjo.cointracker.util.KIMP_ASCENDING
+import com.librarydevloperjo.cointracker.util.KIMP_DESCENDING
+import com.librarydevloperjo.cointracker.util.PRICE_ASCENDING
+import com.librarydevloperjo.cointracker.util.PRICE_DESCENDING
 import com.librarydevloperjo.cointracker.util.PremiumCalculator
-import com.librarydevloperjo.cointracker.views.fragments.KIMP_ASCENDING
-import com.librarydevloperjo.cointracker.views.fragments.KIMP_DESCENDING
-import com.librarydevloperjo.cointracker.views.fragments.KimpFragment
-import com.librarydevloperjo.cointracker.views.fragments.PRICE_ASCENDING
-import com.librarydevloperjo.cointracker.views.fragments.PRICE_DESCENDING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
