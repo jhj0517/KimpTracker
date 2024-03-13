@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.KpremiumAdapter
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.FragmentKimpBinding
+import com.librarydevloperjo.cointracker.util.KIMP_ASCENDING
+import com.librarydevloperjo.cointracker.util.KIMP_DESCENDING
+import com.librarydevloperjo.cointracker.util.PRICE_ASCENDING
+import com.librarydevloperjo.cointracker.util.PRICE_DESCENDING
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
@@ -116,7 +120,3 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
     }
 
 }
-const val PRICE_ASCENDING = 0
-const val PRICE_DESCENDING = 1
-const val KIMP_ASCENDING = 2
-const val KIMP_DESCENDING = 3
