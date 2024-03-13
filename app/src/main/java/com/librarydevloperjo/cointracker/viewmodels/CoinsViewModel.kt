@@ -35,10 +35,17 @@ class CoinsViewModel @Inject constructor(
     val upbitSortState = MutableLiveData(-1)
     val binanceSortState = MutableLiveData(-1)
 
-    val kPremiumList = MutableLiveData(arrayListOf<KPremiumData>())
-    val upbitList = MutableLiveData(mutableListOf<UpbitCoin>())
-    val binanceList = MutableLiveData(mutableListOf<BinanceCoin>())
-    val excRate = MutableLiveData<String>()
+    private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumData>())
+    val kPremiumList get() = _kPremiumList
+
+    val _upbitList = MutableLiveData(mutableListOf<UpbitCoin>())
+    val upbitList get() = _upbitList
+
+    val _binanceList = MutableLiveData(mutableListOf<BinanceCoin>())
+    val binanceList get()= _binanceList
+
+    val _excRate = MutableLiveData<String>()
+    val excRate get() = _excRate
 
     init {
         collectCoinPrices()
@@ -52,8 +59,8 @@ class CoinsViewModel @Inject constructor(
                     val upbits = it.upbit
                     val unSorted = PremiumCalculator.calculate(upbits,binance,exc)
                     val sorted = sortByState(kPremiumSortState.value!!, unSorted)
-                    kPremiumList.value = sorted
-                    excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
+                    _kPremiumList.value = sorted
+                    _excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
                 }
             }
         }
@@ -91,6 +98,6 @@ class CoinsViewModel @Inject constructor(
     fun searchKData(coinName:String) = kDataDAO.searchKData(coinName)
 
     private fun refreshKData(){
-        kPremiumList.value = kPremiumList.value
+        _kPremiumList.value = _kPremiumList.value
     }
 }
