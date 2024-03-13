@@ -114,7 +114,7 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
             binding.count = "(${data.size})"
 
             val unSorted = ArrayList(data)
-            val sorted = viewmodel.sortByState(state, unSorted)
+            val sorted = viewmodel.sortKimpByState(state, unSorted)
             adapter.submitList(sorted)
         }
     }
