@@ -32,8 +32,9 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        val adapter = KpremiumAdapter(this)
         _binding = FragmentKimpBinding.inflate(inflater, container, false)
+
+        val adapter = KpremiumAdapter(this)
         binding.apply {
             rvKimp.layoutManager = LinearLayoutManager(requireActivity())
             rvKimp.adapter = adapter
