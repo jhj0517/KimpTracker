@@ -1,6 +1,5 @@
 package com.librarydevloperjo.cointracker.adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -8,35 +7,26 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
-import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.CellKimpBinding
-import java.text.NumberFormat
-import java.util.*
+import com.librarydevloperjo.cointracker.util.PreferenceManager
+import com.librarydevloperjo.cointracker.viewmodels.KPremiumAdapterViewModel
 import kotlin.collections.ArrayList
 
 
-class KpremiumAdapter (private val clickcallback:ClickCallback):
-    ListAdapter<KPremiumData,KpremiumAdapter.ViewHolder>(diffUtil),Filterable {
+class KpremiumAdapter(
+    private val clickcallback:ClickCallback,
+    private val pref:PreferenceManager
+):ListAdapter<KPremiumData,KpremiumAdapter.ViewHolder>(diffUtil),
+Filterable {
 
     private var list = mutableListOf<KPremiumData>()
 
     inner class ViewHolder(val binding:CellKimpBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(items: KPremiumData){
             with(binding) {
-                if(items.kPremium < 0){
-                    tvKp.setTextColor(Color.parseColor("#416DD8")) // R.color.red
-                    tvUpbitprice.setTextColor(Color.parseColor("#416DD8"))
-                }else if(items.kPremium>0){
-                    tvKp.setTextColor(Color.parseColor("#E8B53333"))
-                    tvUpbitprice.setTextColor(Color.parseColor("#E8B53333"))
-                }
-                if(items.isBookmark!!) ivStar.setImageDrawable(ivStar.context.getDrawable(R.drawable.ratingstar_filled)) else ivStar.setImageDrawable(ivStar.context.getDrawable(R.drawable.ratingstar_empty))
-
-                tvTicker.text = items.ticker
-                tvUpbitprice.text = nFormat.format(items.upbitPrice)
-                tvBinanceprice.text = nFormat.format(items.binancePrice)
-                tvKp.text = nFormat.format(items.kPremium) + " %"
+                viewModel = KPremiumAdapterViewModel(items, pref)
+                executePendingBindings()
             }
         }
 
@@ -73,8 +63,6 @@ class KpremiumAdapter (private val clickcallback:ClickCallback):
             override fun areItemsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
                 oldItem.ticker == newItem.ticker
         }
-
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
     }
 
     fun setData(list: MutableList<KPremiumData>?){
@@ -106,11 +94,6 @@ class KpremiumAdapter (private val clickcallback:ClickCallback):
             submitList(results.values as ArrayList<KPremiumData>)
         }
     }
-
-    init {
-        nFormat.maximumFractionDigits = 3
-    }
-
     interface ClickCallback{
         fun onItemClicked(items: KPremiumData)
     }

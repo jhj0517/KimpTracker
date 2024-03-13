@@ -2,6 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.librarydevloperjo.cointracker.viewmodels.KPremiumAdapterViewModel" />
+    </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="60dp"
@@ -49,7 +54,7 @@
         android:id="@+id/iv_star"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:src="@drawable/ratingstar_empty"
+        app:imageResource="@{viewModel.starImage}"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
@@ -62,11 +67,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="20dp"
-        android:text="비트코인"
+        android:text="@{viewModel.name}"
         android:textSize="13sp"
         android:textColor="?android:textColorPrimary"/>
-
-    M
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/root_price"
@@ -80,7 +83,7 @@
         android:id="@+id/tv_upbitprice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100,000"
+        android:text="@{viewModel.upbitPriceText}"
         android:textSize="13sp"
         android:textStyle="bold"
         android:textColor="?android:textColorPrimary"/>
@@ -89,7 +92,7 @@
         android:id="@+id/tv_binanceprice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1000"
+        android:text="@{viewModel.binancePriceText}"
         android:textSize="10sp"
         android:textStyle="bold"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -101,7 +104,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/tv_tabkp"
-        android:text="10"
+        android:text="@{viewModel.KPremiumText}"
+        android:textColor="@{viewModel.kpTextColor}"
         android:textSize="15sp"
         android:textStyle="bold"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

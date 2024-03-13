@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.KpremiumAdapter
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.FragmentKimpBinding
+import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import com.librarydevloperjo.cointracker.views.dialogfragments.WidgetMakerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
@@ -23,6 +25,9 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
     private val binding get() = _binding!!
     private val viewmodel: CoinsViewModel by activityViewModels()
     private val uiViewmodel: UIViewModel by activityViewModels()
+
+    @Inject
+    lateinit var preference: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +39,7 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
     ): View? {
         _binding = FragmentKimpBinding.inflate(inflater, container, false)
 
-        val adapter = KpremiumAdapter(this)
+        val adapter = KpremiumAdapter(this,preference)
         binding.apply {
             rvKimp.layoutManager = LinearLayoutManager(requireActivity())
             rvKimp.adapter = adapter

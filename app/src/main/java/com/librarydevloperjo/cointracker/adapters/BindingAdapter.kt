@@ -45,3 +45,9 @@ fun bindIsSortByDesc(view: ImageView, isSortByDesc: Boolean?) {
     }
     view.setImageResource(drawableRes)
 }
+
+// need to define this, see : https://stackoverflow.com/questions/35809290/set-drawable-resource-id-in-androidsrc-for-imageview-using-data-binding-in-andr
+@BindingAdapter("imageResource")
+fun setImageResource(imageView: ImageView, resource: Int) {
+    imageView.setImageResource(resource)
+}
