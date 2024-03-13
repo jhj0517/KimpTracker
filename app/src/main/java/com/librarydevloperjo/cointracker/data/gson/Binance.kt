@@ -7,7 +7,7 @@ data class BinanceResponse(
 )
 
 data class BinanceCoin(
-    @field:SerializedName("coin") val coin: String,
+    @field:SerializedName("coin") val ticker: String,
     @field:SerializedName("price") val price: Float,
     @field:SerializedName("lastPrice") val lastPrice: Double,
     @field:SerializedName("priceChangePercent") val priceChangePercent: Double,

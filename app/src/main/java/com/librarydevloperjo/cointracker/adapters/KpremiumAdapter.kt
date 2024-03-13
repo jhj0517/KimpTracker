@@ -13,6 +13,7 @@ import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.CellKimpBinding
 import java.text.NumberFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class KpremiumAdapter (private val clickcallback:ClickCallback):
@@ -32,7 +33,7 @@ class KpremiumAdapter (private val clickcallback:ClickCallback):
                 }
                 if(items.isBookmark!!) ivStar.setImageDrawable(ivStar.context.getDrawable(R.drawable.ratingstar_filled)) else ivStar.setImageDrawable(ivStar.context.getDrawable(R.drawable.ratingstar_empty))
 
-                tvTicker.text = items.textview_name
+                tvTicker.text = items.ticker
                 tvUpbitprice.text = nFormat.format(items.upbitPrice)
                 tvBinanceprice.text = nFormat.format(items.binancePrice)
                 tvKp.text = nFormat.format(items.kPremium) + " %"
@@ -67,10 +68,10 @@ class KpremiumAdapter (private val clickcallback:ClickCallback):
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<KPremiumData>() {
             override fun areContentsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
-                oldItem.coinName == newItem.coinName
+                oldItem.ticker == newItem.ticker
 
             override fun areItemsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
-                oldItem.coinName == newItem.coinName
+                oldItem.ticker == newItem.ticker
         }
 
         val nFormat = NumberFormat.getNumberInstance(Locale.US)
@@ -91,7 +92,7 @@ class KpremiumAdapter (private val clickcallback:ClickCallback):
                 val filterPattern = constraint.toString().lowercase().trim { it <= ' '}
 
                 for (item in list) {
-                    if(item.coinName!!.contains(filterPattern)){
+                    if(item.ticker.contains(filterPattern)){
                         filteredList.add(item)
                     }
                 }
@@ -102,7 +103,7 @@ class KpremiumAdapter (private val clickcallback:ClickCallback):
         }
 
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
-            submitList(results.values as MutableList<KPremiumData>)
+            submitList(results.values as ArrayList<KPremiumData>)
         }
     }
 

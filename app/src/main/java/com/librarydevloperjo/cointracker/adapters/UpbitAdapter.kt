@@ -22,19 +22,19 @@ class UpbitAdapter:
     inner class ViewHolder(val binding: CellUpbitBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(items: UpbitCoin){
             with(binding){
-                tvTicker.text = items.textview_name
-                tvUpbitprice.text = nFormat.format(items.trade_price)
+                tvTicker.text = items.ticker
+                tvUpbitprice.text = nFormat.format(items.tradePrice)
                 var direction = ""
-                if(items.change_rate>0){
+                if(items.changeRate>0){
                     tvChangerate.setTextColor(Color.parseColor("#E8B53333"))
                     tvUpbitprice.setTextColor(Color.parseColor("#E8B53333"))
                     direction = "+"
-                }else if (items.change_rate<0){
+                }else if (items.changeRate<0){
                     tvChangerate.setTextColor(Color.parseColor("#416DD8"))
                     tvUpbitprice.setTextColor(Color.parseColor("#416DD8"))
                     direction = "-"
                 }
-                tvChangerate.text = direction + nFormat.format(items.change_rate) + " %"
+                tvChangerate.text = direction + nFormat.format(items.changeRate) + " %"
             }
         }
 
@@ -75,7 +75,7 @@ class UpbitAdapter:
                 val filterPattern = constraint.toString().lowercase().trim { it <= ' '}
 
                 for (item in list) {
-                    if(item.coin!!.contains(filterPattern)){
+                    if(item.ticker!!.contains(filterPattern)){
                         filteredList.add(item)
                     }
                 }
@@ -93,10 +93,10 @@ class UpbitAdapter:
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<UpbitCoin>() {
             override fun areContentsTheSame(oldItem: UpbitCoin, newItem: UpbitCoin) =
-                oldItem == newItem
+                oldItem.ticker == newItem.ticker
 
             override fun areItemsTheSame(oldItem: UpbitCoin, newItem: UpbitCoin) =
-                oldItem.coin == newItem.coin
+                oldItem.ticker == newItem.ticker
         }
 
         val nFormat = NumberFormat.getNumberInstance(Locale.US)

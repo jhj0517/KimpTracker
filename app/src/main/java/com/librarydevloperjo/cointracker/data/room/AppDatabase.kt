@@ -33,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
                         }
                     }
                 )
-                .allowMainThreadQueries() //임시. 일단 워커로 해야함.
+                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build()
         }

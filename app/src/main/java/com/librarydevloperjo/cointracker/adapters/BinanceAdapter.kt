@@ -20,7 +20,7 @@ class BinanceAdapter:
     inner class ViewHolder(val binding: CellBinanceBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(items: BinanceCoin){
             with(binding) {
-                tvTicker.text = items.coin
+                tvTicker.text = items.ticker
                 val numberWithComma = nFormat.format(items.price)
                 if(numberWithComma.equals("0")) nFormat.maximumFractionDigits = 9 else nFormat.maximumFractionDigits = 3
                 tvPrice.text = numberWithComma
@@ -63,7 +63,7 @@ class BinanceAdapter:
                 val filterPattern = constraint.toString().lowercase().trim { it <= ' '}
 
                 for (item in list) {
-                    if(item.coin!!.contains(filterPattern)){
+                    if(item.ticker!!.contains(filterPattern)){
                         filteredList.add(item)
                     }
                 }
@@ -81,10 +81,10 @@ class BinanceAdapter:
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<BinanceCoin>() {
             override fun areContentsTheSame(oldItem: BinanceCoin, newItem: BinanceCoin) =
-                oldItem == newItem
+                oldItem.ticker == newItem.ticker
 
             override fun areItemsTheSame(oldItem: BinanceCoin, newItem: BinanceCoin) =
-                oldItem.coin == newItem.coin
+                oldItem.ticker == newItem.ticker
         }
 
         val nFormat = NumberFormat.getNumberInstance(Locale.US)

@@ -53,8 +53,8 @@ class WidgetProvider:AppWidgetProvider(){
                     val ticker = preference.getString(WIDGET_COIN_KEY)
 
                     if( ticker != PreferenceManager.DEFAULT_VALUE_STRING) {
-                        val list = PremiumCalculator.calculate(it.upbit,it.binance,it.exc.get(0).deal_bas_r)
-                        val data = list.filter { it.coinName == ticker }.single()
+                        val list = PremiumCalculator.calculate(it.upbit,it.binance,it.exc.get(0).openingPrice)
+                        val data = list.filter { it.ticker == ticker }.single()
 
                         val updatedViews = updateWidget(views, data)
                         appWidgetManager.updateAppWidget(appWidgetId, updatedViews)
@@ -73,7 +73,7 @@ class WidgetProvider:AppWidgetProvider(){
         views.setTextColor(R.id.tv_kimprate_widget, Color.parseColor(textColor))
         views.setTextColor(R.id.tv_upbitprice_widget, Color.parseColor(textColor))
 
-        views.setTextViewText(R.id.tv_coin_widget, data.coinName)
+        views.setTextViewText(R.id.tv_coin_widget, data.ticker)
         views.setTextViewText(R.id.tv_upbitprice_widget, upbitPrice)
         views.setTextViewText(R.id.tv_binanceprice_widget, binancePrice)
         views.setTextViewText(R.id.tv_kimprate_widget, kimp)

@@ -51,13 +51,13 @@ class UpbitFragment : Fragment() {
             rootTabprice.setOnClickListener {
                 val sortState = viewmodel.upbitSortState.value!!
                 when(sortState){
-                    PRICE_ASCENDING -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.trade_price })
+                    PRICE_ASCENDING -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.tradePrice })
                         ivSortprice.setImageResource(R.drawable.sortdescending)
                         ivSortkp.setImageResource(R.drawable.sort)}
-                    PRICE_DESCENDING -> {sortRV(PRICE_ASCENDING, adapter.currentList.sortedBy { it.trade_price })
+                    PRICE_DESCENDING -> {sortRV(PRICE_ASCENDING, adapter.currentList.sortedBy { it.tradePrice })
                         ivSortprice.setImageResource(R.drawable.sortascending)
                         ivSortkp.setImageResource(R.drawable.sort)}
-                    else -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.trade_price })
+                    else -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.tradePrice })
                         ivSortprice.setImageResource(R.drawable.sortdescending)
                         ivSortkp.setImageResource(R.drawable.sort)}
                 }
@@ -65,13 +65,13 @@ class UpbitFragment : Fragment() {
             rootTabChangerate.setOnClickListener {
                 val sortState = viewmodel.upbitSortState.value!!
                 when(sortState){
-                    CHANGE_RATE_ASCENDING -> {sortRV(CHANGE_RATE_DESCENDING, adapter.currentList.sortedByDescending { it.change_rate })
+                    CHANGE_RATE_ASCENDING -> {sortRV(CHANGE_RATE_DESCENDING, adapter.currentList.sortedByDescending { it.changeRate })
                         ivSortkp.setImageResource(R.drawable.sortdescending)
                         ivSortprice.setImageResource(R.drawable.sort)}
-                    CHANGE_RATE_DESCENDING -> {sortRV(CHANGE_RATE_ASCENDING, adapter.currentList.sortedBy { it.change_rate })
+                    CHANGE_RATE_DESCENDING -> {sortRV(CHANGE_RATE_ASCENDING, adapter.currentList.sortedBy { it.changeRate })
                         ivSortkp.setImageResource(R.drawable.sortascending)
                         ivSortprice.setImageResource(R.drawable.sort)}
-                    else -> {sortRV(CHANGE_RATE_DESCENDING, adapter.currentList.sortedByDescending { it.change_rate })
+                    else -> {sortRV(CHANGE_RATE_DESCENDING, adapter.currentList.sortedByDescending { it.changeRate })
                         ivSortkp.setImageResource(R.drawable.sortdescending)
                         ivSortprice.setImageResource(R.drawable.sort)}
                 }
@@ -99,10 +99,10 @@ class UpbitFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewmodel.coinPricesTickFlow.collectLatest {
                     val upbit = it.upbit
-                    upbit.forEach {
-                        it.textview_name = if(prefrence.getInt(LOCALE_KEY)== LOCALE_KOREAN) it.korean_name else it.english_name
-                        if(it.textview_name.isNullOrEmpty()) it.textview_name = it.coin.replace("KRW-","")
-                    }
+//                    upbit.forEach {
+//                        it. = if(prefrence.getInt(LOCALE_KEY)== LOCALE_KOREAN) it.korean_name else it.english_name
+//                        if(it.textview_name.isNullOrEmpty()) it.textview_name = it.coin.replace("KRW-","")
+//                    }
                     viewmodel.upbitList.value = upbit
                 }
             }
@@ -111,10 +111,10 @@ class UpbitFragment : Fragment() {
             binding.isLoaded = !upbit.isNullOrEmpty()
 
             when(viewmodel.upbitSortState.value){
-                PRICE_ASCENDING -> upbit.sortBy { it.trade_price }
-                PRICE_DESCENDING -> upbit.sortByDescending { it.trade_price }
-                CHANGE_RATE_ASCENDING -> upbit.sortBy { it.change_rate }
-                CHANGE_RATE_DESCENDING -> upbit.sortByDescending { it.change_rate }
+                PRICE_ASCENDING -> upbit.sortBy { it.tradePrice }
+                PRICE_DESCENDING -> upbit.sortByDescending { it.tradePrice }
+                CHANGE_RATE_ASCENDING -> upbit.sortBy { it.changeRate }
+                CHANGE_RATE_DESCENDING -> upbit.sortByDescending { it.changeRate }
             }
             adapter.submitList(upbit)
             binding.tvTotalnum.text = "(${upbit.size})"

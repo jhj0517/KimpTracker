@@ -52,7 +52,7 @@ class WidgetMakerFragment : DialogFragment() {
 
             binding.apply {
                 coin?.let { coin->
-                    tvCoinname.text = coin.textview_name
+                    tvCoinname.text = coin.ticker
                     tvUpbitprice.text = nFormat.format(coin.upbitPrice)
                     tvBinanceprice.text = nFormat.format(coin.binancePrice)
                     tvKimprate.text = nFormat.format(coin.kPremium)
@@ -65,7 +65,7 @@ class WidgetMakerFragment : DialogFragment() {
                         tvKimprate.setTextColor(Color.parseColor("#416DD8"))
                     }
 
-                    val data = viewmodel.searchKData(coin.coinName)
+                    val data = viewmodel.searchKData(coin.ticker)
                     if(data.isNullOrEmpty()){
                         ivStar.setImageResource(R.drawable.ratingstar_empty)
                     }else{
@@ -74,20 +74,20 @@ class WidgetMakerFragment : DialogFragment() {
                 }
 
                 btnWidget.setOnClickListener {
-                    preference.setString(WIDGET_COIN_KEY,coin!!.coinName)
+                    preference.setString(WIDGET_COIN_KEY,coin!!.ticker)
                     Toast.makeText(requireActivity(),
-                        resources.getString(R.string.widgetisadded,coin!!.textview_name),
+                        resources.getString(R.string.widgetisadded,coin!!.ticker),
                         Toast.LENGTH_LONG).show()
                 }
 
                 rootStar.setOnClickListener {
                     coin?.let {
-                        val data = viewmodel.searchKData(it.coinName)
+                        val data = viewmodel.searchKData(it.ticker)
                         if(data.isEmpty()){
                             viewmodel.insertKData(it)
                             ivStar.setImageResource(R.drawable.ratingstar_filled)
                         }else{
-                            viewmodel.deleteKData(it.coinName)
+                            viewmodel.deleteKData(it.ticker)
                             ivStar.setImageResource(R.drawable.ratingstar_empty)
                         }
                     }

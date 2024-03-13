@@ -7,7 +7,6 @@ data class ExchangeRateResponse(
 )
 
 data class ExchangeRate(
-    @field:SerializedName("openingPrice") val deal_bas_r: Double,
+    @field:SerializedName("openingPrice") val openingPrice: Double,
     @field:SerializedName("change") val change: String,
-
 )

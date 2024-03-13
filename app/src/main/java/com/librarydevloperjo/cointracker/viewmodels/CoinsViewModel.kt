@@ -47,7 +47,7 @@ class CoinsViewModel @Inject constructor(
         viewModelScope.launch {
             while (isActive) {
                 coinRepository.coinPricesTickFlow.collect {
-                    val exc = it.exc.get(0).deal_bas_r
+                    val exc = it.exc.get(0).openingPrice
                     val binance = it.binance
                     val upbits = it.upbit
                     val unSorted = PremiumCalculator.calculate(upbits,binance,exc)
@@ -70,7 +70,7 @@ class CoinsViewModel @Inject constructor(
         val bookmarks = getAllKData().onEach { it.isBookmark = true }
         val array = ArrayList(sorted)
         array.removeIf { data ->
-            bookmarks.any { bookmark -> bookmark.coinName == data.coinName}
+            bookmarks.any { bookmark -> bookmark.ticker == data.ticker}
         }
         return ArrayList(bookmarks+array)
     }
