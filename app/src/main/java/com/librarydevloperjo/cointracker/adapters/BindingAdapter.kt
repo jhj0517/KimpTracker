@@ -5,6 +5,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.librarydevloperjo.cointracker.R
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean?) {
@@ -32,4 +33,15 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(view)
     }
+}
+
+
+@BindingAdapter("isSortByDesc")
+fun bindIsSortByDesc(view: ImageView, isSortByDesc: Boolean?) {
+    val drawableRes = when (isSortByDesc) {
+        true -> R.drawable.sortdescending
+        false -> R.drawable.sortascending
+        null -> R.drawable.sort
+    }
+    view.setImageResource(drawableRes)
 }
