@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.databinding.CellBinanceBinding
+import com.librarydevloperjo.cointracker.viewmodels.BinanceAdapterViewModel
 import java.text.NumberFormat
 import java.util.*
 
@@ -20,10 +21,8 @@ class BinanceAdapter:
     inner class ViewHolder(val binding: CellBinanceBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(items: BinanceCoin){
             with(binding) {
-                tvTicker.text = items.ticker
-                val numberWithComma = nFormat.format(items.price)
-                if(numberWithComma.equals("0")) nFormat.maximumFractionDigits = 9 else nFormat.maximumFractionDigits = 3
-                tvPrice.text = numberWithComma
+                viewModel = BinanceAdapterViewModel(items)
+                executePendingBindings()
             }
         }
 
@@ -86,11 +85,5 @@ class BinanceAdapter:
             override fun areItemsTheSame(oldItem: BinanceCoin, newItem: BinanceCoin) =
                 oldItem.ticker == newItem.ticker
         }
-
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
-    }
-
-    init {
-        nFormat.maximumFractionDigits = 3
     }
 }
