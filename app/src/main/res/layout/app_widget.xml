@@ -1,123 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.MySampleApp.AppWidgetContainer"
+    android:background="@color/bggrey">
+
+    <TextView
+        android:id="@+id/tv_coin_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/root_datas"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/appwidget_text"
+        android:fontFamily="@font/aritadotum"
+        android:text="코인"
+        android:textColor="@color/white"
+        android:textSize="45sp"
+        android:textStyle="bold" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:theme="@style/Theme.MySampleApp.AppWidgetContainer"
-        android:background="@color/bggrey">
+        android:id="@+id/root_datas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+    <RelativeLayout
+        android:id="@+id/root_trade_prices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp">
 
         <TextView
-            android:id="@+id/tv_coin_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/root_datas"
-            android:layout_centerHorizontal="true"
-            android:contentDescription="@string/appwidget_text"
-            android:fontFamily="@font/aritadotum"
-            android:text="코인"
-            android:textColor="@color/white"
-            android:textSize="45sp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:id="@+id/root_datas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true">
-
-        <RelativeLayout
-            android:id="@+id/root_trade_prices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="0dp">
-
-            <TextView
-                android:id="@+id/tv_upbit_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/appwidget_text"
-                android:text="@string/upbit"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold|italic" />
-
-            <TextView
-                android:id="@+id/tv_upbitprice_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_upbit_widget"
-                android:layout_marginStart="8dp"
-                android:contentDescription="@string/appwidget_text"
-                android:text="000"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold|italic" />
-
-            <TextView
-                android:id="@+id/tv_binance_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_upbitprice_widget"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/appwidget_text"
-                android:text="@string/binance"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold|italic" />
-
-            <TextView
-                android:id="@+id/tv_binanceprice_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_binance_widget"
-                android:layout_marginStart="8dp"
-                android:contentDescription="@string/appwidget_text"
-                android:text="000"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold|italic" />
-            </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/root_kimp_prices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/root_trade_prices"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="18dp">
-
-        <TextView
-            android:id="@+id/tv_kimp_widget"
+            android:id="@+id/tv_upbit_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/appwidget_text"
-            android:text="@string/menu_kimp"
+            android:text="@string/upbit"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold|italic" />
 
-            <TextView
-                android:id="@+id/tv_kimprate_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_kimp_widget"
-                android:layout_marginStart="3dp"
-                android:contentDescription="@string/appwidget_text"
-                android:text="000"
-                android:textColor="@color/white"
-                android:textSize="37sp"
-                android:textStyle="bold|italic" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_upbitprice_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_upbit_widget"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/appwidget_text"
+            android:text="000"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/tv_binance_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_upbitprice_widget"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/appwidget_text"
+            android:text="@string/binance"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/tv_binanceprice_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_binance_widget"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/appwidget_text"
+            android:text="000"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold|italic" />
         </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/root_kimp_prices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/root_trade_prices"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp">
+
+    <TextView
+        android:id="@+id/tv_kimp_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/appwidget_text"
+        android:text="@string/menu_kimp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold|italic" />
+
+        <TextView
+            android:id="@+id/tv_kimprate_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_kimp_widget"
+            android:layout_marginStart="3dp"
+            android:contentDescription="@string/appwidget_text"
+            android:text="000"
+            android:textColor="@color/white"
+            android:textSize="37sp"
+            android:textStyle="bold|italic" />
     </RelativeLayout>
-</layout>
+    </RelativeLayout>
+
+</RelativeLayout>
