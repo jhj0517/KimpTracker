@@ -57,7 +57,7 @@ class CoinsViewModel @Inject constructor(
                     val binance = it.binance
                     val upbits = it.upbit
                     val unSorted = PremiumCalculator.calculate(upbits,binance,exc)
-                    val sorted = sortKimpByState(kPremiumSortState.value!!, unSorted)
+                    val sorted = sortByState(kPremiumSortState.value!!, unSorted)
                     _kPremiumList.value = sorted
                     _excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
                 }
@@ -65,7 +65,7 @@ class CoinsViewModel @Inject constructor(
         }
     }
 
-    fun sortKimpByState(state:Int, unSorted:ArrayList<KPremiumData>): ArrayList<KPremiumData>{
+    fun sortByState(state:Int, unSorted:ArrayList<KPremiumData>): ArrayList<KPremiumData>{
         val sorted = when (state){
             PRICE_DESCENDING -> unSorted.sortedByDescending { it.upbitPrice }
             PRICE_ASCENDING -> unSorted.sortedBy { it.upbitPrice }
