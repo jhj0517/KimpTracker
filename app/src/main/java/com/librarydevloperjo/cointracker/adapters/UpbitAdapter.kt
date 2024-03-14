@@ -10,31 +10,25 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.databinding.CellUpbitBinding
+import com.librarydevloperjo.cointracker.util.PreferenceManager
+import com.librarydevloperjo.cointracker.viewmodels.UpbitAdapterViewModel
 import java.text.NumberFormat
 import java.util.*
 
 
-class UpbitAdapter:
-    ListAdapter<UpbitCoin, UpbitAdapter.ViewHolder>(diffUtil),Filterable {
+class UpbitAdapter(
+    private val preferenceManager: PreferenceManager
+):
+ListAdapter<UpbitCoin, UpbitAdapter.ViewHolder>(diffUtil)
+,Filterable {
 
     private var list = mutableListOf<UpbitCoin>()
 
     inner class ViewHolder(val binding: CellUpbitBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(items: UpbitCoin){
             with(binding){
-                tvTicker.text = items.ticker
-                tvUpbitprice.text = nFormat.format(items.tradePrice)
-                var direction = ""
-                if(items.changeRate>0){
-                    tvChangerate.setTextColor(Color.parseColor("#E8B53333"))
-                    tvUpbitprice.setTextColor(Color.parseColor("#E8B53333"))
-                    direction = "+"
-                }else if (items.changeRate<0){
-                    tvChangerate.setTextColor(Color.parseColor("#416DD8"))
-                    tvUpbitprice.setTextColor(Color.parseColor("#416DD8"))
-                    direction = "-"
-                }
-                tvChangerate.text = direction + nFormat.format(items.changeRate) + " %"
+                viewModel = UpbitAdapterViewModel(items, preferenceManager)
+                executePendingBindings()
             }
         }
 
@@ -98,12 +92,6 @@ class UpbitAdapter:
             override fun areItemsTheSame(oldItem: UpbitCoin, newItem: UpbitCoin) =
                 oldItem.ticker == newItem.ticker
         }
-
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
-    }
-
-    init {
-        nFormat.maximumFractionDigits = 3
     }
 
 }
