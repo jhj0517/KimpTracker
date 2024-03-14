@@ -15,5 +15,5 @@ interface KDataDAO {
 
     //@Delete
     @Query("DELETE FROM kdata WHERE ticker = :ticker")
-    suspend fun deleteKData(ticker:String)
+    suspend fun deleteBookMark(ticker:String)
 }

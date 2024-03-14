@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.librarydevloperjo.cointracker.data.*
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
-import com.librarydevloperjo.cointracker.data.gson.Coins
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.data.room.KDataDAO
 import com.librarydevloperjo.cointracker.util.*
@@ -95,20 +94,20 @@ class CoinsViewModel @Inject constructor(
         return ArrayList(sorted)
     }
 
-    fun insertKData(data: KPremiumData){
+    fun insertBookMark(data: KPremiumData){
         viewModelScope.launch {
             kDataDAO.insertBookMark(data)
             refreshKData()
         }
     }
-    fun deleteKData(coinName:String){
+    fun deleteBookMark(coinName:String){
         viewModelScope.launch {
-            kDataDAO.deleteKData(coinName)
+            kDataDAO.deleteBookMark(coinName)
             refreshKData()
         }
     }
     private fun getAllBookMarks() = kDataDAO.getAllBookMarks()
-    fun searchKData(coinName:String) = kDataDAO.queryBookMarks(coinName)
+    fun queryBookMarks(coinName:String) = kDataDAO.queryBookMarks(coinName)
 
     private fun refreshKData(){
         _kPremiumList.value = _kPremiumList.value

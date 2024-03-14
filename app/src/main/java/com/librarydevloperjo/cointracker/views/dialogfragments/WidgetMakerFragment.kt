@@ -3,7 +3,6 @@ package com.librarydevloperjo.cointracker.views.dialogfragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -53,7 +52,7 @@ class WidgetMakerFragment : DialogFragment() {
 
             binding.apply {
                 viewModel = viewmodel
-                isStar = coinsViewModel.searchKData(coin?.ticker?:"").isNotEmpty()
+                isStar = coinsViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
 
                 btnWidget.setOnClickListener {
                     preference.setString(WIDGET_COIN_KEY,coin!!.ticker)
@@ -63,12 +62,12 @@ class WidgetMakerFragment : DialogFragment() {
                 }
 
                 rootStar.setOnClickListener {
-                    val data = coinsViewModel.searchKData(coin?.ticker?:"")
+                    val data = coinsViewModel.queryBookMarks(coin?.ticker?:"")
                     if(data.isEmpty()){
-                        coinsViewModel.insertKData(coin!!)
+                        coinsViewModel.insertBookMark(coin!!)
                         isStar = true
                     }else{
-                        coinsViewModel.deleteKData(coin!!.ticker)
+                        coinsViewModel.deleteBookMark(coin!!.ticker)
                         isStar = false
                     }
                 }
