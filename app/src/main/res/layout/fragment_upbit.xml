@@ -8,6 +8,16 @@
         <variable
             name="isLoaded"
             type="boolean" />
+        <variable
+            name="sortPriceByDesc"
+            type="Boolean" />
+        <variable
+            name="sortChangeRateByDesc"
+            type="Boolean" />
+
+        <variable
+            name="count"
+            type="String" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,7 +76,7 @@
         android:id="@+id/tv_totalnum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="()"
+        android:text="@{count}"
         app:layout_constraintBottom_toTopOf="@id/root_tab"
         app:layout_constraintLeft_toLeftOf="parent"
         android:fontFamily="@font/aritadotum_medium"
@@ -120,6 +130,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/tv_tabprice"
                 android:layout_marginLeft="3dp"
+                app:isSortByDesc="@{sortPriceByDesc}"
                 android:src="@drawable/sort"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -151,6 +162,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/tv_tabkp"
                 android:layout_marginLeft="3dp"
+                isSortByDesc="@{sortChangeRateByDesc}"
                 android:src="@drawable/sort"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
