@@ -101,21 +101,17 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
             binding.exc = exc
         }
 
-        val combined = MediatorLiveData<Pair<ArrayList<KPremiumData>, Int>>()
-        combined.addSource(viewmodel.kPremiumList){newValue ->
-            combined.value = Pair(newValue, viewmodel.kPremiumSortState.value!!)
-        }
-        combined.addSource(viewmodel.kPremiumSortState){newValue->
-            combined.value = Pair(viewmodel.kPremiumList.value!!, newValue)
-        }
+        viewmodel.kPremiumList.observe(viewLifecycleOwner){
+            binding.isLoaded = !it.isEmpty()
+            binding.count = "(${it.size})"
 
-        combined.observe(viewLifecycleOwner){ (data, state) ->
-            binding.isLoaded = !data.isEmpty()
-            binding.count = "(${data.size})"
-
-            val unSorted = ArrayList(data)
-            val sorted = viewmodel.sortByState(state, unSorted)
+            val sorted = viewmodel.sortKimpByState(viewmodel.kPremiumSortState.value!!, it)
             adapter.submitList(sorted)
+        }
+
+        viewmodel.kPremiumSortState.observe(viewLifecycleOwner){
+            val sorted = viewmodel.sortKimpByState(it, viewmodel.kPremiumList.value!!)
+            adapter.submitList(sorted){binding.rvKimp.scrollToPosition(0)}
         }
     }
 
