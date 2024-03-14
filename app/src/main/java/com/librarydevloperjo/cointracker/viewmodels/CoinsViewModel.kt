@@ -71,7 +71,7 @@ class CoinsViewModel @Inject constructor(
             KIMP_ASCENDING -> unSorted.sortedBy { it.kPremium }
             else -> unSorted.sortedByDescending { it.upbitPrice }
         }
-        val bookmarks = getAllKData().onEach { it.isBookmark = true }
+        val bookmarks = getAllBookMarks().onEach { it.isBookmark = true }
         val array = ArrayList(sorted)
         array.removeIf { data ->
             bookmarks.any { bookmark -> bookmark.ticker == data.ticker}
@@ -100,7 +100,7 @@ class CoinsViewModel @Inject constructor(
 
     fun insertKData(data: KPremiumData){
         viewModelScope.launch {
-            kDataDAO.insertKData(data)
+            kDataDAO.insertBookMark(data)
             refreshKData()
         }
     }
@@ -110,8 +110,8 @@ class CoinsViewModel @Inject constructor(
             refreshKData()
         }
     }
-    fun getAllKData() = kDataDAO.getAllKData()
-    fun searchKData(coinName:String) = kDataDAO.searchKData(coinName)
+    private fun getAllBookMarks() = kDataDAO.getAllBookMarks()
+    fun searchKData(coinName:String) = kDataDAO.queryBookMarks(coinName)
 
     private fun refreshKData(){
         _kPremiumList.value = _kPremiumList.value

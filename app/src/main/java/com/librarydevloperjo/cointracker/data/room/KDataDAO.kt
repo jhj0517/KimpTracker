@@ -5,13 +5,13 @@ import androidx.room.*
 @Dao
 interface KDataDAO {
     @Query("SELECT * FROM kdata")
-    fun getAllKData():List<KPremiumData>
+    fun getAllBookMarks():List<KPremiumData>
 
     @Query("SELECT * FROM kdata WHERE ticker = :ticker")
-    fun searchKData(ticker:String):List<KPremiumData>
+    fun queryBookMarks(ticker:String):List<KPremiumData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertKData(kdata: KPremiumData)
+    suspend fun insertBookMark(kdata: KPremiumData)
 
     //@Delete
     @Query("DELETE FROM kdata WHERE ticker = :ticker")
