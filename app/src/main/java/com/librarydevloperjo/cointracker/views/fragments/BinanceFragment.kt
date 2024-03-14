@@ -21,8 +21,8 @@ class BinanceFragment : Fragment() {
 
     private var _binding: FragmentBinanceBinding?=null
     private val binding get() = _binding!!
-    private val viewmodel: CoinsViewModel by activityViewModels()
-    private val uiViewmodel: UIViewModel by activityViewModels()
+    private val viewModel: CoinsViewModel by activityViewModels()
+    private val uiViewModel: UIViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,20 +39,20 @@ class BinanceFragment : Fragment() {
             rvBinance.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                when(viewmodel.binanceSortState.value){
+                when(viewModel.binanceSortState.value){
                     PRICE_ASCENDING -> {
                         sortPriceByDesc = true
-                        viewmodel.binanceSortState.value = PRICE_DESCENDING
+                        viewModel.binanceSortState.value = PRICE_DESCENDING
                     }
                     else -> {
                         sortPriceByDesc = false
-                        viewmodel.binanceSortState.value = PRICE_ASCENDING
+                        viewModel.binanceSortState.value = PRICE_ASCENDING
                     }
                 }
             }
 
             btnSetting.setOnClickListener {
-                uiViewmodel.isInfoFragment.value = true
+                uiViewModel.isInfoFragment.value = true
             }
         }
         subscribeUI(adapter)
@@ -65,16 +65,16 @@ class BinanceFragment : Fragment() {
     }
 
     private fun subscribeUI(adapter: BinanceAdapter){
-        viewmodel.binanceList.observe(viewLifecycleOwner){
+        viewModel.binanceList.observe(viewLifecycleOwner){
             binding.isLoaded = it.isNotEmpty()
             binding.tvTotalnum.text = "(${it.size})"
 
-            val sorted = viewmodel.sortBinanceByState(viewmodel.binanceSortState.value!!, it)
+            val sorted = viewModel.sortBinanceByState(viewModel.binanceSortState.value!!, it)
             adapter.submitList(sorted)
         }
 
-        viewmodel.binanceSortState.observe(viewLifecycleOwner){
-            val sorted = viewmodel.sortBinanceByState(it, viewmodel.binanceList.value!!)
+        viewModel.binanceSortState.observe(viewLifecycleOwner){
+            val sorted = viewModel.sortBinanceByState(it, viewModel.binanceList.value!!)
             adapter.submitList(sorted){ binding.rvBinance.scrollToPosition(0) }
         }
     }

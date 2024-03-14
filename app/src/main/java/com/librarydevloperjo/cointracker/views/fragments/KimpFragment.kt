@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MediatorLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.KpremiumAdapter
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
@@ -27,8 +26,8 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
 
     private var _binding: FragmentKimpBinding? =null
     private val binding get() = _binding!!
-    private val viewmodel: CoinsViewModel by activityViewModels()
-    private val uiViewmodel: UIViewModel by activityViewModels()
+    private val viewModel: CoinsViewModel by activityViewModels()
+    private val uiViewModel: UIViewModel by activityViewModels()
 
     @Inject
     lateinit var preference: PreferenceManager
@@ -49,37 +48,37 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
             rvKimp.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                when(viewmodel.kPremiumSortState.value){
+                when(viewModel.kPremiumSortState.value){
                     PRICE_ASCENDING -> {
                         sortKimpByDesc = null
                         sortPriceByDesc = true
-                        viewmodel.kPremiumSortState.value = PRICE_DESCENDING
+                        viewModel.kPremiumSortState.value = PRICE_DESCENDING
                     }
                     else -> {
                         sortKimpByDesc = null
                         sortPriceByDesc = false
-                        viewmodel.kPremiumSortState.value = PRICE_ASCENDING
+                        viewModel.kPremiumSortState.value = PRICE_ASCENDING
                     }
                 }
             }
 
             rootTabkp.setOnClickListener {
-                when(viewmodel.kPremiumSortState.value){
+                when(viewModel.kPremiumSortState.value){
                     KIMP_ASCENDING -> {
                         sortPriceByDesc = null
                         sortKimpByDesc = true
-                        viewmodel.kPremiumSortState.value = KIMP_DESCENDING
+                        viewModel.kPremiumSortState.value = KIMP_DESCENDING
                     }
                     else -> {
                         sortPriceByDesc = null
                         sortKimpByDesc = false
-                        viewmodel.kPremiumSortState.value = KIMP_ASCENDING
+                        viewModel.kPremiumSortState.value = KIMP_ASCENDING
                     }
                 }
             }
 
             btnSetting.setOnClickListener {
-                uiViewmodel.isInfoFragment.value = true
+                uiViewModel.isInfoFragment.value = true
             }
         }
         subscribeUI(adapter)
@@ -97,20 +96,20 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
     }
 
     private fun subscribeUI(adapter:KpremiumAdapter){
-        viewmodel.excRate.observe(viewLifecycleOwner){ exc->
+        viewModel.excRate.observe(viewLifecycleOwner){ exc->
             binding.exc = exc
         }
 
-        viewmodel.kPremiumList.observe(viewLifecycleOwner){
+        viewModel.kPremiumList.observe(viewLifecycleOwner){
             binding.isLoaded = !it.isEmpty()
             binding.count = "(${it.size})"
 
-            val sorted = viewmodel.sortKimpByState(viewmodel.kPremiumSortState.value!!, it)
+            val sorted = viewModel.sortKimpByState(viewModel.kPremiumSortState.value!!, it)
             adapter.submitList(sorted)
         }
 
-        viewmodel.kPremiumSortState.observe(viewLifecycleOwner){
-            val sorted = viewmodel.sortKimpByState(it, viewmodel.kPremiumList.value!!)
+        viewModel.kPremiumSortState.observe(viewLifecycleOwner){
+            val sorted = viewModel.sortKimpByState(it, viewModel.kPremiumList.value!!)
             adapter.submitList(sorted){binding.rvKimp.scrollToPosition(0)}
         }
     }
