@@ -6,19 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.adapters.BinanceAdapter
-import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.databinding.FragmentBinanceBinding
+import com.librarydevloperjo.cointracker.util.PRICE_ASCENDING
+import com.librarydevloperjo.cointracker.util.PRICE_DESCENDING
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -28,7 +23,6 @@ class BinanceFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewmodel: CoinsViewModel by activityViewModels()
     private val uiViewmodel: UIViewModel by activityViewModels()
-    private val adapter = BinanceAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,20 +32,22 @@ class BinanceFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        val adapter = BinanceAdapter()
         _binding = FragmentBinanceBinding.inflate(inflater, container, false)
         binding.apply {
             rvBinance.layoutManager = LinearLayoutManager(requireActivity())
             rvBinance.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                val i = viewmodel.binanceSortState.value!!
-                when(i){
-                    PRICE_ASCENDING -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.price })
-                        ivSortprice.setImageResource(R.drawable.sortdescending)}
-                    PRICE_DESCENDING -> {sortRV(PRICE_ASCENDING, adapter.currentList.sortedBy { it.price })
-                        ivSortprice.setImageResource(R.drawable.sortascending)}
-                    else -> {sortRV(PRICE_DESCENDING, adapter.currentList.sortedByDescending { it.price })
-                        ivSortprice.setImageResource(R.drawable.sortdescending)}
+                when(viewmodel.binanceSortState.value){
+                    PRICE_ASCENDING -> {
+                        sortPriceByDesc = true
+                        viewmodel.binanceSortState.value = PRICE_DESCENDING
+                    }
+                    else -> {
+                        sortPriceByDesc = false
+                        viewmodel.binanceSortState.value = PRICE_ASCENDING
+                    }
                 }
             }
 
@@ -59,7 +55,7 @@ class BinanceFragment : Fragment() {
                 uiViewmodel.isInfoFragment.value = true
             }
         }
-        subscribeUI()
+        subscribeUI(adapter)
         return binding.root
     }
 
@@ -68,35 +64,19 @@ class BinanceFragment : Fragment() {
         _binding = null
     }
 
-    private fun sortRV(state:Int,sorted:List<BinanceCoin>){
-        viewmodel.binanceSortState.value = state
-        adapter.submitList(sorted){binding.rvBinance.scrollToPosition(0)}
-    }
-
-    private fun subscribeUI(){
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewmodel.coinPricesTickFlow.collectLatest {
-                    val binance = it.binance
-                    when(viewmodel.binanceSortState.value){
-                        PRICE_ASCENDING -> binance.sortBy { it.price }
-                        PRICE_DESCENDING -> binance.sortByDescending { it.price }
-                    }
-
-                    viewmodel.binanceList.value = binance
-                }
-            }
-        }
-
-        viewmodel.binanceList.observe(viewLifecycleOwner) {
-            binding.isLoaded = !it.isNullOrEmpty()
-            adapter.submitList(it)
+    private fun subscribeUI(adapter: BinanceAdapter){
+        viewmodel.binanceList.observe(viewLifecycleOwner){
+            binding.isLoaded = it.isNotEmpty()
             binding.tvTotalnum.text = "(${it.size})"
+
+            val sorted = viewmodel.sortBinanceByState(viewmodel.binanceSortState.value!!, it)
+            adapter.submitList(sorted)
+        }
+
+        viewmodel.binanceSortState.observe(viewLifecycleOwner){
+            val sorted = viewmodel.sortBinanceByState(it, viewmodel.binanceList.value!!)
+            adapter.submitList(sorted){ binding.rvBinance.scrollToPosition(0) }
         }
     }
 
-    companion object {
-        private const val PRICE_ASCENDING = 0
-        private const val PRICE_DESCENDING = 1
-    }
 }

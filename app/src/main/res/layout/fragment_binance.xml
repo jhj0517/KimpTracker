@@ -9,6 +9,10 @@
         <variable
             name="isLoaded"
             type="boolean" />
+
+        <variable
+            name="sortPriceByDesc"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -131,6 +135,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/tv_tabprice"
+                    app:isSortByDesc="@{sortPriceByDesc}"
                     android:layout_marginLeft="3dp"
                     android:src="@drawable/sort"/>
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,11 +9,7 @@ import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.data.gson.Coins
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.data.room.KDataDAO
-import com.librarydevloperjo.cointracker.util.KIMP_ASCENDING
-import com.librarydevloperjo.cointracker.util.KIMP_DESCENDING
-import com.librarydevloperjo.cointracker.util.PRICE_ASCENDING
-import com.librarydevloperjo.cointracker.util.PRICE_DESCENDING
-import com.librarydevloperjo.cointracker.util.PremiumCalculator
+import com.librarydevloperjo.cointracker.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
@@ -37,10 +33,10 @@ class CoinsViewModel @Inject constructor(
     private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumData>())
     val kPremiumList get() = _kPremiumList
 
-    private val _upbitList = MutableLiveData(mutableListOf<UpbitCoin>())
+    private val _upbitList = MutableLiveData(arrayListOf<UpbitCoin>())
     val upbitList get() = _upbitList
 
-    private val _binanceList = MutableLiveData(mutableListOf<BinanceCoin>())
+    private val _binanceList = MutableLiveData(arrayListOf<BinanceCoin>())
     val binanceList get()= _binanceList
 
     private val _excRate = MutableLiveData<String>()
@@ -57,15 +53,17 @@ class CoinsViewModel @Inject constructor(
                     val binance = it.binance
                     val upbits = it.upbit
                     val unSorted = PremiumCalculator.calculate(upbits,binance,exc)
-                    val sorted = sortByState(kPremiumSortState.value!!, unSorted)
+                    val sorted = sortKimpByState(kPremiumSortState.value!!, unSorted)
                     _kPremiumList.value = sorted
+                    _binanceList.value = binance
+                    _upbitList.value = upbits
                     _excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
                 }
             }
         }
     }
 
-    fun sortByState(state:Int, unSorted:ArrayList<KPremiumData>): ArrayList<KPremiumData>{
+    fun sortKimpByState(state:Int, unSorted:ArrayList<KPremiumData>): ArrayList<KPremiumData>{
         val sorted = when (state){
             PRICE_DESCENDING -> unSorted.sortedByDescending { it.upbitPrice }
             PRICE_ASCENDING -> unSorted.sortedBy { it.upbitPrice }
@@ -79,6 +77,25 @@ class CoinsViewModel @Inject constructor(
             bookmarks.any { bookmark -> bookmark.ticker == data.ticker}
         }
         return ArrayList(bookmarks+array)
+    }
+
+    fun sortBinanceByState(state:Int, unSorted: ArrayList<BinanceCoin>):ArrayList<BinanceCoin>{
+        val sorted = when (state){
+            PRICE_ASCENDING -> unSorted.sortedBy { it.price }
+            else -> unSorted.sortedByDescending { it.price }
+        }
+        return ArrayList(sorted)
+    }
+
+    fun sortUpbitByState(state:Int, unSorted: ArrayList<UpbitCoin>):ArrayList<UpbitCoin>{
+        val sorted = when (state){
+            PRICE_ASCENDING -> unSorted.sortedBy { it.tradePrice }
+            PRICE_DESCENDING -> unSorted.sortedByDescending { it.tradePrice }
+            CHANGE_RATE_ASCENDING -> unSorted.sortedBy { it.changeRate }
+            CHANGE_RATE_DESCENDING -> unSorted.sortedByDescending { it.changeRate }
+            else -> unSorted.sortedByDescending { it.tradePrice }
+        }
+        return ArrayList(sorted)
     }
 
     fun insertKData(data: KPremiumData){
