@@ -23,13 +23,6 @@ class CoinsViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
     private val kDataDAO: KDataDAO
 ) : ViewModel() {
-
-    val coinPricesTickFlow: SharedFlow<Coins> get() = coinRepository.coinPricesTickFlow
-
-    val kPremiumSortState = MutableLiveData(-1)
-    val upbitSortState = MutableLiveData(-1)
-    val binanceSortState = MutableLiveData(-1)
-
     private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumData>())
     val kPremiumList get() = _kPremiumList
 
@@ -38,6 +31,10 @@ class CoinsViewModel @Inject constructor(
 
     private val _binanceList = MutableLiveData(arrayListOf<BinanceCoin>())
     val binanceList get()= _binanceList
+
+    val kPremiumSortState = MutableLiveData(-1)
+    val upbitSortState = MutableLiveData(-1)
+    val binanceSortState = MutableLiveData(-1)
 
     private val _excRate = MutableLiveData<String>()
     val excRate get() = _excRate

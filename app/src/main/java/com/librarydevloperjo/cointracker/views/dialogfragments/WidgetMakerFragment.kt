@@ -6,20 +6,19 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.FragmentWidgetMakerBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
+import com.librarydevloperjo.cointracker.viewmodels.DialogViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.NumberFormat
-import java.util.*
 import javax.inject.Inject
 
 
@@ -32,7 +31,8 @@ class WidgetMakerFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private var coin: KPremiumData? = null
-    private val viewmodel:CoinsViewModel by activityViewModels()
+    private val coinsViewModel:CoinsViewModel by activityViewModels()
+    private val viewmodel:DialogViewModel by viewModels()
     @Inject
     lateinit var preference: PreferenceManager
 
@@ -44,6 +44,7 @@ class WidgetMakerFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         arguments?.let {
             coin = it.getParcelable(ARG_KEY_KPREMIUM)
+            viewmodel.setCoinData(coin!!)
         }
 
         return activity?.let {
@@ -51,27 +52,8 @@ class WidgetMakerFragment : DialogFragment() {
             _binding =  FragmentWidgetMakerBinding.inflate(LayoutInflater.from(context))
 
             binding.apply {
-                coin?.let { coin->
-                    tvCoinname.text = coin.ticker
-                    tvUpbitprice.text = nFormat.format(coin.upbitPrice)
-                    tvBinanceprice.text = nFormat.format(coin.binancePrice)
-                    tvKimprate.text = nFormat.format(coin.kPremium)
-
-                    if(coin.kPremium > 0){
-                        tvUpbitprice.setTextColor(Color.parseColor("#E8B53333"))
-                        tvKimprate.setTextColor(Color.parseColor("#E8B53333"))
-                    }else if(coin.kPremium<0){
-                        tvUpbitprice.setTextColor(Color.parseColor("#416DD8"))
-                        tvKimprate.setTextColor(Color.parseColor("#416DD8"))
-                    }
-
-                    val data = viewmodel.searchKData(coin.ticker)
-                    if(data.isNullOrEmpty()){
-                        ivStar.setImageResource(R.drawable.ratingstar_empty)
-                    }else{
-                        ivStar.setImageResource(R.drawable.ratingstar_filled)
-                    }
-                }
+                viewModel = viewmodel
+                isStar = coinsViewModel.searchKData(coin?.ticker?:"").isNotEmpty()
 
                 btnWidget.setOnClickListener {
                     preference.setString(WIDGET_COIN_KEY,coin!!.ticker)
@@ -81,15 +63,13 @@ class WidgetMakerFragment : DialogFragment() {
                 }
 
                 rootStar.setOnClickListener {
-                    coin?.let {
-                        val data = viewmodel.searchKData(it.ticker)
-                        if(data.isEmpty()){
-                            viewmodel.insertKData(it)
-                            ivStar.setImageResource(R.drawable.ratingstar_filled)
-                        }else{
-                            viewmodel.deleteKData(it.ticker)
-                            ivStar.setImageResource(R.drawable.ratingstar_empty)
-                        }
+                    val data = coinsViewModel.searchKData(coin?.ticker?:"")
+                    if(data.isEmpty()){
+                        coinsViewModel.insertKData(coin!!)
+                        isStar = true
+                    }else{
+                        coinsViewModel.deleteKData(coin!!.ticker)
+                        isStar = false
                     }
                 }
 
@@ -120,7 +100,5 @@ class WidgetMakerFragment : DialogFragment() {
                     putParcelable(ARG_KEY_KPREMIUM, param1)
                 }
             }
-
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
     }
 }

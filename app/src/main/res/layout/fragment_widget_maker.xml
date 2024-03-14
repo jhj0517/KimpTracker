@@ -3,6 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.dialogfragments.WidgetMakerFragment">
+    
+    <data>
+        <variable
+            name="viewModel"
+            type="com.librarydevloperjo.cointracker.viewmodels.DialogViewModel" />
+
+        <variable
+            name="isStar"
+            type="boolean" />
+    </data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -62,7 +72,8 @@
                     android:id="@+id/iv_star"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ratingstar_empty" />
+                    android:src="@drawable/ratingstar_empty"
+                    app:isStar="@{isStar}"/>
             </RelativeLayout>
 
             <TextView
@@ -90,7 +101,7 @@
                     android:layout_centerHorizontal="true"
                     android:contentDescription="@string/appwidget_text"
                     android:fontFamily="@font/aritadotum"
-                    android:text="코인"
+                    android:text="@{viewModel.name}"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -128,7 +139,7 @@
                             android:layout_below="@id/tv_upbit_widget"
                             android:layout_marginStart="8dp"
                             android:contentDescription="@string/appwidget_text"
-                            android:text="000"
+                            android:text="@{viewModel.upbitPrice}"
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             android:textStyle="bold|italic" />
@@ -153,7 +164,7 @@
                             android:layout_below="@id/tv_binance_widget"
                             android:layout_marginStart="8dp"
                             android:contentDescription="@string/appwidget_text"
-                            android:text="000"
+                            android:text="@{viewModel.binancePrice}"
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             android:textStyle="bold|italic" />
@@ -186,8 +197,8 @@
                             android:layout_below="@id/tv_kimp_widget"
                             android:layout_marginStart="3dp"
                             android:contentDescription="@string/appwidget_text"
-                            android:text="000"
-                            android:textColor="@color/white"
+                            android:text="@{viewModel.KPremium}"
+                            android:textColor="@{viewModel.textColor}"
                             android:textSize="25sp"
                             android:textStyle="bold|italic" />
                     </RelativeLayout>

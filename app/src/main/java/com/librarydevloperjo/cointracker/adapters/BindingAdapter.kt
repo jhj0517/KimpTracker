@@ -34,7 +34,14 @@ fun bindImageFromUrl(view: ImageView, imageUrl: String?) {
             .into(view)
     }
 }
-
+@BindingAdapter("isStar")
+fun bindIsStar(view: ImageView, isStar: Boolean?) {
+    val drawable = when (isStar) {
+        true -> R.drawable.ratingstar_filled
+        else -> R.drawable.ratingstar_empty
+    }
+    view.setImageResource(drawable)
+}
 
 @BindingAdapter("isSortByDesc")
 fun bindIsSortByDesc(view: ImageView, isSortByDesc: Boolean?) {
