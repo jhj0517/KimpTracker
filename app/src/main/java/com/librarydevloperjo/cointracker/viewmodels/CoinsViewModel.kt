@@ -106,8 +106,8 @@ class CoinsViewModel @Inject constructor(
             refreshKData()
         }
     }
-    private fun getAllBookMarks() = kDataDAO.getAllBookMarks()
     fun queryBookMarks(coinName:String) = kDataDAO.queryBookMarks(coinName)
+    private fun getAllBookMarks() = kDataDAO.getAllBookMarks()
 
     private fun refreshKData(){
         _kPremiumList.value = _kPremiumList.value
