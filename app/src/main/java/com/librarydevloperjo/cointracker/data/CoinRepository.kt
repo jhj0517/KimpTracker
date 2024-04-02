@@ -24,7 +24,7 @@ class CoinRepository @Inject constructor(
         externalScope.launch {
             while(true) {
                 try {
-                    _coinPricesTickFlow.emit(service.getAllCoin().result)
+                    _coinPricesTickFlow.emit(service.getAllCoin().body.result)
                 } catch (e: Exception){
                     throw Exception("$e")
                 }

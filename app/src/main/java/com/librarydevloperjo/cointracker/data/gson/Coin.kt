@@ -2,6 +2,11 @@ package com.librarydevloperjo.cointracker.data.gson
 
 import com.google.gson.annotations.SerializedName
 
+data class BaseResponse(
+    @field:SerializedName("statusCode") val statusCode: Int,
+    @field:SerializedName("body") val body: CoinResponse,
+)
+
 data class CoinResponse(
     @field:SerializedName("result") val result: Coins,
 )
