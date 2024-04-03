@@ -38,11 +38,6 @@ class WidgetProvider:AppWidgetProvider(){
         appWidgetIds: IntArray
     ) {
         appWidgetIds.forEach { appWidgetId ->
-            val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
-                .let { intent ->
-                    PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-                }
-
             val views = RemoteViews(
                 context.packageName,
                 R.layout.app_widget
