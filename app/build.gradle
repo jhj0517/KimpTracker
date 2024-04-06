@@ -12,7 +12,7 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdk 31
+    compileSdk 34
 
     dataBinding {
         enabled = true
@@ -22,7 +22,7 @@ android {
     defaultConfig {
         applicationId "com.librarydevloperjo.cointracker"
         minSdk 26
-        targetSdk 31
+        targetSdk 34
         versionCode 6
         versionName "6.0"
 
@@ -42,11 +42,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         viewBinding true
@@ -84,11 +84,12 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpLoggingVersion"
     //hilt
     implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"
     //fragment ktx
     implementation("androidx.navigation:navigation-fragment-ktx:$rootProject.navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$rootProject.navVersion")
+    implementation("androidx.navigation:navigation-compose:$rootProject.navVersion")
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
