@@ -4,6 +4,7 @@ import android.util.Log
 import com.librarydevloperjo.cointracker.api.CoinService
 import com.librarydevloperjo.cointracker.data.gson.Coins
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class CoinRepository @Inject constructor(
     val coinPricesTickFlow: SharedFlow<Coins> = _coinPricesTickFlow
 
     init {
-        externalScope.launch {
+        externalScope.launch(Dispatchers.IO) {
             while(true) {
                 try {
                     _coinPricesTickFlow.emit(service.getAllCoin().body.result)

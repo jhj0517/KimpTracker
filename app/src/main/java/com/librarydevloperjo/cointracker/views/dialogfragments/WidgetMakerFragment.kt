@@ -3,6 +3,8 @@ package com.librarydevloperjo.cointracker.views.dialogfragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.librarydevloperjo.cointracker.R
+import com.librarydevloperjo.cointracker.coinwidget.WidgetUpdateService
 import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import com.librarydevloperjo.cointracker.databinding.FragmentWidgetMakerBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
@@ -55,7 +58,7 @@ class WidgetMakerFragment : DialogFragment() {
                 isStar = coinsViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
 
                 btnWidget.setOnClickListener {
-                    preference.setString(WIDGET_COIN_KEY,coin!!.ticker)
+                    startService()
                     Toast.makeText(requireActivity(),
                         resources.getString(R.string.widgetisadded,coin!!.ticker),
                         Toast.LENGTH_LONG).show()
@@ -89,6 +92,20 @@ class WidgetMakerFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun startService(){
+        preference.setString(WIDGET_COIN_KEY,coin!!.ticker)
+
+        Intent(context, WidgetUpdateService::class.java).also { intent ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // `startForegroundService` is possible only on API 26+
+                requireActivity().startForegroundService(intent)
+            } else {
+                // In this case, the service will stop when the app is in idle state because it's not a ForegroundService.
+                requireActivity().startService(intent)
+            }
+        }
     }
 
     companion object {
