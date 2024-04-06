@@ -13,15 +13,15 @@ buildscript {
     }
 
     ext {
-        gsonVersion = '2.8.2'
-        retrofitVersion = '2.9.0'
+        gsonVersion = '2.10.1'
+        retrofitVersion = '2.11.0'
         navVersion = '2.7.7'
         roomVersion = '2.6.1'
-        hiltVersion = '2.46'
-        okhttpLoggingVersion = '4.7.2'
-        lifecycleVersion = '2.4.0'
-        jacksonVersion = '2.9.7'
-        glideVersion = '4.13.0'
+        hiltVersion = '2.51.1'
+        okhttpLoggingVersion = '4.12.0'
+        lifecycleVersion = '2.7.0'
+        jacksonVersion = '2.17.0'
+        glideVersion = '4.16.0'
         googleplayVersion = '2.0.0'
     }
 }
