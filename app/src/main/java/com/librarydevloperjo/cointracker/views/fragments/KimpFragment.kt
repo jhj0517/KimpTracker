@@ -101,8 +101,7 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
             binding.isLoaded = !it.isEmpty()
             binding.count = "(${it.size})"
 
-            val sorted = viewModel.sortKimpByState(viewModel.sortState.value!!, it)
-            adapter.submitList(sorted)
+            adapter.submitList(it)
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){

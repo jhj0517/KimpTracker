@@ -55,11 +55,10 @@ class CoinsViewModel @Inject constructor(
                     val exc = it.exc[0].openingPrice
                     val binance = it.binance
                     val upbits = it.upbit
-                    val unSorted = PremiumCalculator.calculate(upbits,binance,exc)
-                    val sorted = sortKimpByState(sortState.value!!, unSorted)
-                    _kPremiumList.value = sorted
-                    _binanceList.value = binance
-                    _upbitList.value = upbits
+                    val kimp = PremiumCalculator.calculate(upbits,binance,exc)
+                    _kPremiumList.value = sortKimpByState(sortState.value!!, kimp)
+                    _binanceList.value = sortBinanceByState(sortState.value!!, binance)
+                    _upbitList.value = sortUpbitByState(sortState.value!!, upbits)
                     _excRate.value = NumberFormat.getNumberInstance(Locale.US).format(exc)
                 }
             }
@@ -102,20 +101,17 @@ class CoinsViewModel @Inject constructor(
     fun insertBookMark(data: KPremiumData){
         viewModelScope.launch {
             kDataDAO.insertBookMark(data)
-            refreshKData()
+            _kPremiumList.value = sortKimpByState(sortState.value!!, kPremiumList.value!!)
         }
     }
     fun deleteBookMark(coinName:String){
         viewModelScope.launch {
             kDataDAO.deleteBookMark(coinName)
-            refreshKData()
+            _kPremiumList.value = sortKimpByState(sortState.value!!, kPremiumList.value!!)
         }
     }
 
     fun queryBookMarks(coinName:String) = kDataDAO.queryBookMarks(coinName)
     private fun getAllBookMarks() = kDataDAO.getAllBookMarks()
 
-    private fun refreshKData(){
-        _kPremiumList.value = _kPremiumList.value
-    }
 }

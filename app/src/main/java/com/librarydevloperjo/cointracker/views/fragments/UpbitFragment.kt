@@ -87,8 +87,7 @@ class UpbitFragment : Fragment() {
             binding.isLoaded = !it.isNullOrEmpty()
             binding.count = "(${it.size})"
 
-            val sorted = viewModel.sortUpbitByState(viewModel.sortState.value!!, it)
-            adapter.submitList(sorted)
+            adapter.submitList(it)
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){
