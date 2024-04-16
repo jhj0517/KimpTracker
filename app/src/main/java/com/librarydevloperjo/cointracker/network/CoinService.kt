@@ -11,7 +11,7 @@ import retrofit2.http.GET
 interface CoinService {
 
     @GET("price")
-    suspend fun getAllCoin(): BaseResponse
+    suspend fun getPlatformData(): BaseResponse
 
     companion object {
         private const val BASE_URL = BuildConfig.BaseURL
