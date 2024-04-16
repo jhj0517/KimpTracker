@@ -4,14 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 data class BaseResponse(
     @field:SerializedName("statusCode") val statusCode: Int,
-    @field:SerializedName("body") val body: CoinResponse,
+    @field:SerializedName("body") val body: Result,
 )
 
-data class CoinResponse(
-    @field:SerializedName("result") val result: Coins,
+data class Result(
+    @field:SerializedName("result") val result: PlatformData,
 )
 
-data class Coins(
+data class PlatformData(
     @field:SerializedName("upbit") val upbit:  ArrayList<UpbitCoin>,
     @field:SerializedName("binance") val binance:  ArrayList<BinanceCoin>,
     @field:SerializedName("exc") val exc:  List<ExchangeRate>,

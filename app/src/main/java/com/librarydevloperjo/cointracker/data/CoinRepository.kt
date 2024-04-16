@@ -1,8 +1,7 @@
 package com.librarydevloperjo.cointracker.data
 
-import android.util.Log
 import com.librarydevloperjo.cointracker.api.CoinService
-import com.librarydevloperjo.cointracker.data.gson.Coins
+import com.librarydevloperjo.cointracker.data.gson.PlatformData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,8 +17,8 @@ class CoinRepository @Inject constructor(
     private val externalScope: CoroutineScope,
     ) {
 
-    private val _coinPricesTickFlow = MutableSharedFlow<Coins>(replay = 0)
-    val coinPricesTickFlow: SharedFlow<Coins> = _coinPricesTickFlow
+    private val _coinPricesTickFlow = MutableSharedFlow<PlatformData>(replay = 0)
+    val coinPricesTickFlow: SharedFlow<PlatformData> = _coinPricesTickFlow
 
     init {
         externalScope.launch(Dispatchers.IO) {
@@ -27,7 +26,7 @@ class CoinRepository @Inject constructor(
                 try {
                     _coinPricesTickFlow.emit(service.getAllCoin().body.result)
                 } catch (e: Exception){
-                    throw Exception("$e")
+                    throw Exception("Network error : $e")
                 }
                 delay(refreshInterval)
             }
