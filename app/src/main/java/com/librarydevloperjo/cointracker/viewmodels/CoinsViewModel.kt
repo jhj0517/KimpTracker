@@ -10,7 +10,6 @@ import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.data.room.KDataDAO
 import com.librarydevloperjo.cointracker.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -46,12 +45,12 @@ class CoinsViewModel @Inject constructor(
     val sortState = MutableLiveData(SortState.KIMP_DESCENDING)
 
     init {
-        collectCoinPrices()
+        collectPlatformData()
     }
-    private fun collectCoinPrices() {
+    private fun collectPlatformData() {
         viewModelScope.launch {
             while (isActive) {
-                coinRepository.coinPricesTickFlow.collect {
+                coinRepository.platformDataTickFlow.collect {
                     val exc = it.exc[0].openingPrice
                     val binance = it.binance
                     val upbits = it.upbit

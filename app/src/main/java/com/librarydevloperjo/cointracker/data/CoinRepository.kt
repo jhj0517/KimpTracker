@@ -19,14 +19,14 @@ class CoinRepository @Inject constructor(
     private val externalScope: CoroutineScope,
 ) {
 
-    private val _coinPricesTickFlow = MutableSharedFlow<PlatformData>(replay = 0)
-    val coinPricesTickFlow: SharedFlow<PlatformData> = _coinPricesTickFlow
+    private val _platformDataTickFlow = MutableSharedFlow<PlatformData>(replay = 0)
+    val platformDataTickFlow: SharedFlow<PlatformData> = _platformDataTickFlow
 
     init {
         externalScope.launch(Dispatchers.IO) {
             while(true) {
                 try {
-                    _coinPricesTickFlow.emit(service.getPlatformData().body.result)
+                    _platformDataTickFlow.emit(service.getPlatformData().body.result)
                 } catch (e: Exception){
                     throw Exception("Network error : $e")
                 }

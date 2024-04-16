@@ -54,7 +54,7 @@ class WidgetUpdateService: LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         lifecycleScope.launch {
-            repository.coinPricesTickFlow.collectLatest {
+            repository.platformDataTickFlow.collectLatest {
                 val ticker = preference.getString(WIDGET_COIN_KEY)
 
                 if( ticker != PreferenceManager.DEFAULT_VALUE_STRING) {
