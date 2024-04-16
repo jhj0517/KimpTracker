@@ -8,14 +8,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
 const val refreshInterval = 1500L
 const val refreshInterval10minute = 600000L
 
+@Singleton
 class CoinRepository @Inject constructor(
     private val service: CoinService,
     private val externalScope: CoroutineScope,
-    ) {
+) {
 
     private val _coinPricesTickFlow = MutableSharedFlow<PlatformData>(replay = 0)
     val coinPricesTickFlow: SharedFlow<PlatformData> = _coinPricesTickFlow
