@@ -42,10 +42,13 @@ class WidgetMakerFragment : DialogFragment() {
         super.onAttach(context)
     }
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         arguments?.let {
-            coin = it.getParcelable(ARG_KEY_KPREMIUM)
+            coin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelable(ARG_KEY_KPREMIUM, KPremiumData::class.java)
+            } else {
+                it.getParcelable(ARG_KEY_KPREMIUM)
+            }
             viewmodel.setCoinData(coin!!)
         }
 
