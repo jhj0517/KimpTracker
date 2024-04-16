@@ -36,7 +36,7 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentKimpBinding.inflate(inflater, container, false)
 
         val adapter = KpremiumAdapter(this,preference)
