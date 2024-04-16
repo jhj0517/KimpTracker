@@ -1,6 +1,6 @@
 package com.librarydevloperjo.cointracker.di
 
-import com.librarydevloperjo.cointracker.api.CoinService
+import com.librarydevloperjo.cointracker.network.CoinService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

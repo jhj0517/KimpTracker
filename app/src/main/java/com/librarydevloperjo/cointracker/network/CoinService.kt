@@ -1,4 +1,4 @@
-package com.librarydevloperjo.cointracker.api
+package com.librarydevloperjo.cointracker.network
 
 import com.librarydevloperjo.cointracker.BuildConfig
 import com.librarydevloperjo.cointracker.data.gson.BaseResponse

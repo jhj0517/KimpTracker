@@ -1,6 +1,6 @@
 package com.librarydevloperjo.cointracker.data
 
-import com.librarydevloperjo.cointracker.api.CoinService
+import com.librarydevloperjo.cointracker.network.CoinService
 import com.librarydevloperjo.cointracker.data.gson.PlatformData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
