@@ -9,12 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.UpbitAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentUpbitBinding
-import com.librarydevloperjo.cointracker.util.CHANGE_RATE_ASCENDING
-import com.librarydevloperjo.cointracker.util.CHANGE_RATE_DESCENDING
-import com.librarydevloperjo.cointracker.util.PRICE_ASCENDING
-import com.librarydevloperjo.cointracker.util.PRICE_DESCENDING
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
+import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,30 +41,30 @@ class UpbitFragment : Fragment() {
             rvUpbit.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                when(viewModel.upbitSortState.value!!){
-                    PRICE_ASCENDING -> {
+                when(viewModel.sortState.value!!){
+                    SortState.PRICE_ASCENDING -> {
                         sortPriceByDesc = true
                         sortChangeRateByDesc = null
-                        viewModel.upbitSortState.value = PRICE_DESCENDING
+                        viewModel.sortState.value = SortState.PRICE_DESCENDING
                     }
                     else -> {
                         sortPriceByDesc = false
                         sortChangeRateByDesc = null
-                        viewModel.upbitSortState.value = PRICE_ASCENDING
+                        viewModel.sortState.value = SortState.PRICE_ASCENDING
                     }
                 }
             }
             rootTabChangerate.setOnClickListener {
-                when(viewModel.upbitSortState.value!!){
-                    CHANGE_RATE_ASCENDING -> {
+                when(viewModel.sortState.value!!){
+                    SortState.CHANGE_RATE_ASCENDING -> {
                         sortChangeRateByDesc = true
                         sortPriceByDesc = null
-                        viewModel.upbitSortState.value = CHANGE_RATE_DESCENDING
+                        viewModel.sortState.value = SortState.CHANGE_RATE_DESCENDING
                     }
                     else -> {
                         sortChangeRateByDesc = false
                         sortPriceByDesc = null
-                        viewModel.upbitSortState.value = CHANGE_RATE_ASCENDING
+                        viewModel.sortState.value = SortState.CHANGE_RATE_ASCENDING
                     }
                 }
             }
@@ -90,11 +87,11 @@ class UpbitFragment : Fragment() {
             binding.isLoaded = !it.isNullOrEmpty()
             binding.count = "(${it.size})"
 
-            val sorted = viewModel.sortUpbitByState(viewModel.upbitSortState.value!!, it)
+            val sorted = viewModel.sortUpbitByState(viewModel.sortState.value!!, it)
             adapter.submitList(sorted)
         }
 
-        viewModel.upbitSortState.observe(viewLifecycleOwner){
+        viewModel.sortState.observe(viewLifecycleOwner){
             val sorted = viewModel.sortUpbitByState(it, viewModel.upbitList.value!!)
             adapter.submitList(sorted){ binding.rvUpbit.scrollToPosition(0) }
         }

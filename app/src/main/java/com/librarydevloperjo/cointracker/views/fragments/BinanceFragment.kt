@@ -9,9 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.BinanceAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentBinanceBinding
-import com.librarydevloperjo.cointracker.util.PRICE_ASCENDING
-import com.librarydevloperjo.cointracker.util.PRICE_DESCENDING
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
+import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,14 +38,14 @@ class BinanceFragment : Fragment() {
             rvBinance.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                when(viewModel.binanceSortState.value){
-                    PRICE_ASCENDING -> {
+                when(viewModel.sortState.value){
+                    SortState.PRICE_ASCENDING -> {
                         sortPriceByDesc = true
-                        viewModel.binanceSortState.value = PRICE_DESCENDING
+                        viewModel.sortState.value = SortState.PRICE_DESCENDING
                     }
                     else -> {
                         sortPriceByDesc = false
-                        viewModel.binanceSortState.value = PRICE_ASCENDING
+                        viewModel.sortState.value = SortState.PRICE_ASCENDING
                     }
                 }
             }
@@ -69,11 +68,11 @@ class BinanceFragment : Fragment() {
             binding.isLoaded = it.isNotEmpty()
             binding.tvTotalnum.text = "(${it.size})"
 
-            val sorted = viewModel.sortBinanceByState(viewModel.binanceSortState.value!!, it)
+            val sorted = viewModel.sortBinanceByState(viewModel.sortState.value!!, it)
             adapter.submitList(sorted)
         }
 
-        viewModel.binanceSortState.observe(viewLifecycleOwner){
+        viewModel.sortState.observe(viewLifecycleOwner){
             val sorted = viewModel.sortBinanceByState(it, viewModel.binanceList.value!!)
             adapter.submitList(sorted){ binding.rvBinance.scrollToPosition(0) }
         }
