@@ -2,6 +2,7 @@ import requests
 import time
 from pymongo import MongoClient
 import schedule
+import threading
 
 """
 This python file is designed to update coin price data in the mongodb cloud and runs on EC2 24hours.
@@ -99,13 +100,13 @@ if __name__ == "__main__":
     mongodb = MongoDB()
 
     def job_mongodb_renew_upbit_prices():
-        mongodb.renew_upbit_prices(upbit=upbit)
+        threading.Thread(target=mongodb.renew_upbit_prices, args=upbit).start()
 
     def job_mongodb_renew_binance_prices():
-        mongodb.renew_binance_prices(binance=binance)
+        threading.Thread(target=mongodb.renew_binance_prices, args=binance).start()
 
     def job_mongodb_renew_exchange_rate():
-        mongodb.renew_exchange_rate(exchange_rate=exchange_rate)
+        threading.Thread(target=mongodb.renew_exchange_rate, args=exchange_rate).start()
     
     schedule.every(upbit.api_interval).minutes.do(job_mongodb_renew_upbit_prices)
     schedule.every(binance.api_interval).minutes.do(job_mongodb_renew_binance_prices)
