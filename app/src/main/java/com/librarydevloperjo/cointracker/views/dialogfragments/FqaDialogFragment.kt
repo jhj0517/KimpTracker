@@ -10,23 +10,33 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.databinding.FragmentFqaDialogBinding
+import com.librarydevloperjo.cointracker.databinding.FragmentWidgetMakerBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FqaDialogFragment : DialogFragment() {
+    private var _binding: FragmentFqaDialogBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            val binding =  FragmentFqaDialogBinding.inflate(LayoutInflater.from(context))
+            _binding = FragmentFqaDialogBinding.inflate(layoutInflater)
 
-            binding.ivBack.setOnClickListener {
-                dismiss()
+            binding.apply {
+                ivBack.setOnClickListener {
+                    dismiss()
+                }
             }
 
             builder.setView(binding.root)
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

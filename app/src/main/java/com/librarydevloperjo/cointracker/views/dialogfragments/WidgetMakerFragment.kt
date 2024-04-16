@@ -54,7 +54,7 @@ class WidgetMakerFragment : DialogFragment() {
 
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            _binding =  FragmentWidgetMakerBinding.inflate(LayoutInflater.from(context))
+            _binding =  FragmentWidgetMakerBinding.inflate(layoutInflater)
 
             binding.apply {
                 viewModel = viewmodel
