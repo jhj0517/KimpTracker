@@ -69,7 +69,7 @@ class Upbit:
 
         for f in tickers:
             if(f['market']=='KRW-BTT'):
-                f['market'] = 'KRW-BTTC' # BTTC problem , see here : https://newsroompost.com/business/what-is-bttc-and-what-happened-to-btt-how-to-swap-bttold-read-here/5057305.html
+                f['market'] = 'KRW-BTTC'  # BTTC problem, see here : https://newsroompost.com/business/what-is-bttc-and-what-happened-to-btt-how-to-swap-bttold-read-here/5057305.html
         return {s['market']: s for s in tickers if 'KRW' in s['market']}
     
 
