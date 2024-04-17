@@ -1,8 +1,8 @@
 import requests
 import time
 from pymongo import MongoClient
-import schedule
-import threading
+import os
+import asyncio
 
 """
 This python file is designed to update coin price data in the mongodb cloud and runs on EC2 24hours.
@@ -66,7 +66,7 @@ class ExchangeRate:
 
 class MongoDB:
     def __init__(self) -> None:
-        self.password = 'your_password_for_mongodb_cloud' # os.getenv('MONGO_DB_PASSWORD')
+        self.password = "your_password"  # os.getenv('MONGO_DB_PASSWORD')
         self.connection_url = f'mongodb+srv://your_id_for_mongodb_cloud:{self.password}@cluster0.gulri.mongodb.net/MyDatabase?retryWrites=true&w=majority'
         self.client = MongoClient(self.connection_url)
         self.db = self.client['Coins']
@@ -75,23 +75,24 @@ class MongoDB:
         self.exchange_rate = self.db['ExchangeRate']
         self.api_interval = 0.01
 
-    def renew_upbit_prices(self, upbit:Upbit):
+    async def renew_upbit_prices(self, upbit:Upbit):
         upbit_coins = upbit.get_tickers()
         for c in upbit_coins:
             price = upbit.get_current_price(c)
             self.upbit.update_many({"coin":f"{c}"},{'$set':price},upsert=True)
             time.sleep(self.api_interval)
 
-    def renew_binance_prices(self, binance:Binance):
+    async def renew_binance_prices(self, binance:Binance):
         binance_coins = binance.get_tickers()
         for c in binance_coins:
             price = binance.get_current_price(c)
             self.binance.update_many({"coin":f"{c}"},{'$set':price},upsert=True)
             time.sleep(self.api_interval)
 
-    def renew_exchange_rate(self, exchange_rate:ExchangeRate):
+    async def renew_exchange_rate(self, exchange_rate:ExchangeRate):
         data = exchange_rate.get_exchange_rate()[0]
         self.exchange_rate.update_many({"data":data['currencyCode']},{'$set':data},upsert=True)
+
 
 if __name__ == "__main__":
     binance = Binance()
@@ -99,21 +100,25 @@ if __name__ == "__main__":
     exchange_rate = ExchangeRate()
     mongodb = MongoDB()
 
-    def job_mongodb_renew_upbit_prices():
-        threading.Thread(target=mongodb.renew_upbit_prices, args=upbit).start()
+    async def update_upbit():
+        while True:
+            await mongodb.renew_upbit_prices(upbit=upbit)
+            await asyncio.sleep(upbit.api_interval)
 
-    def job_mongodb_renew_binance_prices():
-        threading.Thread(target=mongodb.renew_binance_prices, args=binance).start()
+    async def update_binance():
+        while True:
+            await mongodb.renew_upbit_prices(upbit=upbit)
+            await asyncio.sleep(binance.api_interval)
 
-    def job_mongodb_renew_exchange_rate():
-        threading.Thread(target=mongodb.renew_exchange_rate, args=exchange_rate).start()
-    
-    schedule.every(upbit.api_interval).minutes.do(job_mongodb_renew_upbit_prices)
-    schedule.every(binance.api_interval).minutes.do(job_mongodb_renew_binance_prices)
-    schedule.every(exchange_rate.api_interval).hours.do(job_mongodb_renew_exchange_rate)
+    async def update_exchange_rate():
+        while True:
+            await mongodb.renew_exchange_rate(exchange_rate=exchange_rate)
+            await asyncio.sleep(exchange_rate.api_interval)
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    async def main():
+        await asyncio.gather(update_upbit(), update_binance(), update_exchange_rate())
+
+    asyncio.run(main())
+
 
 
