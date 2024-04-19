@@ -4,11 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class BaseResponse(
     @field:SerializedName("statusCode") val statusCode: Int,
-    @field:SerializedName("body") val body: Result,
-)
-
-data class Result(
-    @field:SerializedName("result") val result: PlatformData,
+    @field:SerializedName("body") val body: PlatformData,
 )
 
 data class PlatformData(

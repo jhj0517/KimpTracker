@@ -26,7 +26,7 @@ class CoinRepository @Inject constructor(
         externalScope.launch(Dispatchers.IO) {
             while(true) {
                 try {
-                    _platformDataTickFlow.emit(service.getPlatformData().body.result)
+                    _platformDataTickFlow.emit(service.getPlatformData().body)
                 } catch (e: Exception){
                     throw Exception("Network error : $e")
                 }
