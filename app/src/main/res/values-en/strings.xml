@@ -31,7 +31,7 @@
     <string name="wherefromupbit">2. Where does Upbit price come from?</string>
     <string name="upbitisfrom">It is obtained through the official API provided by Upbit.</string>
     <string name="wherefrombinance">3. Where does Binance price come from? </string>
-    <string name="binancefrom">It is obtained through the official API provided by Binance. Prices are in BUSD.</string>
+    <string name="binancefrom">It is obtained through the official API provided by Binance. Prices are in USDT.</string>
 
     <string name="wherefromcoin">2. Where does price come from? </string>
     <string name="coinfrom">It is obtained through the official API provided by Binance,Upbit.</string>
