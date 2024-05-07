@@ -66,10 +66,6 @@ class Upbit:
         except Exception as e:
             print(f"failed to fetch ticker, Error : {e}")
             return {}
-
-        for f in tickers:
-            if(f['market']=='KRW-BTT'):
-                f['market'] = 'KRW-BTTC'  # BTTC problem, see here : https://newsroompost.com/business/what-is-bttc-and-what-happened-to-btt-how-to-swap-bttold-read-here/5057305.html
         return {s['market']: s for s in tickers if 'KRW' in s['market']}
     
 
@@ -92,8 +88,8 @@ class ExchangeRate:
 
 class MongoDB:
     def __init__(self) -> None:
-        self.password = os.getenv('MONGO_DB_PASSWORD')
-        self.connection_url = f'mongodb+srv://your_id_for_mongodb_cloud:{self.password}@cluster0.gulri.mongodb.net/MyDatabase?retryWrites=true&w=majority'
+        self.password = os.environ.get('MONGO_DB_PASSWORD')
+        self.connection_url = f'mongodb+srv://cointracker:{self.password}@cluster0.gulri.mongodb.net/MyDatabase?retryWrites=true&w=majority'
         self.client = MongoClient(self.connection_url)
         self.db = self.client['Coins']
         self.upbit = self.db['Upbit']
@@ -118,7 +114,6 @@ class MongoDB:
         data = exchange_rate.get_exchange_rate()[0]
         self.exchange_rate.update_many({"data": data['currencyCode']}, {'$set': data}, upsert=True)
         await asyncio.sleep(exchange_rate.api_interval)
-
 
 if __name__ == "__main__":
     binance = Binance()
