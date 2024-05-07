@@ -6,6 +6,7 @@
     <string name="name">이름</string>
     <string name="price">가격</string>
     <string name="busdPrice">가격(BUSD)</string>
+    <string name="usdtPrice">가격(USDT)</string>
     <string name="changerate">변화율</string>
     <string name="Kpremium">김프</string>
     <string name="Kpremiumfullname">김프</string>
@@ -24,6 +25,7 @@
 
     <string name="thisis_binance">바이낸스 거래소 코인 가격입니다.</string>
     <string name="priceisbusd">가격은 BUSD 기준입니다.</string>
+    <string name="priceisusdt">가격은 USDT 기준입니다.</string>
     <string name="thisis_upbit">업비트 거래소 코인 가격입니다.</string>
 
     <string name="whatiskpremium">1. 김치 프리미엄이란 무엇인가요?</string>
@@ -37,7 +39,7 @@
     <string name="coinfrom">업비트, 바이낸스에서 각각 제공하는 공식 API 로 부터 가격을 표시합니다.</string>
 
     <string name="howkimchpremium">3. 김치 프리미엄은 어떻게 계산되나요?</string>
-    <string name="bycalculated">바이낸스 거래소 코인 가격(BUSD)에 한국 수출입 은행에서 제공하는 환율을 곱하여 업비트에서의 코인 가격과 비교해 계산됩니다.</string>
+    <string name="bycalculated">바이낸스 거래소 코인 가격(USDT)에 한국 수출입 은행에서 제공하는 환율을 곱하여 업비트에서의 코인 가격과 비교해 계산됩니다.</string>
 
     <string name="coingraph">위젯 등록하기</string>
     <string name="krw">KRW</string>

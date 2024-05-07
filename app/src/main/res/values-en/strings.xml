@@ -5,6 +5,7 @@
     <string name="name">Name</string>
     <string name="price">Price</string>
     <string name="busdPrice">Price(BUSD)</string>
+    <string name="usdtPrice">Price(USDT)</string>
     <string name="changerate">Change</string>
     <string name="Kpremium">Kpremium</string>
     <string name="Kpremiumfullname">Kimch Premium</string>
@@ -22,6 +23,7 @@
 
     <string name="thisis_binance">This is binance prices.</string>
     <string name="priceisbusd">Price is BUSD</string>
+    <string name="priceisusdt">Price is USDT</string>
     <string name="thisis_upbit">This is upbit prices.</string>
 
     <string name="whatiskpremium">1. What is Kimchi Premium?</string>
@@ -35,7 +37,7 @@
     <string name="coinfrom">It is obtained through the official API provided by Binance,Upbit.</string>
 
     <string name="howkimchpremium">3. How is Kimchi Premium calculated?</string>
-    <string name="bycalculated">It is calculated by multiplying the Binance Exchange coin price (in BUSD) by the exchange rate provided by the Export-Import Bank of Korea and comparing it with the Upbit price.</string>
+    <string name="bycalculated">It is calculated by multiplying the Binance Exchange coin price (in USDT) by the exchange rate provided by the Export-Import Bank of Korea and comparing it with the Upbit price.</string>
 
     <string name="coingraph">Widget Maker</string>
     <string name="krw">KRW</string>
