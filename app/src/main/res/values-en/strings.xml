@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">KimpTracker</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="busdPrice">Price(BUSD)</string>
+    <string name="usdtPrice">Price(USDT)</string>
+    <string name="changerate">Change</string>
+    <string name="Kpremium">Kpremium</string>
+    <string name="Kpremiumfullname">Kimch Premium</string>
+    <string name="ExcRate">Exchange Rate</string>
+    <string name="menu_kimp">Kimp</string>
+    <string name="menu_upbit">Upbit</string>
+    <string name="menu_binance">Binance</string>
+
+    <string name="review">Review</string>
+    <string name="reviewishelpful">Thank you for your review if this app is helpful.</string>
+    <string name="privacypolicy">Privacy Policy</string>
+    <string name="fqa">FQA</string>
+    <string name="frequentlyanswer">about frequently asked questions.</string>
+
+
+    <string name="thisis_binance">This is binance prices.</string>
+    <string name="priceisbusd">Price is BUSD</string>
+    <string name="priceisusdt">Price is USDT</string>
+    <string name="thisis_upbit">This is upbit prices.</string>
+
+    <string name="whatiskpremium">1. What is Kimchi Premium?</string>
+    <string name="kimchpremiumis">Kimchi premium is an indicator of how high the price of cryptocurrency traded in Korea is compared to that of foreign exchanges.</string>
+    <string name="wherefromupbit">2. Where does Upbit price come from?</string>
+    <string name="upbitisfrom">It is obtained through the official API provided by Upbit.</string>
+    <string name="wherefrombinance">3. Where does Binance price come from? </string>
+    <string name="binancefrom">It is obtained through the official API provided by Binance. Prices are in USDT.</string>
+
+    <string name="wherefromcoin">2. Where does price come from? </string>
+    <string name="coinfrom">It is obtained through the official API provided by Binance,Upbit.</string>
+
+    <string name="howkimchpremium">3. How is Kimchi Premium calculated?</string>
+    <string name="bycalculated">It is calculated by multiplying the Binance Exchange coin price (in USDT) by the exchange rate provided by the Export-Import Bank of Korea and comparing it with the Upbit price.</string>
+
+    <string name="coingraph">Widget Maker</string>
+    <string name="krw">KRW</string>
+    <string name="krwupbit">KRW (Upbit)</string>
+    <string name="krwbin">KRW (Binance)</string>
+    <string name="busd">BUSD</string>
+    <string name="usdt">USDT</string>
+    <string name="binance">Binance</string>
+    <string name="upbit">Upbit</string>
+
+    <string name="addstar">Bookmark \n(Bookmarks are exposed at the top)</string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">add widget above in home screen.</string>
+
+    <string name="widgetisadded">widget is made by %1$s .</string>
+
+    <string name="privacyurl">https://docs.google.com/document/d/e/2PACX-1vQnn01kZgK0EWyeRBcyZBBuXXjRq09-SlYhJ35XOPyRljUrGE1qs9ocoS3EV2Mr4FLurzz93sh39nYV/pub</string>
+</resources>

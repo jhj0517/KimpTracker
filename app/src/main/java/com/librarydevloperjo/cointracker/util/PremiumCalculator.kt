@@ -9,7 +9,7 @@ object PremiumCalculator {
         val list = arrayListOf<KPremiumData>()
 
         val upbitMap = upbits.associateBy { it.ticker.replace("KRW-","") }
-        val binanceMap = binances.associateBy { it.ticker.replace("BUSD","") }
+        val binanceMap = binances.associateBy { it.ticker.replace("USDT","") }
 
         val sameKeys = upbitMap.keys.intersect(binanceMap.keys)
 
