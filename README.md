@@ -1,16 +1,12 @@
 # KimpTracker
-This is an practice Android project that provides cryptocurrency prices and Kimchi-Premium.
+Get cryptocurrency prices of [Upbit](https://upbit.com/home) & [Binance](https://binance.com) and [Kimchi Premium](https://www.cnbc.com/2024/04/03/south-koreas-kimchi-premium-in-the-spotlight-after-btcs-record-highs.html#:~:text=The%20%22kimchi%20premium%22%20refers%20to,to%20make%20a%20quick%20buck.) between them.
 
-## Demo Video
 https://github.com/jhj0517/KimpTracker/assets/97279763/5d1bdc06-6c9e-4ebf-b0e9-50c6786dbd44
 
-## Feature
-- Provide cryptocurrency prices from different platforms and get KimChi-Premium based on the prices, in the form of `RecycleView`.
+# Architecture
+![Flowcharts - Page 1](https://github.com/jhj0517/KimpTracker/assets/97279763/4c21fa15-ecb3-45a3-ae6e-e8b532c8326e)
 
-  **This project has its own backend to store cryptocurrency price data, so if you want to clone this project, you need to set up your own MongoDB cloud and AWS. Check the `backend` folder to see what I've done in the backend!**
-- Place widget on home screen so users can see prices/Kimch-Premium directly on home screen without opening app
-
-## Technologies
+## Overview
 
 | Technology | Usage |
 | ---------- | ----- |
@@ -32,4 +28,4 @@ https://github.com/jhj0517/KimpTracker/assets/97279763/5d1bdc06-6c9e-4ebf-b0e9-5
 - Using MongoDB Cloud for backend cloud-based database management. This gave me hands-on experience of setting up and managing a cloud-based MongoDB database.
 
 ## PlayStore
-The app is available on the PlayStore. If you want to see how it works, you can check it [here](https://play.google.com/store/apps/details?id=com.librarydevloperjo.cointracker&hl=ko&gl=US).
+[![download on playstore](https://github.com/jhj0517/AIBridge/assets/97279763/6457404a-a4d9-4303-b614-f4a8e58c5b79)](https://play.google.com/store/apps/details?id=com.librarydevloperjo.cointracker&hl=ko&gl=US)
