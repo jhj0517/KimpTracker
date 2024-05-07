@@ -132,14 +132,14 @@ if __name__ == "__main__":
             start_time = time.time()
             await mongodb.renew_upbit_prices(upbit=upbit)
             elapsed_time = time.time() - start_time
-            print(f"Upbit updated with: {elapsed_time:.2f} seconds")
+            print(f"Upbit updated in: {elapsed_time:.2f} seconds")
 
     async def update_binance():
         while True:
             start_time = time.time()
             await mongodb.renew_binance_prices(binance=binance)
             elapsed_time = time.time() - start_time
-            print(f"Binance updated with: {elapsed_time:.2f} seconds")
+            print(f"Binance updated in: {elapsed_time:.2f} seconds")
 
     async def update_exchange_rate():
         while True:
