@@ -1,7 +1,8 @@
 import requests
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient  # Async client for MongoDB
 import os
 import asyncio
+import time
 
 """
 This python file is designed to update coin price data in the mongodb cloud and runs on EC2 24hours.
@@ -21,22 +22,22 @@ class Binance:
             "symbol": ticker
         }
         try:
-            return requests.get(url, params=param).json()
+            latest_prices = requests.get(url, params=param).json()
         except Exception as e:
             print(f"failed to fetch price : {ticker}, Error: {e}")
             return {}
+
+        return [item for item in latest_prices if item['symbol'].endswith("USDT")]
     
     def get_tickers(self):
         url = self.base_endpoint + "/api/v3/exchangeInfo"
-        tickers = []
         try:
-            tickers = requests.get(url).json()['symbols']
+            info = requests.get(url).json()['symbols']
         except Exception as e:
             print(f"failed to fetch ticker, Error: {e}")
-            return {}
+            return []
 
-        return {s['symbol']: s for s in tickers if 'BUSD' in s['symbol'] and not 'USDT' in s['symbol'] and not 'USDC' in s['symbol']
-        and not 'USDS' in s['symbol'] and not 'BTTBUSD' in s['symbol']}
+        return [i['symbol'] for i in info if i['symbol'].endswith("USDT")]
         
 
 class Upbit:
@@ -60,14 +61,13 @@ class Upbit:
     def get_tickers(self):
         url = self.base_endpoint + "/v1/market/all?isDetails=false"
         headers = {"Accept": "application/json"}
-        tickers = []
         try:
             tickers = requests.get(url, headers=headers).json()
         except Exception as e:
             print(f"failed to fetch ticker, Error : {e}")
-            return {}
-        return {s['market']: s for s in tickers if 'KRW' in s['market']}
-    
+            return []
+        return [t['market'] for t in tickers if t['market'].startswith("KRW-")]
+
 
 class ExchangeRate:
     def __init__(self) -> None:
@@ -90,30 +90,36 @@ class MongoDB:
     def __init__(self) -> None:
         self.password = os.environ.get('MONGO_DB_PASSWORD')
         self.connection_url = f'mongodb+srv://cointracker:{self.password}@cluster0.gulri.mongodb.net/MyDatabase?retryWrites=true&w=majority'
-        self.client = MongoClient(self.connection_url)
+        self.client = AsyncIOMotorClient(self.connection_url)
         self.db = self.client['Coins']
-        self.upbit = self.db['Upbit']
-        self.binance = self.db['Binance']
-        self.exchange_rate = self.db['ExchangeRate']
+        self.upbit_col = self.db['Upbit']
+        self.binance_col = self.db['Binance']
+        self.exchange_rate_col = self.db['ExchangeRate']
+        self.rpm = 6000  # https://www.mongodb.com/docs/atlas/reference/free-shared-limitations/
+        self.api_interval = 1/(self.rpm/60)
 
     async def renew_upbit_prices(self, upbit: Upbit):
         upbit_coins = upbit.get_tickers()
         for c in upbit_coins:
             price = upbit.get_current_price(c)
-            self.upbit.update_many({"coin": f"{c}"}, {'$set': price}, upsert=True)
+            await self.upbit_col.update_many({"coin": f"{c}"}, {'$set': price}, upsert=True)
             await asyncio.sleep(upbit.api_interval)
 
     async def renew_binance_prices(self, binance: Binance):
-        binance_coins = binance.get_tickers()
-        for c in binance_coins:
-            price = binance.get_current_price(c)
-            self.binance.update_many({"coin": f"{c}"}, {'$set': price}, upsert=True)
-            await asyncio.sleep(binance.api_interval)
+        prices = binance.get_current_price(None)
+        await asyncio.sleep(binance.api_interval)
+        for p in prices:
+            p["coin"] = p["symbol"]
+
+        for p in prices:
+            await self.binance_col.update_many({"coin": f"{p['coin']}"}, {'$set': p}, upsert=True)
+            await asyncio.sleep(self.api_interval)
 
     async def renew_exchange_rate(self, exchange_rate: ExchangeRate):
         data = exchange_rate.get_exchange_rate()[0]
-        self.exchange_rate.update_many({"data": data['currencyCode']}, {'$set': data}, upsert=True)
+        await self.exchange_rate_col.update_many({"data": data['currencyCode']}, {'$set': data}, upsert=True)
         await asyncio.sleep(exchange_rate.api_interval)
+
 
 if __name__ == "__main__":
     binance = Binance()
@@ -123,18 +129,28 @@ if __name__ == "__main__":
 
     async def update_upbit():
         while True:
+            start_time = time.time()
             await mongodb.renew_upbit_prices(upbit=upbit)
+            elapsed_time = time.time() - start_time
+            print(f"Upbit updated with: {elapsed_time:.2f} seconds")
 
     async def update_binance():
         while True:
+            start_time = time.time()
             await mongodb.renew_binance_prices(binance=binance)
+            elapsed_time = time.time() - start_time
+            print(f"Binance updated with: {elapsed_time:.2f} seconds")
 
     async def update_exchange_rate():
         while True:
             await mongodb.renew_exchange_rate(exchange_rate=exchange_rate)
 
     async def main():
-        await asyncio.gather(update_upbit(), update_binance(), update_exchange_rate())
+        await asyncio.gather(
+            update_upbit(),
+            update_binance(),
+            update_exchange_rate()
+        )
 
     asyncio.run(main())
 
