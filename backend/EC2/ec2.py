@@ -71,16 +71,22 @@ class Upbit:
 
 class ExchangeRate:
     def __init__(self):
-        self.base_endpoint = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent'
-        self.rpd = 2  # RPD (Request Per Day): Request Per Day
+        self.base_endpoint = 'https://api.fxratesapi.com/latest'
+        self.api_key = os.getenv("FXRATEAPI_KEY")
+        self.rpd = 24  # RPD (Request Per Day): Request Per Day
         self.api_interval = 1/(self.rpd/(24*60*60))
 
     def get_exchange_rate(self):
         param = {
-            "codes": "FRX.KRWUSD",
+            "base": "USD",
+            "currencies": "KRW",
+            "resolution": "1h",
+            "places": str(6)
         }
         try:
-            return requests.get(url=self.base_endpoint, params=param).json()
+            result = requests.get(url=self.base_endpoint, params=param).json()
+            result["platform"] = "fxratesapi"
+            return result
         except Exception as e:
             print(f"failed to fetch ticker, Error : {e}")
             return {}
