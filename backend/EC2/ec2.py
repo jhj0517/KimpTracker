@@ -11,7 +11,7 @@ If you want to clone this project, you will need to set up your own MongoDB clou
 
 
 class Binance:
-    def __init__(self) -> None:
+    def __init__(self):
         self.base_endpoint = 'https://api.binance.com'
         self.rpm = 2400  # RPM (Request Per Minute): https://dev.binance.vision/t/binance-api-status-error-503/14553/3
         self.api_interval = 1/(self.rpm/60)
@@ -41,7 +41,7 @@ class Binance:
         
 
 class Upbit:
-    def __init__(self) -> None:
+    def __init__(self):
         self.base_endpoint = 'https://api.upbit.com'
         self.rpm = 1800  # RPM (Request Per Minute): https://docs.upbit.com/docs/user-request-guide
         self.api_interval = 1/(self.rpm/60)
@@ -70,7 +70,7 @@ class Upbit:
 
 
 class ExchangeRate:
-    def __init__(self) -> None:
+    def __init__(self):
         self.base_endpoint = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent'
         self.rpd = 2  # RPD (Request Per Day): Request Per Day
         self.api_interval = 1/(self.rpd/(24*60*60))
@@ -87,8 +87,8 @@ class ExchangeRate:
 
 
 class MongoDB:
-    def __init__(self) -> None:
-        self.password = os.environ.get('MONGO_DB_PASSWORD')
+    def __init__(self):
+        self.password = os.getenv("MONGO_DB_PASSWORD")
         self.connection_url = f'mongodb+srv://cointracker:{self.password}@cluster0.gulri.mongodb.net/MyDatabase?retryWrites=true&w=majority'
         self.client = AsyncIOMotorClient(self.connection_url)
         self.db = self.client['Coins']
