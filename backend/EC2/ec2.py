@@ -13,7 +13,7 @@ If you want to clone this project, you will need to set up your own MongoDB clou
 class Binance:
     def __init__(self) -> None:
         self.base_endpoint = 'https://api.binance.com'
-        self.rpm = 2400  # Request Per Minute # https://dev.binance.vision/t/binance-api-status-error-503/14553/3
+        self.rpm = 2400  # RPM (Request Per Minute): https://dev.binance.vision/t/binance-api-status-error-503/14553/3
         self.api_interval = 1/(self.rpm/60)
 
     def get_current_price(self, ticker):
@@ -43,7 +43,7 @@ class Binance:
 class Upbit:
     def __init__(self) -> None:
         self.base_endpoint = 'https://api.upbit.com'
-        self.rpm = 1800  # https://docs.upbit.com/docs/user-request-guide
+        self.rpm = 1800  # RPM (Request Per Minute): https://docs.upbit.com/docs/user-request-guide
         self.api_interval = 1/(self.rpm/60)
 
     def get_current_price(self, ticker):
@@ -72,7 +72,7 @@ class Upbit:
 class ExchangeRate:
     def __init__(self) -> None:
         self.base_endpoint = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent'
-        self.rpd = 2  # Request Per Day
+        self.rpd = 2  # RPD (Request Per Day): Request Per Day
         self.api_interval = 1/(self.rpd/(24*60*60))
 
     def get_exchange_rate(self):
@@ -95,7 +95,7 @@ class MongoDB:
         self.upbit_col = self.db['Upbit']
         self.binance_col = self.db['Binance']
         self.exchange_rate_col = self.db['ExchangeRate']
-        self.rpm = 6000  # https://www.mongodb.com/docs/atlas/reference/free-shared-limitations/
+        self.rpm = 6000  # RPM (Request Per Minute): https://www.mongodb.com/docs/atlas/reference/free-shared-limitations/
         self.api_interval = 1/(self.rpm/60)
 
     async def renew_upbit_prices(self, upbit: Upbit):
@@ -104,6 +104,14 @@ class MongoDB:
             price = upbit.get_current_price(c)
             await self.upbit_col.update_many({"coin": f"{c}"}, {'$set': price}, upsert=True)
             await asyncio.sleep(upbit.api_interval)
+
+        collection = await self.upbit_col.find().to_list(length=None)
+        collection = [d["coin"] for d in collection]
+        delisted = set(collection) - set(upbit_coins)
+        if delisted:
+            print(f"상장폐지 코인 : {delisted}")
+            for de in delisted:
+                await self.upbit_col.delete_many({"coin": f"{de}"})
 
     async def renew_binance_prices(self, binance: Binance):
         prices = binance.get_current_price(None)
@@ -114,6 +122,15 @@ class MongoDB:
         for p in prices:
             await self.binance_col.update_many({"coin": f"{p['coin']}"}, {'$set': p}, upsert=True)
             await asyncio.sleep(self.api_interval)
+
+        collection = await self.binance_col.find().to_list(length=None)
+        collection = [d["coin"] for d in collection]
+        binance_coins = [p['symbol'] for p in prices]
+        delisted = set(collection) - set(binance_coins)
+        if delisted:
+            print(f"상장폐지 코인 : {delisted}")
+            for de in delisted:
+                await self.upbit_col.delete_many({"coin": f"{de}"})
 
     async def renew_exchange_rate(self, exchange_rate: ExchangeRate):
         data = exchange_rate.get_exchange_rate()[0]
@@ -153,6 +170,4 @@ if __name__ == "__main__":
         )
 
     asyncio.run(main())
-
-
 
