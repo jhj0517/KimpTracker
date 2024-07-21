@@ -1,4 +1,5 @@
 *.iml
+*.mp4
 .gradle
 /local.properties
 /.idea
@@ -8,5 +9,4 @@
 .externalNativeBuild
 .cxx
 /app/google-services.json
-/Demo video.mp4
 /app/release
