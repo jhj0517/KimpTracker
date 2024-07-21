@@ -23,7 +23,7 @@ class CryptoCurrencyMarketBase(ABC):
 
     @abstractmethod
     def get_current_price(self,
-                          currency: str):
+                          currency: Optional[str]):
         """
         Get the latest price of the currency from the platform
 

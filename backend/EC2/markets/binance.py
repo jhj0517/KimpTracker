@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import requests
 
 from markets.crypto_currency_market_base import CryptoCurrencyMarketBase
@@ -28,15 +28,21 @@ class Binance(CryptoCurrencyMarketBase):
         return [i['symbol'] for i in info if i['symbol'].endswith("USDT")]
 
     def get_current_price(self,
-                          ticker: str):
+                          currency: Optional[str] = None):
+        """
+        Get prices of the currencies from Binance. Only returns USDT buy-able currencies.
+
+        :param currency: Currency code. Returns price of all currencies if it's None.
+        :return: List of currency prices
+        """
         url = self.base_endpoint + "/api/v3/ticker/price"
         param = {
-            "symbol": ticker
+            "symbol": currency
         }
         try:
             latest_prices = requests.get(url, params=param).json()
         except Exception as e:
-            print(f"failed to fetch price : {ticker}, Error: {e}")
+            print(f"failed to fetch price : {currency}, Error: {e}")
             return {}
 
         return [item for item in latest_prices if item['symbol'].endswith("USDT")]
