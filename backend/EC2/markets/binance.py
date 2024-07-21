@@ -1,6 +1,6 @@
 from typing import List, Optional
 import requests
-from datetime import datetime, timezone
+import time
 
 from markets.crypto_currency_market_base import CryptoCurrencyMarketBase
 
@@ -47,7 +47,7 @@ class Binance(CryptoCurrencyMarketBase):
             return {}
 
         usdt_prices = [item for item in latest_prices if item['symbol'].endswith("USDT")]
-        timestamp = datetime.now(timezone.utc)
+        timestamp = int(time.time() * 1000)
         for currency in usdt_prices:
             currency["timestamp"] = timestamp
 
