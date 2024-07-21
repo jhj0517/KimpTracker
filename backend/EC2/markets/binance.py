@@ -17,6 +17,7 @@ class Binance(CryptoCurrencyMarketBase):
         )
 
     def get_currencies(self) -> List:
+        """Only returns USDT buy-able coins"""
         url = self.base_endpoint + "/api/v3/exchangeInfo"
         try:
             info = requests.get(url).json()['symbols']
