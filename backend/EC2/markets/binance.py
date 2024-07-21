@@ -3,6 +3,8 @@ import requests
 
 from markets.crypto_currency_market_base import CryptoCurrencyMarketBase
 
+# Binance API documentation : https://dev.binance.vision/t/binance-api-status-error-503/14553/3
+
 
 class Binance(CryptoCurrencyMarketBase):
     def __init__(self,
