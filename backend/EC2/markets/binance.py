@@ -49,6 +49,6 @@ class Binance(CryptoCurrencyMarketBase):
         usdt_prices = [item for item in latest_prices if item['symbol'].endswith("USDT")]
         timestamp = datetime.now(timezone.utc)
         for currency in usdt_prices:
-            currency["uat"] = timestamp
+            currency["timestamp"] = timestamp
 
         return [item for item in latest_prices if item['symbol'].endswith("USDT")]
