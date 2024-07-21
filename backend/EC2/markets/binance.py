@@ -1,5 +1,6 @@
 from typing import List, Optional
 import requests
+from datetime import datetime, timezone
 
 from markets.crypto_currency_market_base import CryptoCurrencyMarketBase
 
@@ -44,5 +45,10 @@ class Binance(CryptoCurrencyMarketBase):
         except Exception as e:
             print(f"failed to fetch price : {currency}, Error: {e}")
             return {}
+
+        usdt_prices = [item for item in latest_prices if item['symbol'].endswith("USDT")]
+        timestamp = datetime.now(timezone.utc)
+        for currency in usdt_prices:
+            currency["uat"] = timestamp
 
         return [item for item in latest_prices if item['symbol'].endswith("USDT")]
