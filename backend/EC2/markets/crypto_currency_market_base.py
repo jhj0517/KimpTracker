@@ -19,7 +19,7 @@ class CryptoCurrencyMarketBase(ABC):
 
         :return: List of currency codes
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_current_price(self,
@@ -30,4 +30,4 @@ class CryptoCurrencyMarketBase(ABC):
         :param currency: Currency code
         :return: Price info data of the currency code from the platform
         """
-        pass
+        raise NotImplementedError
