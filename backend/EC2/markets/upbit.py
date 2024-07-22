@@ -24,7 +24,7 @@ class Upbit(CryptoCurrencyMarketBase):
         except Exception as e:
             print(f"failed to fetch ticker, Error : {e}")
             return []
-        return [t['market'] for t in tickers if t['market'].startswith("KRW-")]
+        return [t for t in tickers if t['market'].startswith("KRW-")]
 
     def get_current_price(self,
                           ticker: str
