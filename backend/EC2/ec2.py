@@ -34,8 +34,10 @@ class DBManager:
         collection = self.db['Upbit']
 
         upbit_coins = api.get_currencies()
+        symbols = []
         for currency in upbit_coins:
             symbol = currency["market"]
+            symbols.append(symbol)
             price = api.get_current_price(symbol)
 
             data = {**currency, **price}
@@ -47,6 +49,11 @@ class DBManager:
             )
             await asyncio.sleep(api.api_interval)
 
+        # Remove delisted symbols
+        await collection.delete_many(
+            {"market": {"$nin": symbols}}
+        )
+
     async def renew_binance_prices(self):
         api = self.binance_api
         collection = self.db['Binance']
@@ -54,8 +61,10 @@ class DBManager:
         all_price_data = api.get_current_price()
         await asyncio.sleep(api.api_interval)
 
+        symbols = []
         for data in all_price_data:
             symbol = data["symbol"]
+            symbols.append(symbol)
 
             await collection.update_one(
                 {"symbol": {"$eq": symbol}},
@@ -63,6 +72,11 @@ class DBManager:
                 upsert=True
             )
             await asyncio.sleep(api.api_interval)
+
+        # Remove delisted symbols
+        await collection.delete_many(
+            {"market": {"$nin": symbols}}
+        )
 
     async def renew_exchange_rate(self):
         api = self.exchange_rate_api
