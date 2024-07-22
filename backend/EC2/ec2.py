@@ -35,10 +35,14 @@ class DBManager:
 
         upbit_coins = api.get_currencies()
         for currency in upbit_coins:
-            price = api.get_current_price(currency)
-            await collection.update_many(
-                {"coin": currency},
-                {'$set': price},
+            symbol = currency["market"]
+            price = api.get_current_price(symbol)
+
+            data = {**currency, **price}
+
+            await collection.update_one(
+                {"market": {"$eq": symbol}},
+                {"$set": data},
                 upsert=True
             )
             await asyncio.sleep(api.api_interval)
@@ -47,15 +51,15 @@ class DBManager:
         api = self.binance_api
         collection = self.db['Binance']
 
-        prices = api.get_current_price(None)
+        all_price_data = api.get_current_price()
         await asyncio.sleep(api.api_interval)
-        for p in prices:
-            p["coin"] = p["symbol"]
 
-        for p in prices:
-            await collection.update_many(
-                {"coin": f"{p['coin']}"},
-                {'$set': p},
+        for data in all_price_data:
+            symbol = data["symbol"]
+
+            await collection.update_one(
+                {"symbol": {"$eq": symbol}},
+                {"$set": data},
                 upsert=True
             )
             await asyncio.sleep(api.api_interval)
@@ -67,7 +71,7 @@ class DBManager:
         data = api.get_exchange_rate()
         await collection.update_one(
             {"base": {"$eq": "USD"}},
-            {'$set': data},
+            {"$set": data},
             upsert=True
         )
         await asyncio.sleep(api.api_interval)
