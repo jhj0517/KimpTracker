@@ -8,7 +8,7 @@ class CryptoCurrencyMarketBase(ABC):
                  rpm: Optional[int] = None):
         self.base_endpoint = base_endpoint
         self.rpm = rpm
-        self.api_interval = None
+        self.api_interval = 1
         if self.rpm is not None:
             self.api_interval = 1 / (self.rpm / 60)
 
