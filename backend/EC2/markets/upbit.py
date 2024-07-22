@@ -29,6 +29,7 @@ class Upbit(CryptoCurrencyMarketBase):
     def get_current_price(self,
                           ticker: str
                           ):
+        """Returns price data for the ticker(symbol)"""
         url = self.base_endpoint + "/v1/ticker"
         header = {"Accept": "application/json"}
         param = {
