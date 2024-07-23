@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 from markets import Binance, Upbit
 from exchange_rate import FXRateAPI
+from utils.kimchi_premium import calculate_kimchi_premium
 
 
 # https://www.datensen.com/
@@ -90,6 +91,60 @@ class DBManager:
         )
         await asyncio.sleep(api.api_interval)
 
+    async def renew_kimchi_premium(self):
+        kp_collection = self.db['KimchiPremium']
+        er_collection = self.db['ExchangeRate']
+        binance_collection = self.db['Binance']
+        upbit_collection = self.db["Upbit"]
+
+        exchange_rate_data = await er_collection.find()
+        timestamp = int(time.time() * 1000)
+
+        upbit_coins = await upbit_collection.find()
+        binance_coins = await binance_collection.find()
+
+        binance_map = {coin['symbol'].replace('USDT', ''): coin for coin in binance_coins if coin['symbol'].endswith('USDT')}
+
+        for upbit_data in upbit_coins:
+            upbit_symbol = upbit_data["market"]
+
+            if upbit_symbol.startswith("KRW-"):
+                base_symbol = upbit_symbol.replace("KRW-", "")
+                binance_data = binance_map[base_symbol]
+
+                upbit_price = upbit_data["trade_price"]
+                binance_price = binance_data["price"]
+                exchange_rate = exchange_rate_data["rates"]["KRW"]
+                kimchi_premium = calculate_kimchi_premium(binance_price, upbit_price, exchange_rate)
+
+                data = {
+                    "base_symbol": base_symbol,
+                    "kimchi_premium": kimchi_premium,
+                    "upbit_timestamp": upbit_data["timestamp"],
+                    "binance_timestamp": binance_data["timestamp"],
+                    "timestamp": timestamp,
+                    "upbit_data": {
+                        "symbol": upbit_data["market"],
+                        "price": upbit_data["trade_price"],
+                        "timestamp": upbit_data["timestamp"]
+                    },
+                    "binance_data": {
+                        "symbol": binance_data["symbol"],
+                        "price": binance_data["price"],
+                        "timestamp": binance_data["timestamp"]
+                    },
+                    "exchange_rate": {
+                        "usd_krw": exchange_rate,
+                        "timestamp": exchange_rate_data["timestamp"]
+                    }
+                }
+
+                await kp_collection.update_one(
+                    {"base_symbol": {"$eq": base_symbol}},
+                    {"$set": data},
+                    upsert=True
+                )
+                await asyncio.sleep(api.api_interval)
 
 async def update_schedule(
     func: Callable,
