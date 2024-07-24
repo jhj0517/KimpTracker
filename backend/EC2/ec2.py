@@ -33,13 +33,15 @@ class DBManager:
     async def renew_upbit_prices(self):
         api = self.upbit_api
         collection = self.db['Upbit']
-
         upbit_coins = api.get_currencies()
         symbols = []
+
         for currency in upbit_coins:
             symbol = currency["market"]
             symbols.append(symbol)
+
             price = api.get_current_price(symbol)
+            await asyncio.sleep(api.api_interval)
 
             data = {**currency, **price}
 
@@ -48,7 +50,6 @@ class DBManager:
                 {"$set": data},
                 upsert=True
             )
-            await asyncio.sleep(api.api_interval)
 
         # Remove delisted symbols
         await collection.delete_many(
@@ -57,10 +58,10 @@ class DBManager:
 
     async def renew_binance_prices(self):
         api = self.binance_api
+        write_interval = self.write_interval
         collection = self.db['Binance']
 
         all_price_data = api.get_current_price()
-        await asyncio.sleep(api.api_interval)
 
         symbols = []
         for data in all_price_data:
@@ -72,7 +73,7 @@ class DBManager:
                 {"$set": data},
                 upsert=True
             )
-            await asyncio.sleep(api.api_interval)
+            await asyncio.sleep(write_interval)
 
         # Remove delisted symbols
         await collection.delete_many(
@@ -97,6 +98,7 @@ class DBManager:
         binance_collection = self.db['Binance']
         upbit_collection = self.db["Upbit"]
         api_interval = max(self.binance_api.api_interval, self.upbit_api.api_interval)
+        write_interval = self.write_interval
 
         exchange_rate_data = await er_collection.find({}).to_list(None)
         exchange_rate_data = exchange_rate_data[0]
@@ -144,6 +146,7 @@ class DBManager:
                     {"$set": data},
                     upsert=True
                 )
+                await asyncio.sleep(write_interval)
 
         await asyncio.sleep(api_interval)
 
