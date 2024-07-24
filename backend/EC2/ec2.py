@@ -33,13 +33,15 @@ class DBManager:
     async def renew_upbit_prices(self):
         api = self.upbit_api
         collection = self.db['Upbit']
-
         upbit_coins = api.get_currencies()
         symbols = []
+
         for currency in upbit_coins:
             symbol = currency["market"]
             symbols.append(symbol)
+
             price = api.get_current_price(symbol)
+            await asyncio.sleep(api.api_interval)
 
             data = {**currency, **price}
 
@@ -48,7 +50,6 @@ class DBManager:
                 {"$set": data},
                 upsert=True
             )
-            await asyncio.sleep(api.api_interval)
 
         # Remove delisted symbols
         await collection.delete_many(
@@ -57,10 +58,10 @@ class DBManager:
 
     async def renew_binance_prices(self):
         api = self.binance_api
+        write_interval = self.write_interval
         collection = self.db['Binance']
 
         all_price_data = api.get_current_price()
-        await asyncio.sleep(api.api_interval)
 
         symbols = []
         for data in all_price_data:
@@ -72,7 +73,7 @@ class DBManager:
                 {"$set": data},
                 upsert=True
             )
-            await asyncio.sleep(api.api_interval)
+            await asyncio.sleep(write_interval)
 
         # Remove delisted symbols
         await collection.delete_many(
@@ -96,41 +97,42 @@ class DBManager:
         er_collection = self.db['ExchangeRate']
         binance_collection = self.db['Binance']
         upbit_collection = self.db["Upbit"]
+        api_interval = max(self.binance_api.api_interval, self.upbit_api.api_interval)
+        write_interval = self.write_interval
 
-        exchange_rate_data = await er_collection.find()
+        exchange_rate_data = await er_collection.find({}).to_list(None)
+        exchange_rate_data = exchange_rate_data[0]
         timestamp = int(time.time() * 1000)
 
-        upbit_coins = await upbit_collection.find()
-        binance_coins = await binance_collection.find()
+        upbit_coins = await upbit_collection.find({}).to_list(None)
+        binance_coins = await binance_collection.find({}).to_list(None)
 
         binance_map = {coin['symbol'].replace('USDT', ''): coin for coin in binance_coins if coin['symbol'].endswith('USDT')}
+        upbit_map = {coin['market'].replace('KRW-', ''): coin for coin in upbit_coins if coin['market'].startswith('KRW-')}
 
-        for upbit_data in upbit_coins:
-            upbit_symbol = upbit_data["market"]
-
-            if upbit_symbol.startswith("KRW-"):
-                base_symbol = upbit_symbol.replace("KRW-", "")
+        for base_symbol, upbit_data in upbit_map.items():
+            if base_symbol in binance_map:
                 binance_data = binance_map[base_symbol]
 
                 upbit_price = upbit_data["trade_price"]
-                binance_price = binance_data["price"]
+                binance_price = float(binance_data["price"])
                 exchange_rate = exchange_rate_data["rates"]["KRW"]
                 kimchi_premium = calculate_kimchi_premium(binance_price, upbit_price, exchange_rate)
 
                 data = {
                     "base_symbol": base_symbol,
                     "kimchi_premium": kimchi_premium,
-                    "upbit_timestamp": upbit_data["timestamp"],
-                    "binance_timestamp": binance_data["timestamp"],
+                    "korean_name": upbit_data["korean_name"],
+                    "english_name": upbit_data["english_name"],
                     "timestamp": timestamp,
                     "upbit_data": {
                         "symbol": upbit_data["market"],
-                        "price": upbit_data["trade_price"],
+                        "price": upbit_price,
                         "timestamp": upbit_data["timestamp"]
                     },
                     "binance_data": {
                         "symbol": binance_data["symbol"],
-                        "price": binance_data["price"],
+                        "price": binance_price,
                         "timestamp": binance_data["timestamp"]
                     },
                     "exchange_rate": {
@@ -144,7 +146,10 @@ class DBManager:
                     {"$set": data},
                     upsert=True
                 )
-                await asyncio.sleep(api.api_interval)
+                await asyncio.sleep(write_interval)
+
+        await asyncio.sleep(api_interval)
+
 
 async def update_schedule(
     func: Callable,
@@ -178,6 +183,10 @@ if __name__ == "__main__":
         update_schedule(
             func=db_manager.renew_exchange_rate,
             name="Exchange Rate"
+        ),
+        update_schedule(
+            func=db_manager.renew_kimchi_premium,
+            name="Kimchi Premium"
         )
     ]
 
