@@ -1,7 +1,7 @@
 package com.librarydevloperjo.cointracker.viewmodels
 
 import android.graphics.Color
-import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
+import com.librarydevloperjo.cointracker.data.gson.UpbitItem
 import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
 import com.librarydevloperjo.cointracker.util.PreferenceManager
@@ -9,7 +9,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class UpbitAdapterViewModel(
-    private val items:UpbitCoin,
+    private val item:UpbitItem,
     private val pref: PreferenceManager
 ) {
 
@@ -17,7 +17,7 @@ class UpbitAdapterViewModel(
         get() = setLocalizedText()
 
     val priceText: String
-        get() = nFormat.format(items.tradePrice)
+        get() = nFormat.format(item.tradePrice)
 
     val changeRate:String
         get() = setChangeRateText()
@@ -27,24 +27,24 @@ class UpbitAdapterViewModel(
 
     private fun setTextColor(): Int {
         return when {
-            items.changeRate < 0 -> Color.parseColor("#416DD8")
-            items.changeRate > 0 -> Color.parseColor("#E8B53333")
+            item.changeRate < 0 -> Color.parseColor("#416DD8")
+            item.changeRate > 0 -> Color.parseColor("#E8B53333")
             else -> Color.BLACK // Default color
         }
     }
 
     private fun setChangeRateText(): String{
         return when {
-            items.changeRate < 0 -> "-${nFormat.format(items.changeRate)} %"
-            items.changeRate > 0 -> "+${nFormat.format(items.changeRate)} %"
-            else -> "${nFormat.format(items.changeRate)} %"
+            item.changeRate < 0 -> "-${nFormat.format(item.changeRate)} %"
+            item.changeRate > 0 -> "+${nFormat.format(item.changeRate)} %"
+            else -> "${nFormat.format(item.changeRate)} %"
         }
     }
 
     private fun setLocalizedText(): String {
         return when (pref.getInt(LOCALE_KEY)) {
-            LOCALE_KOREAN -> items.koreanName ?: items.ticker
-            else -> items.englishName ?: items.ticker
+            LOCALE_KOREAN -> item.koreanName
+            else -> item.englishName
         }
     }
 
@@ -53,6 +53,6 @@ class UpbitAdapterViewModel(
     }
 
     companion object{
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
+        val nFormat: NumberFormat = NumberFormat.getNumberInstance(Locale.US)
     }
 }
