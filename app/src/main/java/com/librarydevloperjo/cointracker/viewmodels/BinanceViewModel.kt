@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.librarydevloperjo.cointracker.data.CoinRepository
 import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class BinanceViewModel @Inject constructor(
     private val _sortState = MutableLiveData(SortState.PRICE_DESCENDING)
     val sortState get() = _sortState
 
-    private val _binanceList = MutableLiveData(arrayListOf<KimchiPremiumItem>())
+    private val _binanceList = MutableLiveData<List<KimchiPremiumItem>>(emptyList())
     val binanceList get()= _binanceList
 
     private var unSortedList: List<KimchiPremiumItem> = emptyList()
@@ -44,7 +45,7 @@ class BinanceViewModel @Inject constructor(
             SortState.PRICE_ASCENDING -> unSortedList.sortedBy { it.binanceData.price }
             else -> unSortedList
         }
-        _binanceList.value = ArrayList(sortedList)
+        _binanceList.value = sortedList
     }
 
     fun toggleSortState() {

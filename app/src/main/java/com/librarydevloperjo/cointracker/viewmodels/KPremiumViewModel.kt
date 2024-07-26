@@ -34,7 +34,7 @@ class KPremiumViewModel @Inject constructor(
     private val _sortState = MutableLiveData(SortState.PRICE_DESCENDING)
     val sortState get() = _sortState
 
-    private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumEntity>())
+    private val _kPremiumList =  MutableLiveData<List<KPremiumEntity>>(emptyList())
     val kPremiumList get()= _kPremiumList
 
     private var unSortedList: List<KimchiPremiumItem> = emptyList()
@@ -61,8 +61,7 @@ class KPremiumViewModel @Inject constructor(
             SortState.KIMP_ASCENDING -> unSortedList.sortedBy { it.kimchiPremium }
             else -> unSortedList
         }
-        val entities = sortedList.map { item -> item.toEntity() }
-        _kPremiumList.value = ArrayList(entities)
+        _kPremiumList.value = sortedList.map { item -> item.toEntity() }
     }
 
     fun toggleSortState(criteria: KPremiumSortCriteria) {
