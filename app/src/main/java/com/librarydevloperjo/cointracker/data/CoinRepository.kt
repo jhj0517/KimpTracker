@@ -1,7 +1,7 @@
 package com.librarydevloperjo.cointracker.data
 
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumResponse
 import com.librarydevloperjo.cointracker.network.CoinService
-import com.librarydevloperjo.cointracker.data.gson.PlatformData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,14 +19,14 @@ class CoinRepository @Inject constructor(
     private val externalScope: CoroutineScope,
 ) {
 
-    private val _platformDataTickFlow = MutableSharedFlow<PlatformData>(replay = 0)
-    val platformDataTickFlow: SharedFlow<PlatformData> = _platformDataTickFlow
+    private val _kpDataTickFlow = MutableSharedFlow<KimchiPremiumResponse>(replay = 0)
+    val kpDataTickFlow: SharedFlow<KimchiPremiumResponse> = _kpDataTickFlow
 
     init {
         externalScope.launch(Dispatchers.IO) {
             while(true) {
                 try {
-                    _platformDataTickFlow.emit(service.getPlatformData().body)
+                    _kpDataTickFlow.emit(service.fetchKimchiPremiumData())
                 } catch (e: Exception){
                     throw Exception("Network error : $e")
                 }
