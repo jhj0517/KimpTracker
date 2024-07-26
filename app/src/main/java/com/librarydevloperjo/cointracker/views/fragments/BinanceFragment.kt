@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.BinanceAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentBinanceBinding
 import com.librarydevloperjo.cointracker.viewmodels.BinanceViewModel
+import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -67,10 +68,24 @@ class BinanceFragment : Fragment() {
             }
         }
 
-        viewModel.sortState.observe(viewLifecycleOwner){
+        viewModel.sortState.observe(viewLifecycleOwner){ state ->
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(100)
                 binding.rvBinance.scrollToPosition(0)
+            }
+
+            binding.apply {
+                when (state) {
+                    SortState.PRICE_ASCENDING -> {
+                        sortPriceByDesc = false
+                    }
+                    SortState.PRICE_DESCENDING -> {
+                        sortPriceByDesc = true
+                    }
+                    else -> {
+                        sortPriceByDesc = null
+                    }
+                }
             }
         }
     }

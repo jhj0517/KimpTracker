@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.UpbitAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentUpbitBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
+import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UpbitSortCriteria
 import com.librarydevloperjo.cointracker.viewmodels.UpbitViewModel
@@ -45,7 +46,7 @@ class UpbitFragment : Fragment() {
             rvUpbit.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                viewModel.toggleSortState(UpbitSortCriteria.CHANGE_RATE)
+                viewModel.toggleSortState(UpbitSortCriteria.PRICE)
             }
             rootTabChangerate.setOnClickListener {
                 viewModel.toggleSortState(UpbitSortCriteria.CHANGE_RATE)
@@ -73,10 +74,35 @@ class UpbitFragment : Fragment() {
             }
         }
 
-        viewModel.sortState.observe(viewLifecycleOwner){
+        viewModel.sortState.observe(viewLifecycleOwner){ state ->
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(100)
                 binding.rvUpbit.scrollToPosition(0)
+            }
+
+            binding.apply {
+                when(state){
+                    SortState.PRICE_ASCENDING -> {
+                        sortChangeRateByDesc = null
+                        sortPriceByDesc = false
+                    }
+                    SortState.PRICE_DESCENDING -> {
+                        sortChangeRateByDesc = null
+                        sortPriceByDesc = true
+                    }
+                    SortState.CHANGE_RATE_ASCENDING -> {
+                        sortPriceByDesc = null
+                        sortChangeRateByDesc = false
+                    }
+                    SortState.CHANGE_RATE_DESCENDING -> {
+                        sortPriceByDesc = null
+                        sortChangeRateByDesc = true
+                    }
+                    else -> {
+                        sortChangeRateByDesc = null
+                        sortPriceByDesc = null
+                    }
+                }
             }
         }
     }

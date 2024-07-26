@@ -15,6 +15,7 @@ import com.librarydevloperjo.cointracker.databinding.FragmentKimpBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.KPremiumSortCriteria
 import com.librarydevloperjo.cointracker.viewmodels.KPremiumViewModel
+import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import com.librarydevloperjo.cointracker.views.dialogfragments.WidgetMakerFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,11 +56,11 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
             rvKimp.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                viewModel.toggleSortState(KPremiumSortCriteria.KIMP)
+                viewModel.toggleSortState(KPremiumSortCriteria.PRICE)
             }
 
             rootTabkp.setOnClickListener {
-                viewModel.toggleSortState(KPremiumSortCriteria.PRICE)
+                viewModel.toggleSortState(KPremiumSortCriteria.KIMP)
             }
 
             btnSetting.setOnClickListener {
@@ -91,10 +92,35 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
             }
         }
 
-        viewModel.sortState.observe(viewLifecycleOwner){
+        viewModel.sortState.observe(viewLifecycleOwner){ state ->
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(100)
                 binding.rvKimp.scrollToPosition(0)
+            }
+
+            binding.apply {
+                when(state){
+                    SortState.PRICE_ASCENDING -> {
+                        sortKimpByDesc = null
+                        sortPriceByDesc = false
+                    }
+                    SortState.PRICE_DESCENDING -> {
+                        sortKimpByDesc = null
+                        sortPriceByDesc = true
+                    }
+                    SortState.KIMP_ASCENDING -> {
+                        sortKimpByDesc = false
+                        sortPriceByDesc = null
+                    }
+                    SortState.KIMP_DESCENDING -> {
+                        sortKimpByDesc = true
+                        sortPriceByDesc = null
+                    }
+                    else -> {
+                        sortKimpByDesc = null
+                        sortPriceByDesc = null
+                    }
+                }
             }
         }
     }
