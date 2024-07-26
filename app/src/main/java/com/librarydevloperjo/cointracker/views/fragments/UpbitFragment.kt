@@ -64,9 +64,10 @@ class UpbitFragment : Fragment() {
     private fun subscribeUI(adapter: UpbitAdapter){
         viewModel.upbitList.observe(viewLifecycleOwner){
             binding.isLoaded = !it.isNullOrEmpty()
-            binding.count = "(${it.size})"
-
-            adapter.submitList(it)
+            if (it.isNotEmpty()){
+                binding.count = "(${it.size})"
+                adapter.submitList(it)
+            }
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){

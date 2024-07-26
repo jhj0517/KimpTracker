@@ -73,11 +73,13 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
 
     private fun subscribeUI(adapter:KpremiumAdapter){
         viewModel.kPremiumList.observe(viewLifecycleOwner){
-            binding.isLoaded = !it.isEmpty()
-            binding.count = "(${it.size})"
-            binding.exc = it.first().exchangeRate.toString()
+            binding.isLoaded = !it.isNullOrEmpty()
 
-            adapter.submitList(it)
+            if (it.isNotEmpty()){
+                binding.count = "(${it.size})"
+                binding.exc = it.first().exchangeRate.toString()
+                adapter.submitList(it)
+            }
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){

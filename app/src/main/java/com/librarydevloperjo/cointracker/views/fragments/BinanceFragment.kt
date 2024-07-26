@@ -56,9 +56,12 @@ class BinanceFragment : Fragment() {
 
     private fun subscribeUI(adapter: BinanceAdapter){
         viewModel.binanceList.observe(viewLifecycleOwner){
-            binding.isLoaded = it.isNotEmpty()
-            binding.tvTotalnum.text = "(${it.size})"
-            adapter.submitList(it)
+            binding.isLoaded = !it.isNullOrEmpty()
+
+            if (it.isNotEmpty()){
+                binding.tvTotalnum.text = "(${it.size})"
+                adapter.submitList(it)
+            }
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){
