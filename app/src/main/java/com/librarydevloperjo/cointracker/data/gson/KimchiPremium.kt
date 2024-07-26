@@ -1,6 +1,7 @@
 package com.librarydevloperjo.cointracker.data.gson
 
 import com.google.gson.annotations.SerializedName
+import com.librarydevloperjo.cointracker.data.room.KPremiumData
 import java.math.BigDecimal
 
 data class KimchiPremiumResponse(
@@ -18,6 +19,15 @@ data class KimchiPremiumData(
     @field:SerializedName("upbit_data") val upbitData: ExchangeData
 ) {
     fun getPercentage(): BigDecimal = kimchiPremium.multiply(BigDecimal(100))
+
+    fun toLocal(): KPremiumData = KPremiumData(
+        koreanName = koreanName,
+        englishName = englishName,
+        ticker = baseSymbol,
+        upbitPrice = upbitData.price.toDouble(),
+        binancePrice = binanceData.price.toDouble(),
+        kPremium = getPercentage().toDouble()
+    )
 }
 
 data class ExchangeData(
