@@ -11,10 +11,3 @@ data class BinanceItem(
     @field:SerializedName("price") val price: String,
     @field:SerializedName("timestamp") val timestamp: Long
 )
-
-data class BinanceCoin(
-    @field:SerializedName("coin") val ticker: String,
-    @field:SerializedName("price") val price: Float,
-    @field:SerializedName("lastPrice") val lastPrice: Double,
-    @field:SerializedName("priceChangePercent") val priceChangePercent: Double,
-)
