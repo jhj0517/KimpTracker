@@ -1,15 +1,15 @@
 package com.librarydevloperjo.cointracker.util
 
-import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
+import com.librarydevloperjo.cointracker.data.gson.BinanceItem
 import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 
 object PremiumCalculator {
-    fun calculate(upbits:List<UpbitCoin>, binances:List<BinanceCoin>, exc:Double) : ArrayList<KPremiumEntity>{
+    fun calculate(upbits:List<UpbitCoin>, binances:List<BinanceItem>, exc:Double) : ArrayList<KPremiumEntity>{
         val list = arrayListOf<KPremiumEntity>()
 
         val upbitMap = upbits.associateBy { it.ticker.replace("KRW-","") }
-        val binanceMap = binances.associateBy { it.ticker.replace("USDT","") }
+        val binanceMap = binances.associateBy { it.symbol.replace("USDT","") }
 
         val sameKeys = upbitMap.keys.intersect(binanceMap.keys)
 
@@ -20,14 +20,15 @@ object PremiumCalculator {
         combinedMap.forEach { (key, pair) ->
             val upbit = pair.first!!
             val binance = pair.second!!
-            val premium = (upbit.tradePrice)/(binance.price*exc)*100-100
+            val premium = (upbit.tradePrice)/(binance.price.toDouble()*exc)*100-100
             val data = KPremiumEntity(
                 ticker = key,
                 koreanName = upbit.koreanName,
                 englishName = upbit.englishName,
                 upbitPrice = upbit.tradePrice,
-                binancePrice = binance.price * exc,
-                kPremium = premium
+                binancePrice = binance.price.toDouble() * exc,
+                kPremium = premium,
+                exchangeRate = exc
             )
             list.add(data)
         }
