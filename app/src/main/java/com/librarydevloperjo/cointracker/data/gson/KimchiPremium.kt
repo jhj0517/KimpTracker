@@ -14,8 +14,6 @@ data class KimchiPremiumItem(
     @field:SerializedName("timestamp") val timestamp: Long,
     @field:SerializedName("upbit_data") val upbitData: UpbitExchangeData
 ) {
-    fun getPercentage(): BigDecimal = kimchiPremium.multiply(BigDecimal(100))
-
     fun toEntity(): KPremiumEntity = KPremiumEntity(
         koreanName = koreanName,
         englishName = englishName,
@@ -23,7 +21,7 @@ data class KimchiPremiumItem(
         upbitPrice = upbitData.price,
         binancePrice = binanceData.price,
         exchangeRate = exchangeRate.usdKrw.toDouble(),
-        kPremium = getPercentage().toDouble()
+        kPremium = kimchiPremium.toDouble()
     )
 
 }
