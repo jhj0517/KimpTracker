@@ -4,10 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import java.math.BigDecimal
 
-data class KimchiPremiumResponse(
-    val items: List<KimchiPremiumItem>
-)
-
 data class KimchiPremiumItem(
     @field:SerializedName("base_symbol") val baseSymbol: String,
     @field:SerializedName("binance_data") val binanceData: BinanceExchangeData,

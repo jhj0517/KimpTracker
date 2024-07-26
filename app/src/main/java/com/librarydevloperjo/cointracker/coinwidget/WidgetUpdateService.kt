@@ -58,7 +58,7 @@ class WidgetUpdateService: LifecycleService() {
                 val ticker = preference.getString(WIDGET_COIN_KEY)
 
                 if( ticker != PreferenceManager.DEFAULT_VALUE_STRING) {
-                    val list = it.items.map { item -> item.toEntity() }
+                    val list = it.map { item -> item.toEntity() }
                     val data = list.single { entity -> entity.ticker == ticker }
 
                     updateWidget(data)

@@ -46,7 +46,7 @@ class KPremiumViewModel @Inject constructor(
         viewModelScope.launch {
             while (isActive) {
                 coinRepository.kpDataTickFlow.collect { response ->
-                    unSortedList = response.items
+                    unSortedList = response
                     sortKPremiumList()
                 }
             }

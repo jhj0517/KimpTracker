@@ -1,10 +1,9 @@
 package com.librarydevloperjo.cointracker.network
 
 import com.librarydevloperjo.cointracker.BuildConfig
-import com.librarydevloperjo.cointracker.data.gson.BaseResponse
 import com.librarydevloperjo.cointracker.data.gson.BinanceResponse
 import com.librarydevloperjo.cointracker.data.gson.ExchangeRateResponse
-import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumResponse
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
 import com.librarydevloperjo.cointracker.data.gson.UpbitResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,7 +23,7 @@ interface CoinService {
     suspend fun fetchExchangeRateData(): ExchangeRateResponse
 
     @GET("/kimchi-premium")
-    suspend fun fetchKimchiPremiumData(): KimchiPremiumResponse
+    suspend fun fetchKimchiPremiumData(): List<KimchiPremiumItem>
 
     companion object {
         private const val BASE_URL = BuildConfig.BaseURL
