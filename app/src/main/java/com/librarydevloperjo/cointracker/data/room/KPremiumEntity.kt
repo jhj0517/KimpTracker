@@ -16,6 +16,7 @@ data class KPremiumEntity(
     @ColumnInfo(name = "englishName") val englishName:String?,
     @ColumnInfo(name = "ticker") val ticker:String,
     @ColumnInfo(name = "upbitPrice") val upbitPrice:Double,
+    @ColumnInfo(name = "exchangeRate") val exchangeRate:Double,
     @ColumnInfo(name = "binancePrice") val binancePrice:Double,
     @ColumnInfo(name = "kPremium") val kPremium:Double,
     var isBookmark:Boolean?=false,
