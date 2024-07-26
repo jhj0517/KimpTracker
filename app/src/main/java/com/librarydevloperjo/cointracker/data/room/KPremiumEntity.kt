@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
     tableName = "kdata"
 )
 @Parcelize
-data class KPremiumData(
+data class KPremiumEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id:Long=0,
     @ColumnInfo(name = "koreanName") val koreanName:String?,
     @ColumnInfo(name = "englishName") val englishName:String?,

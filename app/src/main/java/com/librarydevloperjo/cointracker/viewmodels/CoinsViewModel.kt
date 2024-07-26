@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.librarydevloperjo.cointracker.data.*
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
 import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
 import com.librarydevloperjo.cointracker.data.room.KDataDAO
@@ -30,7 +30,7 @@ class CoinsViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
     private val kDataDAO: KDataDAO
 ) : ViewModel() {
-    private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumData>())
+    private val _kPremiumList = MutableLiveData(arrayListOf<KPremiumEntity>())
     val kPremiumList get() = _kPremiumList
 
     private val _upbitList = MutableLiveData(arrayListOf<UpbitCoin>())
@@ -64,7 +64,7 @@ class CoinsViewModel @Inject constructor(
         }
     }
 
-    fun sortKimpByState(state:SortState, unSorted:ArrayList<KPremiumData>): ArrayList<KPremiumData>{
+    fun sortKimpByState(state:SortState, unSorted:ArrayList<KPremiumEntity>): ArrayList<KPremiumEntity>{
         val sorted = when (state){
             SortState.PRICE_DESCENDING -> unSorted.sortedByDescending { it.upbitPrice }
             SortState.PRICE_ASCENDING -> unSorted.sortedBy { it.upbitPrice }
@@ -97,7 +97,7 @@ class CoinsViewModel @Inject constructor(
         return ArrayList(sorted)
     }
 
-    fun insertBookMark(data: KPremiumData){
+    fun insertBookMark(data: KPremiumEntity){
         viewModelScope.launch {
             kDataDAO.insertBookMark(data)
             _kPremiumList.value = sortKimpByState(sortState.value!!, kPremiumList.value!!)

@@ -7,14 +7,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.coinwidget.WidgetUpdateService
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.databinding.FragmentWidgetMakerBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
@@ -32,7 +31,7 @@ class WidgetMakerFragment : DialogFragment() {
     private var _binding:FragmentWidgetMakerBinding? = null
     private val binding get() = _binding!!
 
-    private var coin: KPremiumData? = null
+    private var coin: KPremiumEntity? = null
     private val coinsViewModel:CoinsViewModel by activityViewModels()
     private val viewmodel:DialogViewModel by viewModels()
     @Inject
@@ -45,7 +44,7 @@ class WidgetMakerFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         arguments?.let {
             coin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(ARG_KEY_KPREMIUM, KPremiumData::class.java)
+                it.getParcelable(ARG_KEY_KPREMIUM, KPremiumEntity::class.java)
             } else {
                 it.getParcelable(ARG_KEY_KPREMIUM)
             }

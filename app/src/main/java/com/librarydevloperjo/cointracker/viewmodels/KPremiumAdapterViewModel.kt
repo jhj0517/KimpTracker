@@ -2,7 +2,7 @@ package com.librarydevloperjo.cointracker.viewmodels
 
 import android.graphics.Color
 import com.librarydevloperjo.cointracker.R
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
 import com.librarydevloperjo.cointracker.util.PreferenceManager
@@ -10,7 +10,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class KPremiumAdapterViewModel(
-    private val items: KPremiumData,
+    private val items: KPremiumEntity,
     private val pref:PreferenceManager
 ) {
     val name: String

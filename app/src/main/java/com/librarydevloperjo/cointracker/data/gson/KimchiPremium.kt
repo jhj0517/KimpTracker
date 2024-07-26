@@ -1,7 +1,7 @@
 package com.librarydevloperjo.cointracker.data.gson
 
 import com.google.gson.annotations.SerializedName
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import java.math.BigDecimal
 
 data class KimchiPremiumResponse(
@@ -20,7 +20,7 @@ data class KimchiPremiumData(
 ) {
     fun getPercentage(): BigDecimal = kimchiPremium.multiply(BigDecimal(100))
 
-    fun toLocal(): KPremiumData = KPremiumData(
+    fun toLocal(): KPremiumEntity = KPremiumEntity(
         koreanName = koreanName,
         englishName = englishName,
         ticker = baseSymbol,

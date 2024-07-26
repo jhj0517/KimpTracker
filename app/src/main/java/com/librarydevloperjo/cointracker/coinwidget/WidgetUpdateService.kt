@@ -20,7 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.librarydevloperjo.cointracker.MainActivity
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.data.CoinRepository
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.util.PremiumCalculator
 import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
@@ -85,7 +85,7 @@ class WidgetUpdateService: LifecycleService() {
         }
     }
 
-    private fun updateWidget(data: KPremiumData) {
+    private fun updateWidget(data: KPremiumEntity) {
         val appWidgetManager = AppWidgetManager.getInstance(this)
         val widget = ComponentName(this, WidgetProvider::class.java)
         val allWidgetIds = appWidgetManager.getAppWidgetIds(widget)
@@ -97,7 +97,7 @@ class WidgetUpdateService: LifecycleService() {
         }
     }
 
-    private fun updateView(data: KPremiumData): RemoteViews {
+    private fun updateView(data: KPremiumEntity): RemoteViews {
         val views = RemoteViews(
             this.packageName,
             R.layout.app_widget

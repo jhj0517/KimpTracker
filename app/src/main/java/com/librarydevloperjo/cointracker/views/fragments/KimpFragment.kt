@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.KpremiumAdapter
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.databinding.FragmentKimpBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
@@ -87,7 +87,7 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
         _binding = null
     }
 
-    override fun onItemClicked(items: KPremiumData) {
+    override fun onItemClicked(items: KPremiumEntity) {
         val dialog = WidgetMakerFragment.newInstance(items)
         dialog.show(requireActivity().supportFragmentManager,"dialog")
     }
