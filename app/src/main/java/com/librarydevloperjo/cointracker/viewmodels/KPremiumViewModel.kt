@@ -53,15 +53,27 @@ class KPremiumViewModel @Inject constructor(
         }
     }
 
-    private fun sortKPremiumList(){
-        val sortedList = when (_sortState.value) {
-            SortState.PRICE_DESCENDING -> unSortedList.sortedByDescending { it.upbitData.price }
-            SortState.PRICE_ASCENDING -> unSortedList.sortedBy { it.upbitData.price }
-            SortState.KIMP_DESCENDING -> unSortedList.sortedByDescending { it.kimchiPremium }
-            SortState.KIMP_ASCENDING -> unSortedList.sortedBy { it.kimchiPremium }
-            else -> unSortedList
+    private fun sortKPremiumList() {
+        viewModelScope.launch {
+            val bookMarks = getAllBookMarks()
+
+            val sortedList = when (_sortState.value) {
+                SortState.PRICE_DESCENDING -> unSortedList.sortedByDescending { it.upbitData.price }
+                SortState.PRICE_ASCENDING -> unSortedList.sortedBy { it.upbitData.price }
+                SortState.KIMP_DESCENDING -> unSortedList.sortedByDescending { it.kimchiPremium }
+                SortState.KIMP_ASCENDING -> unSortedList.sortedBy { it.kimchiPremium }
+                else -> unSortedList
+            }
+            val entities = sortedList.map { item -> item.toEntity() }
+
+            val finalList = entities.map { item ->
+                val isBookmarked = bookMarks.any { it.ticker == item.ticker }
+                item.isBookmark = isBookmarked
+                item
+            }
+
+            _kPremiumList.value = bookMarks + finalList.filter { !it.isBookmark!! }
         }
-        _kPremiumList.value = sortedList.map { item -> item.toEntity() }
     }
 
     fun toggleSortState(criteria: KPremiumSortCriteria) {
@@ -79,6 +91,7 @@ class KPremiumViewModel @Inject constructor(
 
     fun insertBookMark(data: KPremiumEntity){
         viewModelScope.launch {
+            data.isBookmark = true
             kDataDAO.insertBookMark(data)
             sortKPremiumList()
         }
@@ -90,7 +103,7 @@ class KPremiumViewModel @Inject constructor(
         }
     }
 
-    fun queryBookMarks(coinName:String) = kDataDAO.queryBookMarks(coinName)
-    private fun getAllBookMarks() = kDataDAO.getAllBookMarks()
+    suspend fun queryBookMarks(coinName:String) = kDataDAO.queryBookMarks(coinName)
+    private suspend fun getAllBookMarks() = kDataDAO.getAllBookMarks()
 
 }

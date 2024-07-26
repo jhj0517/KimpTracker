@@ -32,7 +32,7 @@ Filterable {
 
         init{
             binding.ltRoot.setOnClickListener {
-                val data = currentList.get(adapterPosition)
+                val data = currentList[adapterPosition]
                 clickcallback.onItemClicked(data)
             }
         }
