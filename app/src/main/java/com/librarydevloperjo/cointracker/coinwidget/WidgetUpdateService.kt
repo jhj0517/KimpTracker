@@ -54,12 +54,13 @@ class WidgetUpdateService: LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         lifecycleScope.launch {
-            repository.platformDataTickFlow.collectLatest {
+            repository.kpDataTickFlow.collectLatest {
                 val ticker = preference.getString(WIDGET_COIN_KEY)
 
                 if( ticker != PreferenceManager.DEFAULT_VALUE_STRING) {
-                    val list = PremiumCalculator.calculate(it.upbit, it.binance, it.exc[0].openingPrice)
-                    val data = list.single { coin -> coin.ticker == ticker }
+                    val list = it.items.map { item -> item.toEntity() }
+                    val data = list.single { entity -> entity.ticker == ticker }
+
                     updateWidget(data)
                 }
             }
