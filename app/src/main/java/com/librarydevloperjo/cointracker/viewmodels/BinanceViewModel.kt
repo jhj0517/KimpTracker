@@ -14,6 +14,7 @@ import javax.inject.Inject
 class BinanceViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
 ): ViewModel() {
+
     private val _sortState = MutableLiveData(SortState.PRICE_DESCENDING)
     val sortState get() = _sortState
 
@@ -25,6 +26,7 @@ class BinanceViewModel @Inject constructor(
     init {
         collectBinanceData()
     }
+
     private fun collectBinanceData() {
         viewModelScope.launch {
             while (isActive) {
@@ -35,6 +37,7 @@ class BinanceViewModel @Inject constructor(
             }
         }
     }
+
     fun sortBinanceList(){
         val sortedList = when (_sortState.value) {
             SortState.PRICE_DESCENDING -> unSortedList.sortedByDescending { it.binanceData.price }
@@ -42,6 +45,16 @@ class BinanceViewModel @Inject constructor(
             else -> unSortedList
         }
         _binanceList.value = ArrayList(sortedList)
+    }
+
+    fun toggleSortState() {
+        val newState = when (sortState.value) {
+            SortState.PRICE_DESCENDING -> SortState.PRICE_ASCENDING
+            SortState.PRICE_ASCENDING -> SortState.PRICE_DESCENDING
+            else -> SortState.PRICE_DESCENDING
+        }
+        _sortState.value = newState
+        sortBinanceList()
     }
 
 }
