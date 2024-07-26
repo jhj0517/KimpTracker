@@ -34,7 +34,7 @@
     <string name="binancefrom">It is obtained through the official API provided by Binance. Prices are in USDT.</string>
 
     <string name="wherefromcoin">2. Where does price come from? </string>
-    <string name="coinfrom">It is obtained through the official API provided by Binance,Upbit.</string>
+    <string name="coinfrom">It is obtained through the official OPEN API provided by Binance,Upbit.</string>
 
     <string name="howkimchpremium">3. How is Kimchi Premium calculated?</string>
     <string name="bycalculated">It is calculated by multiplying the Binance Exchange coin price (in USDT) by the exchange rate provided by the Export-Import Bank of Korea and comparing it with the Upbit price.</string>
