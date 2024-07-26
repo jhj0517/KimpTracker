@@ -8,7 +8,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
 import com.librarydevloperjo.cointracker.databinding.CellUpbitBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.UpbitAdapterViewModel
@@ -19,13 +19,13 @@ import java.util.*
 class UpbitAdapter(
     private val preferenceManager: PreferenceManager
 ):
-ListAdapter<UpbitCoin, UpbitAdapter.ViewHolder>(diffUtil)
+ListAdapter<KimchiPremiumItem, UpbitAdapter.ViewHolder>(diffUtil)
 ,Filterable {
 
-    private var list = mutableListOf<UpbitCoin>()
+    private var list = mutableListOf<KimchiPremiumItem>()
 
     inner class ViewHolder(val binding: CellUpbitBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(items: UpbitCoin){
+        fun bind(items: KimchiPremiumItem){
             with(binding){
                 viewModel = UpbitAdapterViewModel(items, preferenceManager)
                 executePendingBindings()
@@ -54,7 +54,7 @@ ListAdapter<UpbitCoin, UpbitAdapter.ViewHolder>(diffUtil)
         return SearchFilter
     }
 
-    fun setData(list: MutableList<UpbitCoin>?){
+    fun setData(list: MutableList<KimchiPremiumItem>?){
         this.list = list!!
         submitList(list)
     }
@@ -62,14 +62,14 @@ ListAdapter<UpbitCoin, UpbitAdapter.ViewHolder>(diffUtil)
     private val SearchFilter : Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence): FilterResults {
 
-            val filteredList: ArrayList<UpbitCoin> = ArrayList()
+            val filteredList: ArrayList<KimchiPremiumItem> = ArrayList()
             if (constraint == null || constraint.length == 0) {
                 filteredList.addAll(list)
             } else {
                 val filterPattern = constraint.toString().lowercase().trim { it <= ' '}
 
                 for (item in list) {
-                    if(item.ticker!!.contains(filterPattern)){
+                    if(item.upbitData.symbol.contains(filterPattern)){
                         filteredList.add(item)
                     }
                 }
@@ -80,17 +80,17 @@ ListAdapter<UpbitCoin, UpbitAdapter.ViewHolder>(diffUtil)
         }
 
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
-            submitList(results.values as MutableList<UpbitCoin>)
+            submitList(results.values as MutableList<KimchiPremiumItem>)
         }
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<UpbitCoin>() {
-            override fun areContentsTheSame(oldItem: UpbitCoin, newItem: UpbitCoin) =
-                oldItem.ticker == newItem.ticker
+        val diffUtil = object : DiffUtil.ItemCallback<KimchiPremiumItem>() {
+            override fun areContentsTheSame(oldItem: KimchiPremiumItem, newItem: KimchiPremiumItem) =
+                oldItem.upbitData.symbol == newItem.upbitData.symbol
 
-            override fun areItemsTheSame(oldItem: UpbitCoin, newItem: UpbitCoin) =
-                oldItem.ticker == newItem.ticker
+            override fun areItemsTheSame(oldItem: KimchiPremiumItem, newItem: KimchiPremiumItem) =
+                oldItem.upbitData.symbol == newItem.upbitData.symbol
         }
     }
 

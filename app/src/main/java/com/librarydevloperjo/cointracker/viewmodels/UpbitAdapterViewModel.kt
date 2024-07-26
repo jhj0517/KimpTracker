@@ -1,6 +1,7 @@
 package com.librarydevloperjo.cointracker.viewmodels
 
 import android.graphics.Color
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
 import com.librarydevloperjo.cointracker.data.gson.UpbitItem
 import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
@@ -9,7 +10,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class UpbitAdapterViewModel(
-    private val item:UpbitItem,
+    private val item:KimchiPremiumItem,
     private val pref: PreferenceManager
 ) {
 
@@ -17,7 +18,7 @@ class UpbitAdapterViewModel(
         get() = setLocalizedText()
 
     val priceText: String
-        get() = nFormat.format(item.tradePrice)
+        get() = nFormat.format(item.upbitData.price)
 
     val changeRate:String
         get() = setChangeRateText()
@@ -26,18 +27,20 @@ class UpbitAdapterViewModel(
         get() = setTextColor()
 
     private fun setTextColor(): Int {
+        val changeRate = item.upbitData.changeRate
         return when {
-            item.changeRate < 0 -> Color.parseColor("#416DD8")
-            item.changeRate > 0 -> Color.parseColor("#E8B53333")
+            changeRate < 0 -> Color.parseColor("#416DD8")
+            changeRate > 0 -> Color.parseColor("#E8B53333")
             else -> Color.BLACK // Default color
         }
     }
 
     private fun setChangeRateText(): String{
+        val changeRate = item.upbitData.changeRate
         return when {
-            item.changeRate < 0 -> "-${nFormat.format(item.changeRate)} %"
-            item.changeRate > 0 -> "+${nFormat.format(item.changeRate)} %"
-            else -> "${nFormat.format(item.changeRate)} %"
+            changeRate < 0 -> "-${nFormat.format(changeRate)} %"
+            changeRate > 0 -> "+${nFormat.format(changeRate)} %"
+            else -> "${nFormat.format(changeRate)} %"
         }
     }
 
