@@ -1,6 +1,6 @@
 package com.librarydevloperjo.cointracker.data
 
-import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumResponse
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
 import com.librarydevloperjo.cointracker.network.CoinService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +19,8 @@ class CoinRepository @Inject constructor(
     private val externalScope: CoroutineScope,
 ) {
 
-    private val _kpDataTickFlow = MutableSharedFlow<KimchiPremiumResponse>(replay = 0)
-    val kpDataTickFlow: SharedFlow<KimchiPremiumResponse> = _kpDataTickFlow
+    private val _kpDataTickFlow = MutableSharedFlow<List<KimchiPremiumItem>>(replay = 0)
+    val kpDataTickFlow: SharedFlow<List<KimchiPremiumItem>> = _kpDataTickFlow
 
     init {
         externalScope.launch(Dispatchers.IO) {
