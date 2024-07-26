@@ -128,7 +128,10 @@ class DBManager:
                     "upbit_data": {
                         "symbol": upbit_data["market"],
                         "price": upbit_price,
-                        "timestamp": upbit_data["timestamp"]
+                        "timestamp": upbit_data["timestamp"],
+                        "change": upbit_data["change"],
+                        "change_rate": upbit_data["change_rate"],
+                        "change_price": upbit_data["change_price"]
                     },
                     "binance_data": {
                         "symbol": binance_data["symbol"],
