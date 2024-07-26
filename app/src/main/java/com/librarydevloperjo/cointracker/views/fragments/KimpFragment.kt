@@ -24,7 +24,7 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
 
     private var _binding: FragmentKimpBinding? =null
     private val binding get() = _binding!!
-    private val viewModel: KPremiumViewModel by viewModels()
+    private val viewModel: KPremiumViewModel by activityViewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
 
     @Inject

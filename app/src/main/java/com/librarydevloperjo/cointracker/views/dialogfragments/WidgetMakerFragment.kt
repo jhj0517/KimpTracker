@@ -17,8 +17,8 @@ import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.databinding.FragmentWidgetMakerBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
-import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.DialogViewModel
+import com.librarydevloperjo.cointracker.viewmodels.KPremiumViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ class WidgetMakerFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private var coin: KPremiumEntity? = null
-    private val coinsViewModel:CoinsViewModel by activityViewModels()
+    private val kpViewModel:KPremiumViewModel by activityViewModels()
     private val viewmodel:DialogViewModel by viewModels()
     @Inject
     lateinit var preference: PreferenceManager
@@ -57,7 +57,7 @@ class WidgetMakerFragment : DialogFragment() {
 
             binding.apply {
                 viewModel = viewmodel
-                isStar = coinsViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
+                isStar = kpViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
 
                 btnWidget.setOnClickListener {
                     startService()
@@ -67,12 +67,12 @@ class WidgetMakerFragment : DialogFragment() {
                 }
 
                 rootStar.setOnClickListener {
-                    val data = coinsViewModel.queryBookMarks(coin?.ticker?:"")
+                    val data = kpViewModel.queryBookMarks(coin?.ticker?:"")
                     if(data.isEmpty()){
-                        coinsViewModel.insertBookMark(coin!!)
+                        kpViewModel.insertBookMark(coin!!)
                         isStar = true
                     }else{
-                        coinsViewModel.deleteBookMark(coin!!.ticker)
+                        kpViewModel.deleteBookMark(coin!!.ticker)
                         isStar = false
                     }
                 }
