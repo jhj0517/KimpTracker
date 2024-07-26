@@ -38,7 +38,7 @@ class BinanceViewModel @Inject constructor(
         }
     }
 
-    fun sortBinanceList(){
+    private fun sortBinanceList(){
         val sortedList = when (_sortState.value) {
             SortState.PRICE_DESCENDING -> unSortedList.sortedByDescending { it.binanceData.price }
             SortState.PRICE_ASCENDING -> unSortedList.sortedBy { it.binanceData.price }
