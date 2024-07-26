@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.UpbitAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentUpbitBinding
@@ -15,6 +16,8 @@ import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UpbitSortCriteria
 import com.librarydevloperjo.cointracker.viewmodels.UpbitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -71,7 +74,10 @@ class UpbitFragment : Fragment() {
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){
-            binding.rvUpbit.scrollToPosition(0)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(100)
+                binding.rvUpbit.scrollToPosition(0)
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.KpremiumAdapter
 import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
@@ -17,6 +18,11 @@ import com.librarydevloperjo.cointracker.viewmodels.KPremiumViewModel
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import com.librarydevloperjo.cointracker.views.dialogfragments.WidgetMakerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -26,6 +32,9 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
     private val binding get() = _binding!!
     private val viewModel: KPremiumViewModel by activityViewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
+
+    private val scrollJob = Job()
+    private val scrollScope = CoroutineScope(Dispatchers.Main + scrollJob)
 
     @Inject
     lateinit var preference: PreferenceManager
@@ -83,7 +92,10 @@ class KimpFragment : Fragment(),KpremiumAdapter.ClickCallback {
         }
 
         viewModel.sortState.observe(viewLifecycleOwner){
-            binding.rvKimp.scrollToPosition(0)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(100)
+                binding.rvKimp.scrollToPosition(0)
+            }
         }
     }
 
