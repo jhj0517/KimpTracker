@@ -5,10 +5,10 @@ import androidx.room.*
 @Dao
 interface KDataDAO {
     @Query("SELECT * FROM kdata")
-    fun getAllBookMarks():List<KPremiumEntity>
+    suspend fun getAllBookMarks():List<KPremiumEntity>
 
     @Query("SELECT * FROM kdata WHERE ticker = :ticker")
-    fun queryBookMarks(ticker:String):List<KPremiumEntity>
+    suspend fun queryBookMarks(ticker:String):List<KPremiumEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBookMark(kdata: KPremiumEntity)

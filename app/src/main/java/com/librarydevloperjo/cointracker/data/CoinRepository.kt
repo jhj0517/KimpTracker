@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
-const val refreshInterval = 1500L
+const val refreshInterval = 3000L
 const val refreshInterval10minute = 600000L
 
 @Singleton

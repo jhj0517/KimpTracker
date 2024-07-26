@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.coinwidget.WidgetUpdateService
 import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
@@ -20,6 +21,7 @@ import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
 import com.librarydevloperjo.cointracker.viewmodels.DialogViewModel
 import com.librarydevloperjo.cointracker.viewmodels.KPremiumViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -57,7 +59,7 @@ class WidgetMakerFragment : DialogFragment() {
 
             binding.apply {
                 viewModel = viewmodel
-                isStar = kpViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
+                subscribeUI()
 
                 btnWidget.setOnClickListener {
                     startService()
@@ -67,13 +69,15 @@ class WidgetMakerFragment : DialogFragment() {
                 }
 
                 rootStar.setOnClickListener {
-                    val data = kpViewModel.queryBookMarks(coin?.ticker?:"")
-                    if(data.isEmpty()){
-                        kpViewModel.insertBookMark(coin!!)
-                        isStar = true
-                    }else{
-                        kpViewModel.deleteBookMark(coin!!.ticker)
-                        isStar = false
+                    lifecycleScope.launch {
+                        val data = kpViewModel.queryBookMarks(coin?.ticker?:"")
+                        if(data.isEmpty()){
+                            kpViewModel.insertBookMark(coin!!)
+                            isStar = true
+                        }else{
+                            kpViewModel.deleteBookMark(coin!!.ticker)
+                            isStar = false
+                        }
                     }
                 }
 
@@ -85,6 +89,15 @@ class WidgetMakerFragment : DialogFragment() {
             builder.setView(binding.root)
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun subscribeUI(){
+        lifecycleScope.launch {
+            binding.apply {
+                isStar = kpViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
+            }
+        }
+
     }
 
     override fun onResume() {
