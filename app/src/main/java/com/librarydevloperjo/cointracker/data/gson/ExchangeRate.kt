@@ -5,10 +5,10 @@ import java.math.BigDecimal
 import com.google.gson.annotations.SerializedName
 
 data class ExchangeRateResponse(
-   val items: List<ExchangeRate>,
+   val items: List<ExchangeRateItem>,
 )
 
-data class ExchangeRate(
+data class ExchangeRateItem(
     @field:SerializedName("base") val base: String,
     @field:SerializedName("date") val date: String,
     @field:SerializedName("platform") val platform: String,

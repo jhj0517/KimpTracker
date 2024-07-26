@@ -5,10 +5,10 @@ import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import java.math.BigDecimal
 
 data class KimchiPremiumResponse(
-    val items: List<KimchiPremiumData>
+    val items: List<KimchiPremiumItem>
 )
 
-data class KimchiPremiumData(
+data class KimchiPremiumItem(
     @field:SerializedName("base_symbol") val baseSymbol: String,
     @field:SerializedName("binance_data") val binanceData: ExchangeData,
     @field:SerializedName("english_name") val englishName: String,
