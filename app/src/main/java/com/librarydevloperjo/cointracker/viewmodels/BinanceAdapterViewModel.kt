@@ -14,13 +14,15 @@ class BinanceAdapterViewModel(
     val priceText:String
         get() = formatPrice(item.binanceData.price)
 
-    private fun formatPrice(price: Double): String {
-        val bigDecimal = BigDecimal(price)
-        val stripped = bigDecimal.stripTrailingZeros()
+    private fun formatPrice(price: BigDecimal): String {
+        val stripped = price.stripTrailingZeros()
         val formatted = nFormat.format(stripped)
         return if (stripped.scale() <= 0) "$formatted.00" else formatted
     }
 
+    init {
+        nFormat.maximumFractionDigits = 6
+    }
     companion object{
         val nFormat: NumberFormat = NumberFormat.getNumberInstance(Locale.US)
     }
