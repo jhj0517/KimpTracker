@@ -27,6 +27,7 @@ import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -104,8 +105,9 @@ class WidgetUpdateService: LifecycleService() {
             R.layout.app_widget
         )
 
-        val textColor = if (data.kPremium > 0) WidgetColors.POSITIVE
-                        else if (data.kPremium < 0) WidgetColors.NEGATIVE
+        val kPremium = data.kPremium.toBigDecimal()
+        val textColor = if (kPremium > BigDecimal.ZERO) WidgetColors.POSITIVE
+                        else if (kPremium < BigDecimal.ZERO) WidgetColors.NEGATIVE
                         else WidgetColors.NEUTRAL
         views.setTextColor(R.id.tv_kimprate_widget, Color.parseColor(textColor))
         views.setTextColor(R.id.tv_upbitprice_widget, Color.parseColor(textColor))

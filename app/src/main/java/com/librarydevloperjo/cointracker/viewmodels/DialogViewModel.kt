@@ -8,6 +8,7 @@ import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -44,10 +45,10 @@ class DialogViewModel @Inject constructor(
     }
 
     private fun setTextColor(): Int {
-        val kPremium = coin.value?.kPremium ?: 0.0
+        val kPremium = coin.value?.kPremium?.toBigDecimal() ?: BigDecimal.ZERO
         return when {
-            kPremium < 0 -> Color.parseColor("#416DD8")
-            kPremium > 0 -> Color.parseColor("#E8B53333")
+            kPremium < BigDecimal.ZERO -> Color.parseColor("#416DD8")
+            kPremium > BigDecimal.ZERO -> Color.parseColor("#E8B53333")
             else -> Color.BLACK
         }
     }

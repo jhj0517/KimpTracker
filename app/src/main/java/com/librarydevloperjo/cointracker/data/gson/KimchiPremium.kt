@@ -18,27 +18,27 @@ data class KimchiPremiumItem(
         koreanName = koreanName,
         englishName = englishName,
         ticker = baseSymbol,
-        upbitPrice = upbitData.price,
-        binancePrice = binanceData.price,
-        exchangeRate = exchangeRate.usdKrw.toDouble(),
-        kPremium = kimchiPremium.toDouble()
+        upbitPrice = upbitData.price.toString(),
+        binancePrice = binanceData.price.toString(),
+        exchangeRate = exchangeRate.usdKrw.toString(),
+        kPremium = kimchiPremium.toString()
     )
 
 }
 
 data class BinanceExchangeData(
     @field:SerializedName("symbol") val symbol: String,
-    @field:SerializedName("price") val price: Double,
+    @field:SerializedName("price") val price: BigDecimal,
     @field:SerializedName("timestamp") val timestamp: Long
 )
 
 data class UpbitExchangeData(
     @field:SerializedName("symbol") val symbol: String,
-    @field:SerializedName("price") val price: Double,
+    @field:SerializedName("price") val price: BigDecimal,
     @field:SerializedName("timestamp") val timestamp: Long,
     @field:SerializedName("change") val change: String,
-    @field:SerializedName("change_rate") val changeRate: Double,
-    @field:SerializedName("change_price") val changePrice: Double
+    @field:SerializedName("change_rate") val changeRate: BigDecimal,
+    @field:SerializedName("change_price") val changePrice: BigDecimal
 )
 
 data class ExchangeRateData(

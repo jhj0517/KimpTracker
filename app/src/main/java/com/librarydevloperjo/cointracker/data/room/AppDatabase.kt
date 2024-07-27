@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.librarydevloperjo.cointracker.util.DATABASE_NAME
 
-@Database(entities = [KPremiumEntity::class], version =6, exportSchema = false)
+@Database(entities = [KPremiumEntity::class], version =7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun kdataDao():KDataDAO
 

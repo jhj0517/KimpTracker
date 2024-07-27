@@ -6,6 +6,7 @@ import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
 import com.librarydevloperjo.cointracker.util.PreferenceManager
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -17,13 +18,13 @@ class KPremiumAdapterViewModel(
         get() = setLocalizedText()
 
     val upbitPriceText: String
-        get() = nFormat.format(items.upbitPrice)
+        get() = nFormat.format(items.upbitPrice.toBigDecimal())
 
     val binancePriceText: String
-        get() = nFormat.format(items.binancePrice)
+        get() = nFormat.format(items.binancePrice.toBigDecimal())
 
     val kPremiumText: String
-        get() = nFormat.format(items.kPremium) + " %"
+        get() = nFormat.format(items.kPremium.toBigDecimal()) + " %"
 
     val kpTextColor: Int
         get() = setTextColor()
@@ -32,9 +33,10 @@ class KPremiumAdapterViewModel(
         get() = setStarImage()
 
     private fun setTextColor(): Int {
+        val kPremium = items.kPremium.toBigDecimal()
         return when {
-            items.kPremium < 0 -> Color.parseColor("#416DD8") // Blue
-            items.kPremium > 0 -> Color.parseColor("#E8B53333") // Red with transparency
+            kPremium < BigDecimal.ZERO -> Color.parseColor("#416DD8") // Blue
+            kPremium> BigDecimal.ZERO -> Color.parseColor("#E8B53333") // Red with transparency
             else -> Color.BLACK // Default color
         }
     }

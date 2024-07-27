@@ -2,10 +2,10 @@ package com.librarydevloperjo.cointracker.viewmodels
 
 import android.graphics.Color
 import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
-import com.librarydevloperjo.cointracker.data.gson.UpbitItem
 import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
 import com.librarydevloperjo.cointracker.util.PreferenceManager
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -29,8 +29,8 @@ class UpbitAdapterViewModel(
     private fun setTextColor(): Int {
         val changeRate = item.upbitData.changeRate
         return when {
-            changeRate < 0 -> Color.parseColor("#416DD8")
-            changeRate > 0 -> Color.parseColor("#E8B53333")
+            changeRate < BigDecimal.ZERO -> Color.parseColor("#416DD8")
+            changeRate > BigDecimal.ZERO -> Color.parseColor("#E8B53333")
             else -> Color.BLACK // Default color
         }
     }
@@ -38,8 +38,8 @@ class UpbitAdapterViewModel(
     private fun setChangeRateText(): String{
         val changeRate = item.upbitData.changeRate
         return when {
-            changeRate < 0 -> "-${nFormat.format(changeRate)} %"
-            changeRate > 0 -> "+${nFormat.format(changeRate)} %"
+            changeRate < BigDecimal.ZERO -> "-${nFormat.format(changeRate)} %"
+            changeRate > BigDecimal.ZERO -> "+${nFormat.format(changeRate)} %"
             else -> "${nFormat.format(changeRate)} %"
         }
     }

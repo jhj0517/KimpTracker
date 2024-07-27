@@ -25,10 +25,10 @@ object PremiumCalculator {
                 ticker = key,
                 koreanName = upbit.koreanName,
                 englishName = upbit.englishName,
-                upbitPrice = upbit.tradePrice,
-                binancePrice = binance.price.toDouble() * exc,
-                kPremium = premium,
-                exchangeRate = exc
+                upbitPrice = upbit.tradePrice.toString(),
+                binancePrice = (binance.price.toBigDecimal() * exc.toBigDecimal()).toString(),
+                kPremium = premium.toString(),
+                exchangeRate = exc.toString()
             )
             list.add(data)
         }
