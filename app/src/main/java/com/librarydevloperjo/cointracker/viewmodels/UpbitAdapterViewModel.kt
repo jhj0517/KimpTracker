@@ -1,15 +1,16 @@
 package com.librarydevloperjo.cointracker.viewmodels
 
 import android.graphics.Color
-import com.librarydevloperjo.cointracker.data.gson.UpbitCoin
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
 import com.librarydevloperjo.cointracker.util.LOCALE_KEY
 import com.librarydevloperjo.cointracker.util.LOCALE_KOREAN
 import com.librarydevloperjo.cointracker.util.PreferenceManager
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 
 class UpbitAdapterViewModel(
-    private val items:UpbitCoin,
+    private val item:KimchiPremiumItem,
     private val pref: PreferenceManager
 ) {
 
@@ -17,7 +18,7 @@ class UpbitAdapterViewModel(
         get() = setLocalizedText()
 
     val priceText: String
-        get() = nFormat.format(items.tradePrice)
+        get() = nFormat.format(item.upbitData.price)
 
     val changeRate:String
         get() = setChangeRateText()
@@ -26,25 +27,27 @@ class UpbitAdapterViewModel(
         get() = setTextColor()
 
     private fun setTextColor(): Int {
+        val changeRate = item.upbitData.changeRate
         return when {
-            items.changeRate < 0 -> Color.parseColor("#416DD8")
-            items.changeRate > 0 -> Color.parseColor("#E8B53333")
+            changeRate < BigDecimal.ZERO -> Color.parseColor("#416DD8")
+            changeRate > BigDecimal.ZERO -> Color.parseColor("#E8B53333")
             else -> Color.BLACK // Default color
         }
     }
 
     private fun setChangeRateText(): String{
+        val changeRate = item.upbitData.changeRate
         return when {
-            items.changeRate < 0 -> "-${nFormat.format(items.changeRate)} %"
-            items.changeRate > 0 -> "+${nFormat.format(items.changeRate)} %"
-            else -> "${nFormat.format(items.changeRate)} %"
+            changeRate < BigDecimal.ZERO -> "-${nFormat.format(changeRate)} %"
+            changeRate > BigDecimal.ZERO -> "+${nFormat.format(changeRate)} %"
+            else -> "${nFormat.format(changeRate)} %"
         }
     }
 
     private fun setLocalizedText(): String {
         return when (pref.getInt(LOCALE_KEY)) {
-            LOCALE_KOREAN -> items.koreanName ?: items.ticker
-            else -> items.englishName ?: items.ticker
+            LOCALE_KOREAN -> item.koreanName
+            else -> item.englishName
         }
     }
 
@@ -53,6 +56,6 @@ class UpbitAdapterViewModel(
     }
 
     companion object{
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
+        val nFormat: NumberFormat = NumberFormat.getNumberInstance(Locale.US)
     }
 }

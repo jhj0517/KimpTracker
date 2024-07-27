@@ -1,25 +1,29 @@
 package com.librarydevloperjo.cointracker.viewmodels
 
-import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 
 class BinanceAdapterViewModel(
-    private val items: BinanceCoin
+    private val item: KimchiPremiumItem
 ) {
     val name:String
-        get() = items.ticker
+        get() = item.binanceData.symbol
 
-    val price:String
-        get() = getPrice(items.price)
+    val priceText:String
+        get() = formatPrice(item.binanceData.price)
 
-    private fun getPrice(price: Float): String {
-        // This is done because `.format()` rounds the value unintentionally.
-        nFormat.maximumFractionDigits = if (price < 1e-3) 9 else 3
-        return nFormat.format(price)
+    private fun formatPrice(price: BigDecimal): String {
+        val stripped = price.stripTrailingZeros()
+        val formatted = nFormat.format(stripped)
+        return if (stripped.scale() <= 0) "$formatted.00" else formatted
     }
 
+    init {
+        nFormat.maximumFractionDigits = 6
+    }
     companion object{
-        val nFormat = NumberFormat.getNumberInstance(Locale.US)
+        val nFormat: NumberFormat = NumberFormat.getNumberInstance(Locale.US)
     }
 }

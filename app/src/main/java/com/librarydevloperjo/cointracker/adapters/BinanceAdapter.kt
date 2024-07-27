@@ -7,19 +7,19 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.librarydevloperjo.cointracker.data.gson.BinanceCoin
+import com.librarydevloperjo.cointracker.data.gson.KimchiPremiumItem
 import com.librarydevloperjo.cointracker.databinding.CellBinanceBinding
 import com.librarydevloperjo.cointracker.viewmodels.BinanceAdapterViewModel
 import java.text.NumberFormat
 import java.util.*
 
 class BinanceAdapter:
-    ListAdapter<BinanceCoin, BinanceAdapter.ViewHolder>(diffUtil),Filterable {
+    ListAdapter<KimchiPremiumItem, BinanceAdapter.ViewHolder>(diffUtil),Filterable {
 
-    private var list = mutableListOf<BinanceCoin>()
+    private var list = mutableListOf<KimchiPremiumItem>()
 
     inner class ViewHolder(val binding: CellBinanceBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(items: BinanceCoin){
+        fun bind(items: KimchiPremiumItem){
             with(binding) {
                 viewModel = BinanceAdapterViewModel(items)
                 executePendingBindings()
@@ -47,7 +47,7 @@ class BinanceAdapter:
         return SearchFilter
     }
 
-    fun setData(list: MutableList<BinanceCoin>?){
+    fun setData(list: MutableList<KimchiPremiumItem>?){
         this.list = list!!
         submitList(list)
     }
@@ -55,14 +55,14 @@ class BinanceAdapter:
     private val SearchFilter : Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence): FilterResults {
 
-            val filteredList: ArrayList<BinanceCoin> = ArrayList()
+            val filteredList: ArrayList<KimchiPremiumItem> = ArrayList()
             if (constraint == null || constraint.length == 0) {
                 filteredList.addAll(list)
             } else {
                 val filterPattern = constraint.toString().lowercase().trim { it <= ' '}
 
                 for (item in list) {
-                    if(item.ticker!!.contains(filterPattern)){
+                    if(item.binanceData.symbol.contains(filterPattern)){
                         filteredList.add(item)
                     }
                 }
@@ -73,17 +73,17 @@ class BinanceAdapter:
         }
 
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
-            submitList(results.values as MutableList<BinanceCoin>)
+            submitList(results.values as MutableList<KimchiPremiumItem>)
         }
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<BinanceCoin>() {
-            override fun areContentsTheSame(oldItem: BinanceCoin, newItem: BinanceCoin) =
-                oldItem.ticker == newItem.ticker
+        val diffUtil = object : DiffUtil.ItemCallback<KimchiPremiumItem>() {
+            override fun areContentsTheSame(oldItem: KimchiPremiumItem, newItem: KimchiPremiumItem) =
+                oldItem.binanceData.symbol == newItem.binanceData.symbol
 
-            override fun areItemsTheSame(oldItem: BinanceCoin, newItem: BinanceCoin) =
-                oldItem.ticker == newItem.ticker
+            override fun areItemsTheSame(oldItem: KimchiPremiumItem, newItem: KimchiPremiumItem) =
+                oldItem.binanceData.symbol == newItem.binanceData.symbol
         }
     }
 }

@@ -63,7 +63,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/tv_tabprice"
-            android:text="@{viewModel.price}"
+            android:text="@{viewModel.priceText}"
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="?android:textColorPrimary"/>

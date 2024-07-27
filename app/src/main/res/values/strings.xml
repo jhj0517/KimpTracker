@@ -36,7 +36,7 @@
     <string name="binancefrom">바이낸스에서 제공하는 공식 API 를 통해 받아옵니다. 가격은 USDT 기준입니다.</string>
 
     <string name="wherefromcoin">2. 코인들 가격 출처는 어떻게 되나요? </string>
-    <string name="coinfrom">업비트, 바이낸스에서 각각 제공하는 공식 API 로 부터 가격을 표시합니다.</string>
+    <string name="coinfrom">업비트, 바이낸스에서 각각 제공하는 공식 오픈 API 로 부터 가격을 표시합니다.</string>
 
     <string name="howkimchpremium">3. 김치 프리미엄은 어떻게 계산되나요?</string>
     <string name="bycalculated">바이낸스 거래소 코인 가격(USDT)에 한국 수출입 은행에서 제공하는 환율을 곱하여 업비트에서의 코인 가격과 비교해 계산됩니다.</string>

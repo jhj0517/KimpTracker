@@ -20,13 +20,14 @@ import androidx.lifecycle.lifecycleScope
 import com.librarydevloperjo.cointracker.MainActivity
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.data.CoinRepository
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.util.PremiumCalculator
 import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
 import javax.inject.Inject
@@ -54,12 +55,13 @@ class WidgetUpdateService: LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         lifecycleScope.launch {
-            repository.platformDataTickFlow.collectLatest {
+            repository.kpDataTickFlow.collectLatest {
                 val ticker = preference.getString(WIDGET_COIN_KEY)
 
                 if( ticker != PreferenceManager.DEFAULT_VALUE_STRING) {
-                    val list = PremiumCalculator.calculate(it.upbit, it.binance, it.exc[0].openingPrice)
-                    val data = list.single { coin -> coin.ticker == ticker }
+                    val list = it.map { item -> item.toEntity() }
+                    val data = list.single { entity -> entity.ticker == ticker }
+
                     updateWidget(data)
                 }
             }
@@ -85,7 +87,7 @@ class WidgetUpdateService: LifecycleService() {
         }
     }
 
-    private fun updateWidget(data: KPremiumData) {
+    private fun updateWidget(data: KPremiumEntity) {
         val appWidgetManager = AppWidgetManager.getInstance(this)
         val widget = ComponentName(this, WidgetProvider::class.java)
         val allWidgetIds = appWidgetManager.getAppWidgetIds(widget)
@@ -97,14 +99,15 @@ class WidgetUpdateService: LifecycleService() {
         }
     }
 
-    private fun updateView(data: KPremiumData): RemoteViews {
+    private fun updateView(data: KPremiumEntity): RemoteViews {
         val views = RemoteViews(
             this.packageName,
             R.layout.app_widget
         )
 
-        val textColor = if (data.kPremium > 0) WidgetColors.POSITIVE
-                        else if (data.kPremium < 0) WidgetColors.NEGATIVE
+        val kPremium = data.kPremium.toBigDecimal()
+        val textColor = if (kPremium > BigDecimal.ZERO) WidgetColors.POSITIVE
+                        else if (kPremium < BigDecimal.ZERO) WidgetColors.NEGATIVE
                         else WidgetColors.NEUTRAL
         views.setTextColor(R.id.tv_kimprate_widget, Color.parseColor(textColor))
         views.setTextColor(R.id.tv_upbitprice_widget, Color.parseColor(textColor))

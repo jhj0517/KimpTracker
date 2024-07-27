@@ -7,20 +7,21 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.librarydevloperjo.cointracker.R
 import com.librarydevloperjo.cointracker.coinwidget.WidgetUpdateService
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.databinding.FragmentWidgetMakerBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.util.WIDGET_COIN_KEY
-import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.DialogViewModel
+import com.librarydevloperjo.cointracker.viewmodels.KPremiumViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -32,8 +33,8 @@ class WidgetMakerFragment : DialogFragment() {
     private var _binding:FragmentWidgetMakerBinding? = null
     private val binding get() = _binding!!
 
-    private var coin: KPremiumData? = null
-    private val coinsViewModel:CoinsViewModel by activityViewModels()
+    private var coin: KPremiumEntity? = null
+    private val kpViewModel:KPremiumViewModel by activityViewModels()
     private val viewmodel:DialogViewModel by viewModels()
     @Inject
     lateinit var preference: PreferenceManager
@@ -45,7 +46,7 @@ class WidgetMakerFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         arguments?.let {
             coin = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(ARG_KEY_KPREMIUM, KPremiumData::class.java)
+                it.getParcelable(ARG_KEY_KPREMIUM, KPremiumEntity::class.java)
             } else {
                 it.getParcelable(ARG_KEY_KPREMIUM)
             }
@@ -58,7 +59,7 @@ class WidgetMakerFragment : DialogFragment() {
 
             binding.apply {
                 viewModel = viewmodel
-                isStar = coinsViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
+                subscribeUI()
 
                 btnWidget.setOnClickListener {
                     startService()
@@ -68,13 +69,15 @@ class WidgetMakerFragment : DialogFragment() {
                 }
 
                 rootStar.setOnClickListener {
-                    val data = coinsViewModel.queryBookMarks(coin?.ticker?:"")
-                    if(data.isEmpty()){
-                        coinsViewModel.insertBookMark(coin!!)
-                        isStar = true
-                    }else{
-                        coinsViewModel.deleteBookMark(coin!!.ticker)
-                        isStar = false
+                    lifecycleScope.launch {
+                        val data = kpViewModel.queryBookMarks(coin?.ticker?:"")
+                        if(data.isEmpty()){
+                            kpViewModel.insertBookMark(coin!!)
+                            isStar = true
+                        }else{
+                            kpViewModel.deleteBookMark(coin!!.ticker)
+                            isStar = false
+                        }
                     }
                 }
 
@@ -86,6 +89,15 @@ class WidgetMakerFragment : DialogFragment() {
             builder.setView(binding.root)
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun subscribeUI(){
+        lifecycleScope.launch {
+            binding.apply {
+                isStar = kpViewModel.queryBookMarks(coin?.ticker?:"").isNotEmpty()
+            }
+        }
+
     }
 
     override fun onResume() {

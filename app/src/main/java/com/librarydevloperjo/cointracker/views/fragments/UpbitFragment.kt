@@ -6,14 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.UpbitAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentUpbitBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
-import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
 import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
+import com.librarydevloperjo.cointracker.viewmodels.UpbitSortCriteria
+import com.librarydevloperjo.cointracker.viewmodels.UpbitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,7 +26,7 @@ class UpbitFragment : Fragment() {
 
     private var _binding:FragmentUpbitBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: CoinsViewModel by activityViewModels()
+    private val viewModel: UpbitViewModel by viewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
     @Inject
     lateinit var prefrence:PreferenceManager
@@ -33,7 +38,7 @@ class UpbitFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentUpbitBinding.inflate(inflater, container, false)
         val adapter = UpbitAdapter(prefrence)
         binding.apply {
@@ -41,32 +46,10 @@ class UpbitFragment : Fragment() {
             rvUpbit.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                when(viewModel.sortState.value!!){
-                    SortState.PRICE_ASCENDING -> {
-                        sortPriceByDesc = true
-                        sortChangeRateByDesc = null
-                        viewModel.sortState.value = SortState.PRICE_DESCENDING
-                    }
-                    else -> {
-                        sortPriceByDesc = false
-                        sortChangeRateByDesc = null
-                        viewModel.sortState.value = SortState.PRICE_ASCENDING
-                    }
-                }
+                viewModel.toggleSortState(UpbitSortCriteria.PRICE)
             }
             rootTabChangerate.setOnClickListener {
-                when(viewModel.sortState.value!!){
-                    SortState.CHANGE_RATE_ASCENDING -> {
-                        sortChangeRateByDesc = true
-                        sortPriceByDesc = null
-                        viewModel.sortState.value = SortState.CHANGE_RATE_DESCENDING
-                    }
-                    else -> {
-                        sortChangeRateByDesc = false
-                        sortPriceByDesc = null
-                        viewModel.sortState.value = SortState.CHANGE_RATE_ASCENDING
-                    }
-                }
+                viewModel.toggleSortState(UpbitSortCriteria.CHANGE_RATE)
             }
 
             btnSetting.setOnClickListener {
@@ -85,14 +68,42 @@ class UpbitFragment : Fragment() {
     private fun subscribeUI(adapter: UpbitAdapter){
         viewModel.upbitList.observe(viewLifecycleOwner){
             binding.isLoaded = !it.isNullOrEmpty()
-            binding.count = "(${it.size})"
-
-            adapter.submitList(it)
+            if (it.isNotEmpty()){
+                binding.count = "(${it.size})"
+                adapter.submitList(it)
+            }
         }
 
-        viewModel.sortState.observe(viewLifecycleOwner){
-            val sorted = viewModel.sortUpbitByState(it, viewModel.upbitList.value!!)
-            adapter.submitList(sorted){ binding.rvUpbit.scrollToPosition(0) }
+        viewModel.sortState.observe(viewLifecycleOwner){ state ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(100)
+                binding.rvUpbit.scrollToPosition(0)
+            }
+
+            binding.apply {
+                when(state){
+                    SortState.PRICE_ASCENDING -> {
+                        sortChangeRateByDesc = null
+                        sortPriceByDesc = false
+                    }
+                    SortState.PRICE_DESCENDING -> {
+                        sortChangeRateByDesc = null
+                        sortPriceByDesc = true
+                    }
+                    SortState.CHANGE_RATE_ASCENDING -> {
+                        sortPriceByDesc = null
+                        sortChangeRateByDesc = false
+                    }
+                    SortState.CHANGE_RATE_DESCENDING -> {
+                        sortPriceByDesc = null
+                        sortChangeRateByDesc = true
+                    }
+                    else -> {
+                        sortChangeRateByDesc = null
+                        sortPriceByDesc = null
+                    }
+                }
+            }
         }
     }
 }

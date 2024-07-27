@@ -7,7 +7,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
-import com.librarydevloperjo.cointracker.data.room.KPremiumData
+import com.librarydevloperjo.cointracker.data.room.KPremiumEntity
 import com.librarydevloperjo.cointracker.databinding.CellKimpBinding
 import com.librarydevloperjo.cointracker.util.PreferenceManager
 import com.librarydevloperjo.cointracker.viewmodels.KPremiumAdapterViewModel
@@ -17,13 +17,13 @@ import kotlin.collections.ArrayList
 class KpremiumAdapter(
     private val clickcallback:ClickCallback,
     private val pref:PreferenceManager
-):ListAdapter<KPremiumData,KpremiumAdapter.ViewHolder>(diffUtil),
+):ListAdapter<KPremiumEntity,KpremiumAdapter.ViewHolder>(diffUtil),
 Filterable {
 
-    private var list = mutableListOf<KPremiumData>()
+    private var list = mutableListOf<KPremiumEntity>()
 
     inner class ViewHolder(val binding:CellKimpBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(items: KPremiumData){
+        fun bind(items: KPremiumEntity){
             with(binding) {
                 viewModel = KPremiumAdapterViewModel(items, pref)
                 executePendingBindings()
@@ -32,7 +32,7 @@ Filterable {
 
         init{
             binding.ltRoot.setOnClickListener {
-                val data = currentList.get(adapterPosition)
+                val data = currentList[adapterPosition]
                 clickcallback.onItemClicked(data)
             }
         }
@@ -56,16 +56,16 @@ Filterable {
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<KPremiumData>() {
-            override fun areContentsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
+        val diffUtil = object : DiffUtil.ItemCallback<KPremiumEntity>() {
+            override fun areContentsTheSame(oldItem: KPremiumEntity, newItem: KPremiumEntity) =
                 oldItem == newItem
 
-            override fun areItemsTheSame(oldItem: KPremiumData, newItem: KPremiumData) =
+            override fun areItemsTheSame(oldItem: KPremiumEntity, newItem: KPremiumEntity) =
                 oldItem == newItem
         }
     }
 
-    fun setData(list: MutableList<KPremiumData>?){
+    fun setData(list: MutableList<KPremiumEntity>?){
         this.list = list!!
         submitList(list)
     }
@@ -73,7 +73,7 @@ Filterable {
     private val SearchFilter : Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence): FilterResults {
 
-            val filteredList: ArrayList<KPremiumData> = ArrayList()
+            val filteredList: ArrayList<KPremiumEntity> = ArrayList()
             if (constraint == null || constraint.length == 0) {
                 filteredList.addAll(list)
             } else {
@@ -91,10 +91,10 @@ Filterable {
         }
 
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
-            submitList(results.values as ArrayList<KPremiumData>)
+            submitList(results.values as ArrayList<KPremiumEntity>)
         }
     }
     interface ClickCallback{
-        fun onItemClicked(items: KPremiumData)
+        fun onItemClicked(items: KPremiumEntity)
     }
 }

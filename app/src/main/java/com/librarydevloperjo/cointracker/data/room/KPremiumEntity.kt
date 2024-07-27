@@ -10,13 +10,14 @@ import kotlinx.parcelize.Parcelize
     tableName = "kdata"
 )
 @Parcelize
-data class KPremiumData(
+data class KPremiumEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id:Long=0,
     @ColumnInfo(name = "koreanName") val koreanName:String?,
     @ColumnInfo(name = "englishName") val englishName:String?,
     @ColumnInfo(name = "ticker") val ticker:String,
-    @ColumnInfo(name = "upbitPrice") val upbitPrice:Double,
-    @ColumnInfo(name = "binancePrice") val binancePrice:Double,
-    @ColumnInfo(name = "kPremium") val kPremium:Double,
+    @ColumnInfo(name = "upbitPrice") val upbitPrice:String,
+    @ColumnInfo(name = "exchangeRate") val exchangeRate:String,
+    @ColumnInfo(name = "binancePrice") val binancePrice:String,
+    @ColumnInfo(name = "kPremium") val kPremium:String,
     var isBookmark:Boolean?=false,
 ):Parcelable

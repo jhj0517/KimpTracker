@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.librarydevloperjo.cointracker.adapters.BinanceAdapter
 import com.librarydevloperjo.cointracker.databinding.FragmentBinanceBinding
-import com.librarydevloperjo.cointracker.viewmodels.CoinsViewModel
+import com.librarydevloperjo.cointracker.viewmodels.BinanceViewModel
 import com.librarydevloperjo.cointracker.viewmodels.SortState
 import com.librarydevloperjo.cointracker.viewmodels.UIViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -20,7 +24,7 @@ class BinanceFragment : Fragment() {
 
     private var _binding: FragmentBinanceBinding?=null
     private val binding get() = _binding!!
-    private val viewModel: CoinsViewModel by activityViewModels()
+    private val viewModel: BinanceViewModel by viewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +34,7 @@ class BinanceFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         val adapter = BinanceAdapter()
         _binding = FragmentBinanceBinding.inflate(inflater, container, false)
         binding.apply {
@@ -38,16 +42,7 @@ class BinanceFragment : Fragment() {
             rvBinance.adapter = adapter
 
             rootTabprice.setOnClickListener {
-                when(viewModel.sortState.value){
-                    SortState.PRICE_ASCENDING -> {
-                        sortPriceByDesc = true
-                        viewModel.sortState.value = SortState.PRICE_DESCENDING
-                    }
-                    else -> {
-                        sortPriceByDesc = false
-                        viewModel.sortState.value = SortState.PRICE_ASCENDING
-                    }
-                }
+                viewModel.toggleSortState()
             }
 
             btnSetting.setOnClickListener {
@@ -65,16 +60,33 @@ class BinanceFragment : Fragment() {
 
     private fun subscribeUI(adapter: BinanceAdapter){
         viewModel.binanceList.observe(viewLifecycleOwner){
-            binding.isLoaded = it.isNotEmpty()
-            binding.tvTotalnum.text = "(${it.size})"
+            binding.isLoaded = !it.isNullOrEmpty()
 
-            val sorted = viewModel.sortBinanceByState(viewModel.sortState.value!!, it)
-            adapter.submitList(sorted)
+            if (it.isNotEmpty()){
+                binding.tvTotalnum.text = "(${it.size})"
+                adapter.submitList(it)
+            }
         }
 
-        viewModel.sortState.observe(viewLifecycleOwner){
-            val sorted = viewModel.sortBinanceByState(it, viewModel.binanceList.value!!)
-            adapter.submitList(sorted){ binding.rvBinance.scrollToPosition(0) }
+        viewModel.sortState.observe(viewLifecycleOwner){ state ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(100)
+                binding.rvBinance.scrollToPosition(0)
+            }
+
+            binding.apply {
+                when (state) {
+                    SortState.PRICE_ASCENDING -> {
+                        sortPriceByDesc = false
+                    }
+                    SortState.PRICE_DESCENDING -> {
+                        sortPriceByDesc = true
+                    }
+                    else -> {
+                        sortPriceByDesc = null
+                    }
+                }
+            }
         }
     }
 
