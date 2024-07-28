@@ -27,7 +27,7 @@ class UpbitAdapterViewModel(
         get() = setTextColor()
 
     private fun setTextColor(): Int {
-        val changeRate = item.upbitData.changeRate
+        val changeRate = item.upbitData.signedChangeRate
         return when {
             changeRate < BigDecimal.ZERO -> Color.parseColor("#416DD8")
             changeRate > BigDecimal.ZERO -> Color.parseColor("#E8B53333")
@@ -36,7 +36,7 @@ class UpbitAdapterViewModel(
     }
 
     private fun setChangeRateText(): String{
-        val changeRate = item.upbitData.changeRate
+        val changeRate = item.upbitData.signedChangeRate
         return when {
             changeRate < BigDecimal.ZERO -> "-${nFormat.format(changeRate)} %"
             changeRate > BigDecimal.ZERO -> "+${nFormat.format(changeRate)} %"
