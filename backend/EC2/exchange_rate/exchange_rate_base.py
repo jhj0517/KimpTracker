@@ -5,12 +5,12 @@ from typing import Optional, List
 class ExchangeRateBase(ABC):
     def __init__(self,
                  base_endpoint: str,
-                 rpd: Optional[int] = None):
+                 rpm: Optional[float] = None):
         self.base_endpoint = base_endpoint
-        self.rpd = rpd
+        self.rpm = rpm
         self.api_interval = None
-        if self.rpd is not None:
-            self.api_interval = 1/(self.rpd/(24*60*60))
+        if self.rpm is not None:
+            self.api_interval = 1 / (self.rpm / 60)
 
     @abstractmethod
     def get_exchange_rate(self):

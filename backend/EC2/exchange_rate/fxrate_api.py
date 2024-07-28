@@ -8,10 +8,10 @@ from exchange_rate.exchange_rate_base import ExchangeRateBase
 class FXRateAPI(ExchangeRateBase):
     def __init__(self,
                  base_endpoint: str = "https://api.fxratesapi.com/latest",
-                 rpd: int = 24):
+                 rpm: float = 0.5):
         super().__init__(
             base_endpoint=base_endpoint,
-            rpd=rpd
+            rpm=rpm
         )
 
     def get_exchange_rate(self):
