@@ -12,8 +12,6 @@ from exchange_rate import FXRateAPI
 from utils.kimchi_premium import calculate_kimchi_premium
 
 
-# https://www.datensen.com/
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mongo_db_currency_renewal")
 
@@ -129,9 +127,8 @@ class DBManager:
                         "symbol": upbit_data["market"],
                         "price": upbit_price,
                         "timestamp": upbit_data["timestamp"],
-                        "change": upbit_data["change"],
-                        "change_rate": -(upbit_data["change_rate"]) if upbit_data["change"] == "FALL" else upbit_data["change_rate"],
-                        "change_price": -(upbit_data["change_price"]) if upbit_data["change"] == "FALL" else upbit_data["change_price"],
+                        "signed_change_rate": upbit_data["signed_change_rate"],
+                        "signed_change_price": upbit_data["signed_change_price"],
                     },
                     "binance_data": {
                         "symbol": binance_data["symbol"],
