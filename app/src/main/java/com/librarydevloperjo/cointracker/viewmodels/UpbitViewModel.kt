@@ -46,8 +46,8 @@ class UpbitViewModel @Inject constructor(
         val sortedList = when (_sortState.value) {
             SortState.PRICE_DESCENDING -> unSortedList.sortedByDescending { it.upbitData.price }
             SortState.PRICE_ASCENDING -> unSortedList.sortedBy { it.upbitData.price }
-            SortState.CHANGE_RATE_DESCENDING -> unSortedList.sortedByDescending { it.upbitData.changeRate }
-            SortState.CHANGE_RATE_ASCENDING -> unSortedList.sortedBy { it.upbitData.changeRate }
+            SortState.CHANGE_RATE_DESCENDING -> unSortedList.sortedByDescending { it.upbitData.signedChangeRate }
+            SortState.CHANGE_RATE_ASCENDING -> unSortedList.sortedBy { it.upbitData.signedChangeRate }
             else -> unSortedList
         }
         _upbitList.value = ArrayList(sortedList)

@@ -36,9 +36,8 @@ data class UpbitExchangeData(
     @field:SerializedName("symbol") val symbol: String,
     @field:SerializedName("price") val price: BigDecimal,
     @field:SerializedName("timestamp") val timestamp: Long,
-    @field:SerializedName("change") val change: String,
-    @field:SerializedName("change_rate") val changeRate: BigDecimal,
-    @field:SerializedName("change_price") val changePrice: BigDecimal
+    @field:SerializedName("signed_change_price") val signedChangePrice: BigDecimal,
+    @field:SerializedName("signed_change_rate") val signedChangeRate: BigDecimal
 )
 
 data class ExchangeRateData(
