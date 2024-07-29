@@ -113,9 +113,9 @@ class WidgetUpdateService: LifecycleService() {
         views.setTextColor(R.id.tv_upbitprice_widget, Color.parseColor(textColor))
 
         views.setTextViewText(R.id.tv_coin_widget, data.ticker)
-        views.setTextViewText(R.id.tv_upbitprice_widget, nFormat.format(data.upbitPrice))
-        views.setTextViewText(R.id.tv_binanceprice_widget, nFormat.format(data.binancePrice))
-        views.setTextViewText(R.id.tv_kimprate_widget, nFormat.format(data.kPremium) + " %")
+        views.setTextViewText(R.id.tv_upbitprice_widget, nFormat.format(data.upbitPrice.toBigDecimal()))
+        views.setTextViewText(R.id.tv_binanceprice_widget, nFormat.format(data.binancePrice.toBigDecimal()))
+        views.setTextViewText(R.id.tv_kimprate_widget, nFormat.format(data.kPremium.toBigDecimal()) + " %")
         return views
     }
 
