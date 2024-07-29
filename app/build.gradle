@@ -23,7 +23,7 @@ android {
         applicationId "com.librarydevloperjo.cointracker"
         minSdk 24
         targetSdk 34
-        versionCode 6
+        versionCode 7
         versionName "7.0"
 
         // File->InvalidateCache - Build clean- rebuild if you experience error
