@@ -15,7 +15,7 @@
    3. [환율 오픈 API](https://fxratesapi.com/) : 0.5 RPM 
 
 > [!NOTE]
-> [기술 블로그 포스트: AWS Lambda + AWS API Gateway 로 REST API 구성하기](https://medium.com/aws-tip/building-a-rest-api-with-aws-lambda-and-api-gateway-4582b3783fe5)
+> [📝 기술 블로그 포스트: AWS Lambda + AWS API Gateway 로 REST API 구성하기](https://medium.com/aws-tip/building-a-rest-api-with-aws-lambda-and-api-gateway-4582b3783fe5)
 
 
 ## API Documentation
