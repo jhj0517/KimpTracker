@@ -24,14 +24,14 @@ class DialogViewModel @Inject constructor(
         get() = setLocalizedText()
 
     val upbitPrice: String
-        get() = nFormat.format(coin.value?.upbitPrice ?: 0)
+        get() = nFormat.format(coin.value?.upbitPrice?.toBigDecimal() ?: 0)
 
     val binancePrice: String
-        get() = nFormat.format(coin.value?.binancePrice ?: 0)
+        get() = nFormat.format(coin.value?.binancePrice?.toBigDecimal() ?: 0)
     val textColor: Int
         get() = setTextColor()
     val kPremium: String
-        get() = "${nFormat.format(coin.value?.kPremium ?: 0)} %"
+        get() = "${nFormat.format(coin.value?.kPremium?.toBigDecimal() ?: 0)} %"
 
     fun setCoinData(data: KPremiumEntity) {
         _coin.value = data
