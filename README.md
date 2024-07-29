@@ -4,7 +4,8 @@
 https://github.com/jhj0517/KimpTracker/assets/97279763/5d1bdc06-6c9e-4ebf-b0e9-50c6786dbd44
 
 ## Overview
-![Flowcharts - Page 1](https://github.com/jhj0517/KimpTracker/assets/97279763/4c21fa15-ecb3-45a3-ae6e-e8b532c8326e)
+![android_architecture](https://github.com/user-attachments/assets/502c72bc-e829-49dc-abcc-074d7c565a33)
+
 > [!NOTE]
 > 백엔드에 대한 구성은 [backend](https://github.com/jhj0517/KimpTracker/tree/master/backend) 폴더에서 확인할 수 있습니다.
 
