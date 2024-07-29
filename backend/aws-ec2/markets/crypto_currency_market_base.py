@@ -1,19 +1,31 @@
 from abc import ABC, abstractmethod, abstractproperty
 from typing import Optional, List
+import aiohttp
+import asyncio
+from aiolimiter import AsyncLimiter
 
 
 class CryptoCurrencyMarketBase(ABC):
     def __init__(self,
                  base_endpoint: str,
-                 rpm: Optional[int] = None):
+                 rpm: int):
         self.base_endpoint = base_endpoint
         self.rpm = rpm
-        self.api_interval = 1
-        if self.rpm is not None:
-            self.api_interval = 1 / (self.rpm / 60)
+        self.session = None
+        self.limiter = AsyncLimiter(self.rpm, 60)
+
+    async def get_session(self):
+        if self.session is None:
+            self.session = aiohttp.ClientSession()
+        return self.session
+
+    async def close(self):
+        if self.session:
+            await self.session.close()
+            self.session = None
 
     @abstractmethod
-    def get_currencies(self) -> List:
+    async def get_currencies(self) -> List:
         """
         Get all currency codes from the platform
 
@@ -22,7 +34,7 @@ class CryptoCurrencyMarketBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get_current_price(self,
+    async def get_current_price(self,
                           currency: Optional[str]):
         """
         Get the latest price of the currency from the platform

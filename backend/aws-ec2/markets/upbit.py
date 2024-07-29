@@ -1,5 +1,4 @@
 from typing import List
-import requests
 
 from markets.crypto_currency_market_base import CryptoCurrencyMarketBase
 
@@ -15,28 +14,32 @@ class Upbit(CryptoCurrencyMarketBase):
             rpm=rpm
         )
 
-    def get_currencies(self) -> List:
+    async def get_currencies(self) -> List:
         """Only returns KRW buy-able coins"""
         url = self.base_endpoint + "/v1/market/all?isDetails=false"
         headers = {"Accept": "application/json"}
-        try:
-            tickers = requests.get(url, headers=headers).json()
-        except Exception as e:
-            print(f"failed to fetch ticker, Error : {e}")
-            return []
-        return [t for t in tickers if t['market'].startswith("KRW-")]
 
-    def get_current_price(self,
-                          ticker: str
-                          ):
+        async with self.limiter:
+            session = await self.get_session()
+            try:
+                response = await session.get(url, headers=headers)
+                tickers = await response.json()
+                return [t for t in tickers if t['market'].startswith("KRW-")]
+            except Exception as e:
+                print(f"Failed to fetch ticker. Error: {e}")
+                return []
+
+    async def get_current_price(self, ticker: str):
         """Returns price data for the ticker(symbol)"""
         url = self.base_endpoint + "/v1/ticker"
-        header = {"Accept": "application/json"}
-        param = {
-            "markets": ticker
-        }
-        try:
-            return requests.get(url, params=param, headers=header).json()[0]
-        except Exception as e:
-            print(f"failed to fetch price : {ticker}, Error: {e}")
-            return {}
+        headers = {"Accept": "application/json"}
+        params = {"markets": ticker}
+
+        async with self.limiter:
+            session = await self.get_session()
+            try:
+                response = await session.get(url, params=params, headers=headers)
+                return await response.json()
+            except Exception as e:
+                print(f"Failed to fetch price for {ticker}. Error: {e}")
+                return {}

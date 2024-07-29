@@ -17,19 +17,21 @@ class Binance(CryptoCurrencyMarketBase):
             rpm=rpm
         )
 
-    def get_currencies(self) -> List:
+    async def get_currencies(self) -> List:
         """Only returns USDT buy-able coins"""
         url = self.base_endpoint + "/api/v3/exchangeInfo"
         try:
-            info = requests.get(url).json()['symbols']
+            async with self.limiter:
+                session = await self.get_session()
+                response = await session.get(url)
+                info = await response.json()['symbols']
+                return [i['symbol'] for i in info if i['symbol'].endswith("USDT")]
         except Exception as e:
             print(f"failed to fetch ticker, Error: {e}")
             return []
 
-        return [i['symbol'] for i in info if i['symbol'].endswith("USDT")]
-
-    def get_current_price(self,
-                          currency: Optional[str] = None):
+    async def get_current_price(self,
+                                currency: Optional[str] = None):
         """
         Get prices of the currencies from Binance. Only returns USDT buy-able currencies.
 
@@ -41,15 +43,18 @@ class Binance(CryptoCurrencyMarketBase):
             "symbol": currency
         }
         try:
-            latest_prices = requests.get(url, params=param).json()
+            async with self.limiter:
+                session = await self.get_session()
+                response = await session.get(url, params=param)
+                latest_prices = await response.json()
+
+                usdt_prices = [item for item in latest_prices if item['symbol'].endswith("USDT")]
+
+                timestamp = int(time.time() * 1000)
+                for currency in usdt_prices:
+                    currency["timestamp"] = timestamp
+
+                return usdt_prices
         except Exception as e:
             print(f"failed to fetch price : {currency}, Error: {e}")
             return {}
-
-        usdt_prices = [item for item in latest_prices if item['symbol'].endswith("USDT")]
-
-        timestamp = int(time.time() * 1000)
-        for currency in usdt_prices:
-            currency["timestamp"] = timestamp
-
-        return usdt_prices
