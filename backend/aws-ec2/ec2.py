@@ -1,6 +1,5 @@
 import requests
 from motor.motor_asyncio import AsyncIOMotorClient  # Async client for MongoDB
-from pymongo import UpdateOne
 import os
 import asyncio
 import time
@@ -32,14 +31,15 @@ class DBManager:
     async def renew_upbit_prices(self):
         api = self.upbit_api
         collection = self.db['Upbit']
-        upbit_coins = await api.get_currencies()
+        upbit_coins = api.get_currencies()
         symbols = []
 
         for currency in upbit_coins:
             symbol = currency["market"]
             symbols.append(symbol)
 
-            price = await api.get_current_price(symbol)
+            price = api.get_current_price(symbol)
+            await asyncio.sleep(api.api_interval)
 
             data = {**currency, **price}
 
@@ -59,18 +59,19 @@ class DBManager:
         write_interval = self.write_interval
         collection = self.db['Binance']
 
-        all_price_data = await api.get_current_price()
-        symbols = [data['symbol'] for data in all_price_data]
+        all_price_data = api.get_current_price()
 
-        transactions = [
-            UpdateOne(
-                {"symbol": data["symbol"]},
+        symbols = []
+        for data in all_price_data:
+            symbol = data["symbol"]
+            symbols.append(symbol)
+
+            await collection.update_one(
+                {"symbol": {"$eq": symbol}},
                 {"$set": data},
                 upsert=True
-            ) for data in all_price_data
-        ]
-
-        await collection.bulk_write(transactions)
+            )
+            await asyncio.sleep(write_interval)
 
         # Remove delisted symbols
         await collection.delete_many(
@@ -94,6 +95,7 @@ class DBManager:
         er_collection = self.db['ExchangeRate']
         binance_collection = self.db['Binance']
         upbit_collection = self.db["Upbit"]
+        api_interval = max(self.binance_api.api_interval, self.upbit_api.api_interval)
         write_interval = self.write_interval
 
         exchange_rate_data = await er_collection.find({}).to_list(None)
@@ -145,6 +147,8 @@ class DBManager:
                     upsert=True
                 )
                 await asyncio.sleep(write_interval)
+
+        await asyncio.sleep(api_interval)
 
 
 async def update_schedule(
