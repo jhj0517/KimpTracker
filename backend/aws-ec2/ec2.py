@@ -6,6 +6,7 @@ import time
 from typing import Callable
 import logging
 from dotenv import load_dotenv
+from pymongo import UpdateOne
 
 from markets import Binance, Upbit
 from exchange_rate import FXRateAPI
@@ -32,11 +33,10 @@ class DBManager:
         api = self.upbit_api
         collection = self.db['Upbit']
         upbit_coins = api.get_currencies()
-        symbols = []
+        symbols = [data['market'] for data in upbit_coins]
 
         for currency in upbit_coins:
             symbol = currency["market"]
-            symbols.append(symbol)
 
             price = api.get_current_price(symbol)
             await asyncio.sleep(api.api_interval)
@@ -60,18 +60,18 @@ class DBManager:
         collection = self.db['Binance']
 
         all_price_data = api.get_current_price()
+        await asyncio.sleep(api.api_interval)
+        symbols = [data['symbol'] for data in all_price_data]
 
-        symbols = []
-        for data in all_price_data:
-            symbol = data["symbol"]
-            symbols.append(symbol)
-
-            await collection.update_one(
-                {"symbol": {"$eq": symbol}},
+        transactions = [
+            UpdateOne(
+                {"symbol": data["symbol"]},
                 {"$set": data},
                 upsert=True
-            )
-            await asyncio.sleep(write_interval)
+            ) for data in all_price_data
+        ]
+
+        await collection.bulk_write(transactions)
 
         # Remove delisted symbols
         await collection.delete_many(
