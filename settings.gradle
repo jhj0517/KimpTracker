@@ -13,4 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "KimpTracker"
+
 include ':app'
+
+include ':feature:kimp'
+include ':feature:info'

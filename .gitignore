@@ -2,7 +2,7 @@
 *.mp4
 .gradle
 /local.properties
-/.idea
+.idea/
 .DS_Store
 /build
 /captures
@@ -10,3 +10,6 @@
 .cxx
 /app/google-services.json
 /app/release
+*.apk
+*.png
+*.json
