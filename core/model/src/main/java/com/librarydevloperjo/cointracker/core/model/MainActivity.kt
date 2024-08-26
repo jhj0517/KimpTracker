@@ -1,4 +1,4 @@
-package com.librarydevloperjo.feature.kimp
+package com.librarydevloperjo.cointracker.core.model
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

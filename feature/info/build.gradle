@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.librarydevloperjo.feature.info'
+    namespace 'com.librarydevloperjo.cointracker.feature.info'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.librarydevloperjo.feature.info"
+        applicationId "com.librarydevloperjo.cointracker.feature.info"
         minSdk 24
         targetSdk 34
         versionCode 1

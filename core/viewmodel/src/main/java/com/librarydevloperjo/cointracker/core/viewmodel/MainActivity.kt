@@ -1,4 +1,4 @@
-package com.librarydevloperjo.feature.info
+package com.librarydevloperjo.cointracker.core.viewmodel
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

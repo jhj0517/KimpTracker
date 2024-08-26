@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.librarydevloperjo.cointracker.feature.kimp'
+    namespace 'com.librarydevloperjo.cointracker.core.database'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.librarydevloperjo.cointracker.feature.kimp"
+        applicationId "com.librarydevloperjo.cointracker.core.database"
         minSdk 24
         targetSdk 34
         versionCode 1
