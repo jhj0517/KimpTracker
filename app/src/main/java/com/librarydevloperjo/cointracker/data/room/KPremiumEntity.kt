@@ -12,12 +12,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class KPremiumEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id:Long=0,
-    @ColumnInfo(name = "koreanName") val koreanName:String?,
-    @ColumnInfo(name = "englishName") val englishName:String?,
-    @ColumnInfo(name = "ticker") val ticker:String,
-    @ColumnInfo(name = "upbitPrice") val upbitPrice:String,
-    @ColumnInfo(name = "exchangeRate") val exchangeRate:String,
-    @ColumnInfo(name = "binancePrice") val binancePrice:String,
-    @ColumnInfo(name = "kPremium") val kPremium:String,
+    @ColumnInfo(name = "koreanName") val koreanName:String="",
+    @ColumnInfo(name = "englishName") val englishName:String="",
+    @ColumnInfo(name = "ticker") val ticker:String="",
+    @ColumnInfo(name = "upbitPrice") val upbitPrice:String="",
+    @ColumnInfo(name = "exchangeRate") val exchangeRate:String="",
+    @ColumnInfo(name = "binancePrice") val binancePrice:String="",
+    @ColumnInfo(name = "kPremium") val kPremium:String="",
     var isBookmark:Boolean?=false,
 ):Parcelable
