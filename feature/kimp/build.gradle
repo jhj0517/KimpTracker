@@ -38,4 +38,8 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.foundation)
+    // ui
+    implementation libs.androidx.material3.android
+
+    implementation project(':app')
 }
