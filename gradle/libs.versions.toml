@@ -35,6 +35,7 @@ espresso = "3.5.1"
 mockito = "5.11.0"
 mockito-kotlin = "5.2.1"
 spotless = "6.25.0"
+material3Android = "1.2.1"
 
 [libraries]
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
@@ -73,6 +74,7 @@ okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-immutable-collection = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 # unit test
 junit = { module = "junit:junit", version.ref = "junit" }
