@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
     // ui
     implementation libs.androidx.material3.android
 

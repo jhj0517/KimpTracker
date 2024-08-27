@@ -37,6 +37,7 @@ mockito = "5.11.0"
 mockito-kotlin = "5.2.1"
 spotless = "6.25.0"
 material3Android = "1.2.1"
+uiToolingPreviewAndroid = "1.6.8"
 
 [libraries]
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
@@ -66,6 +67,7 @@ landscapist-glide = { group = "com.github.skydoves", name = "landscapist-glide",
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
 sandwich = { module = "com.github.skydoves:sandwich-retrofit", version.ref = "sandwich" }
 retrofit-bom = { module = "com.squareup.retrofit2:retrofit-bom", version.ref = "retrofit" }
 retrofit = { module = "com.squareup.retrofit2:retrofit" }
