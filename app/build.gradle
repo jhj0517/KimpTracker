@@ -91,6 +91,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$rootProject.navVersion")
     implementation("androidx.navigation:navigation-compose:$rootProject.navVersion")
 
+    // compose
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.foundation)
+
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
