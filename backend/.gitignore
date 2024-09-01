@@ -1,0 +1,5 @@
+.idea/
+*.png
+*.json
+*.apk
+.env
