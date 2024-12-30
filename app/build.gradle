@@ -56,6 +56,18 @@ android {
 }
 
 dependencies {
+    // Feature Modules
+    implementation(project(":feature:info"))
+    implementation(project(":feature:kimp"))
+
+    // Core Modules
+    implementation(project(":core:data"))
+    implementation(project(":core:database"))
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+    implementation(project(":core:viewmodel"))
+    implementation(project(":core:navigation"))
+
     //Worker
     implementation 'androidx.work:work-runtime-ktx:2.9.0'
     //Glide
