@@ -42,12 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding.apply {
-            // This is an implementation for navigating between fragments without registering an icon in the NavBottomBar.
-            // See also: https://stackoverflow.com/questions/71310764/switch-tab-on-button-click-with-bottom-navigation-and-navigation-component
-            uiViewModel.isInfoFragment.observe(this@MainActivity){
-                if(it) navigation.selectedItemId = R.id.infoFragment
-            }
+        uiViewModel.isInfoFragment.observe(this@MainActivity){
+            if(it) navigation.selectedItemId = R.id.infoFragment
         }
     }
 }
