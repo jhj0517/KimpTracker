@@ -18,23 +18,19 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private var _binding: ActivityMainBinding? =null
-    private val binding get() = _binding!!
     private val uiViewModel:UIViewModel by viewModels()
     @Inject
     lateinit var preference: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.apply{
-            val NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = NavHostFragment.navController
-            navigation.menu.findItem(R.id.infoFragment).isVisible = false
-            navigation.setupWithNavController(navController)
+        enableEdgeToEdge()
+        setContent {
+            KimpTrackerTheme {
+                // Should receive ui viewModel
+                KimpTrackerApp()
+            }
         }
-        setLocale()
-        setContentView(binding.root)
     }
 
     private fun setLocale(){
