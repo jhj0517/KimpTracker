@@ -39,6 +39,7 @@ spotless = "6.25.0"
 material3Android = "1.2.1"
 uiToolingPreviewAndroid = "1.6.8"
 runtimeAndroid = "1.7.6"
+jetbrainsKotlinJvm = "1.8.0"
 
 [libraries]
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
@@ -113,6 +114,7 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 retrofitBundle = ["retrofit", "retrofit-kotlinx-serialization", "okhttp-logging-interceptor"]
