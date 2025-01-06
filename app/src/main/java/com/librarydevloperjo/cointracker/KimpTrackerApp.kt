@@ -22,8 +22,7 @@ fun KimpTrackerNavHost(
         composable(
             route = Screen.Info.route,
         ) {
-            InfoScreen(
-            )
+            InfoScreen()
         }
     }
 }
