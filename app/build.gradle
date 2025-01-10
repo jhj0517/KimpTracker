@@ -62,10 +62,8 @@ dependencies {
 
     // Core Modules
     implementation(project(":core:data"))
-    implementation(project(":core:model"))
     implementation(project(":core:network"))
     implementation(project(":core:viewmodel"))
-    implementation(project(":core:navigation"))
 
     // compose
     implementation(libs.androidx.activity.compose)
