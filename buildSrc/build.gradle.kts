@@ -1,5 +1,6 @@
 plugins {
-    `kotlin-dsl`
+   `kotlin-dsl`
+   `version-catalog`
 }
 
 repositories {
@@ -8,6 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
-    implementation("com.android.tools.build:gradle:8.1.1")
+    implementation(libs.android.gradlePlugin)
+    implementation(libs.kotlin.gradlePlugin)
 }
