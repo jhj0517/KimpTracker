@@ -1,16 +1,16 @@
-plugins {
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.hilt.plugin) apply false
-}
-
 buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath(libs.android.gradlePlugin)
         classpath(libs.kotlin.gradlePlugin)
+        classpath(libs.ksp.gradlePlugin)
+        classpath(libs.hilt.gradlePlugin)
     }
-} 
+}
+
+// Empty plugins block since handling everything in buildscript
+plugins {}
