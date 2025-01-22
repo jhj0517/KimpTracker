@@ -115,6 +115,9 @@ class DBManager:
                 upbit_price = upbit_data["trade_price"]
                 binance_price = float(binance_data["price"])
                 exchange_rate = exchange_rate_data["rates"]["KRW"]
+                if binance_price == 0:
+                    print(f"{base_symbol}USDT 0 detected.")
+                    continue
                 kimchi_premium = calculate_kimchi_premium(binance_price, upbit_price, exchange_rate)
 
                 data = {
@@ -166,32 +169,37 @@ async def update_schedule(
         await asyncio.sleep(1)
 
 
+async def sequential_update(db_manager: DBManager):
+    """Runs each renew_XXX method in sequence and measures total time."""
+    start_time = time.time()
+    await db_manager.renew_upbit_prices()
+    await db_manager.renew_binance_prices()
+    await db_manager.renew_exchange_rate()
+    await db_manager.renew_kimchi_premium()
+    elapsed = time.time() - start_time
+    print(f"[Sequential Update] Completed in {elapsed:.2f}s")
+
+
+async def parallel_update(db_manager: DBManager):
+    """Runs all renew_XXX methods in parallel via asyncio.gather."""
+    start_time = time.time()
+    await asyncio.gather(
+        db_manager.renew_upbit_prices(),
+        db_manager.renew_binance_prices(),
+        db_manager.renew_exchange_rate(),
+        db_manager.renew_kimchi_premium(),
+    )
+    elapsed = time.time() - start_time
+    print(f"[Parallel Update] Completed in {elapsed:.2f}s")
+
+
 if __name__ == "__main__":
     load_dotenv()
     mongodb_cloud_url = os.getenv("MONGO_DB_URL")
     db_manager = DBManager(connection_url=mongodb_cloud_url)
 
-    tasks = [
-        update_schedule(
-            func=db_manager.renew_upbit_prices,
-            name="Ubpit"
-        ),
-        update_schedule(
-            func=db_manager.renew_binance_prices,
-            name="Binance"
-        ),
-        update_schedule(
-            func=db_manager.renew_exchange_rate,
-            name="Exchange Rate"
-        ),
-        update_schedule(
-            func=db_manager.renew_kimchi_premium,
-            name="Kimchi Premium"
-        )
-    ]
-
     async def main():
-        await asyncio.gather(*tasks)
+        # 2) Run IN PARALLEL
+        await parallel_update(db_manager)
 
     asyncio.run(main())
-
