@@ -5,9 +5,9 @@ plugins {
 }
 
 android {
-    namespace = "your.app.package"
+    namespace = "com.librarydevloperjo.cointracker"
     defaultConfig {
-        applicationId = "your.app.package"
+        applicationId = "com.librarydevloperjo.cointracker"
         versionCode = 1
         versionName = "1.0"
     }
