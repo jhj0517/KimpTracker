@@ -2,7 +2,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.your.buildlogic"
+group = "com.librarydevloperjo.buildlogic"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -17,12 +17,20 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "your.android.application"
+            id = "cointracker.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = "your.android.library"
+            id = "cointracker.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidDomain") {
+            id = "cointracker.android.domain"
+            implementationClass = "AndroidDomainConventionPlugin"
+        }
+        register("androidData") {
+            id = "cointracker.android.data"
+            implementationClass = "AndroidDataConventionPlugin"
         }
     }
 } 
