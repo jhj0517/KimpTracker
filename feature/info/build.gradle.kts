@@ -21,5 +21,3 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 }
-
-// ... rest of dependencies 

@@ -1,5 +1,5 @@
 plugins {
-    id("your.android.application")
+    id("cointracker.android.application")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 }
@@ -11,6 +11,14 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    buildFeatures {
+        compose = true
+    }
+    
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.8"
+    }
 }
 
 dependencies {
@@ -19,9 +27,11 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     
     // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     
     // Hilt
     implementation(libs.hilt.android)
