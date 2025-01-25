@@ -17,7 +17,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "KimpTracker"
 
-include(":app")
+// Temporarily comment out app module
+// include(":app")
 
 // Feature modules
 include(":feature:home")
