@@ -1,7 +1,6 @@
 plugins {
-    id("your.android.library")
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    id("cointracker.android.library")
+    id("cointracker.android.hilt")
 }
 
 android {
@@ -11,8 +10,4 @@ android {
 dependencies {
     // Retrofit
     implementation(libs.bundles.retrofitBundle)
-    
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 } 

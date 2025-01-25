@@ -1,7 +1,6 @@
 plugins {
     id("cointracker.android.library")
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    id("cointracker.android.hilt")
 }
 
 android {

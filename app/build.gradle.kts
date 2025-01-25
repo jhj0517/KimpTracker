@@ -1,7 +1,6 @@
 plugins {
     id("cointracker.android.application")
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    id("cointracker.android.hilt")
 }
 
 android {
@@ -44,9 +43,7 @@ dependencies {
     
     // Core modules
     implementation(project(":core:ui"))
-    implementation(project(":core:data"))
     implementation(project(":core:domain"))
-    implementation(project(":core:network"))
     implementation(project(":core:viewmodel"))
 
     // Glide

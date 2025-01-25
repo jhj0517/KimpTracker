@@ -12,6 +12,7 @@ java {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.hilt.gradlePlugin)
 }
 
 gradlePlugin {
@@ -31,6 +32,10 @@ gradlePlugin {
         register("androidData") {
             id = "cointracker.android.data"
             implementationClass = "AndroidDataConventionPlugin"
+        }
+        register("androidHilt") {
+            id = "cointracker.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
         }
     }
 } 
