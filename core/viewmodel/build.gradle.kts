@@ -1,6 +1,7 @@
 plugins {
     id("cointracker.android.library")
     id("cointracker.android.hilt")
+    id("cointracker.android.test")
 }
 
 android {
@@ -16,8 +17,4 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    
-    // Testing
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
 } 

@@ -1,6 +1,7 @@
 plugins {
     id("cointracker.android.data")
     id("cointracker.android.hilt")
+    id("cointracker.android.test")
 }
 
 android {
@@ -10,8 +11,4 @@ android {
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
-    
-    // Testing
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
 }

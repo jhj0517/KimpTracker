@@ -37,5 +37,9 @@ gradlePlugin {
             id = "cointracker.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidTest") {
+            id = "cointracker.android.test"
+            implementationClass = "AndroidTestConventionPlugin"
+        }
     }
 } 
