@@ -2,6 +2,7 @@ plugins {
     id("cointracker.android.library")
     id("cointracker.android.hilt")
     id("cointracker.android.test")
+    id("cointracker.android.coroutines")
 }
 
 android {
@@ -12,7 +13,6 @@ dependencies {
     implementation(project(":core:domain"))
     
     implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.kotlinx.coroutines.android)
     
     // Hilt
     implementation(libs.hilt.android)
