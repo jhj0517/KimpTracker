@@ -41,5 +41,9 @@ gradlePlugin {
             id = "cointracker.android.test"
             implementationClass = "AndroidTestConventionPlugin"
         }
+        register("androidCoroutines") {
+            id = "cointracker.android.coroutines"
+            implementationClass = "AndroidCoroutinesConventionPlugin"
+        }
     }
 } 
