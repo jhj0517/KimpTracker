@@ -10,11 +10,4 @@ android {
 }
 
 dependencies {
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
-
-    
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 }
