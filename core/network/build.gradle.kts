@@ -1,6 +1,7 @@
 plugins {
     id("cointracker.android.library")
     id("cointracker.android.hilt")
+    id("cointracker.android.retrofit")
 }
 
 android {
@@ -8,6 +9,4 @@ android {
 }
 
 dependencies {
-    // Retrofit
-    implementation(libs.bundles.retrofitBundle)
 } 
