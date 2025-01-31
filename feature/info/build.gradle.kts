@@ -1,6 +1,7 @@
 plugins {
     id("cointracker.android.library")
     id("cointracker.android.hilt")
+    id("cointracker.android.compose")
 }
 
 android {
