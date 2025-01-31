@@ -45,5 +45,9 @@ gradlePlugin {
             id = "cointracker.android.coroutines"
             implementationClass = "AndroidCoroutinesConventionPlugin"
         }
+        register("androidRetrofit") {
+            id = "cointracker.android.retrofit"
+            implementationClass = "AndroidRetrofitConventionPlugin"
+        }
     }
 } 
