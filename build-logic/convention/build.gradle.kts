@@ -13,6 +13,7 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.hilt.gradlePlugin)
+    compileOnly(libs.compose.compiler.gradlePlugin)
 }
 
 gradlePlugin {
@@ -52,6 +53,10 @@ gradlePlugin {
         register("androidCompose") {
             id = "cointracker.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
+        }
+        register("androidViewModel") {
+            id = "cointracker.android.viewmodel"
+            implementationClass = "AndroidViewModelConventionPlugin"
         }
     }
 } 
