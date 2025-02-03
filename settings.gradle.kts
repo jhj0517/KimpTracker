@@ -12,6 +12,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
     }
 }
 
@@ -23,7 +24,6 @@ rootProject.name = "KimpTracker"
 // Feature modules
 include(":feature:home")
 include(":feature:info")
-include(":feature:kimp")
 
 // Core modules
 include(":core:ui")
