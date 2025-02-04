@@ -14,6 +14,8 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<LibraryExtension> {
+                compileSdk = 34
+                
                 buildFeatures {
                     compose = true
                 }

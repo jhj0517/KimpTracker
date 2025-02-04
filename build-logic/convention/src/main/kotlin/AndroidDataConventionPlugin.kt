@@ -14,6 +14,8 @@ class AndroidDataConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<LibraryExtension> {
+                compileSdk = 34
+                
                 defaultConfig {
                     targetSdk = 34
                     minSdk = 24
