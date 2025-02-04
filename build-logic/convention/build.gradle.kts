@@ -58,5 +58,9 @@ gradlePlugin {
             id = "cointracker.android.viewmodel"
             implementationClass = "AndroidViewModelConventionPlugin"
         }
+        register("androidApplicationCompose") {
+            id = "cointracker.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
     }
 } 

@@ -1,6 +1,7 @@
 plugins {
     id("cointracker.android.application")
     id("cointracker.android.hilt")
+    id("cointracker.android.application.compose")
 }
 
 android {
@@ -10,43 +11,15 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-
-    buildFeatures {
-        compose = true
-    }
-    
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
-    }
 }
 
 dependencies {
-    // Core dependencies
-    implementation(libs.androidx.core)
+    // Only essential dependencies
     implementation(libs.androidx.activity.compose)
-    
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
     
     // Feature modules
     implementation(project(":feature:home"))
-    implementation(project(":feature:info"))
-    implementation(project(":feature:kimp"))
     
-    // Core modules
+    // Core modules - only what's needed for HomeScreen
     implementation(project(":core:ui"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:viewmodel"))
-
-    // Glide
-    implementation(libs.glide)
-    ksp(libs.glide.compiler)
 } 

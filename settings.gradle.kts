@@ -16,14 +16,16 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "KimpTracker"
 
-// Temporarily comment out app module
-// include(":app")
+// Uncomment this line
+include(":app")
 
 // Feature modules
 include(":feature:home")
 include(":feature:info")
+include(":feature:kimp")
 
 // Core modules
 include(":core:ui")
