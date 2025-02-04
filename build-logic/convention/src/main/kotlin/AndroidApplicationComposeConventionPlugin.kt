@@ -18,6 +18,7 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
+                add("implementation", libs.findLibrary("androidx.activity.compose").get())
                 add("implementation", platform(libs.findLibrary("androidx-compose-bom").get()))
                 add("implementation", libs.findLibrary("androidx.compose.material3").get())
                 add("implementation", libs.findLibrary("androidx.compose.ui").get())

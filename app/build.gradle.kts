@@ -14,9 +14,6 @@ android {
 }
 
 dependencies {
-    // Only essential dependencies
-    implementation(libs.androidx.activity.compose)
-    
     // Feature modules
     implementation(project(":feature:home"))
     
