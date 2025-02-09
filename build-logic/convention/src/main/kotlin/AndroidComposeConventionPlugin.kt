@@ -19,10 +19,6 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
                 buildFeatures {
                     compose = true
                 }
-
-                composeOptions {
-                    kotlinCompilerExtensionVersion = "1.5.8"
-                }
             }
 
             dependencies {
