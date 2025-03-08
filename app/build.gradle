@@ -26,9 +26,9 @@ android {
     defaultConfig {
         applicationId "com.librarydevloperjo.cointracker"
         minSdk 24
-        targetSdk 33
-        versionCode 10
-        versionName "10.0"
+        targetSdk 34
+        versionCode 12
+        versionName "12.0"
 
         // File->InvalidateCache - Build clean- rebuild if you experience error
         // This is my API Key for DB
