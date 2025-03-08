@@ -1,11 +1,15 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
     //hilt
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-
+    id 'com.google.dagger.hilt.android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
+
+    // ksp
+    id "com.google.devtools.ksp"
+
+    // kapt (keep for data binding)
+    id 'kotlin-kapt'
 }
 
 Properties properties = new Properties()
@@ -22,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.librarydevloperjo.cointracker"
         minSdk 24
-        targetSdk 34
+        targetSdk 33
         versionCode 7
         versionName "7.0"
 
@@ -56,11 +60,10 @@ android {
 
 dependencies {
     //Worker
-    implementation 'androidx.work:work-runtime-ktx:2.9.0'
+    implementation 'androidx.work:work-runtime-ktx:2.10.0'
+    implementation 'androidx.hilt:hilt-work:1.2.0'
     //Glide
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-    implementation 'androidx.work:work-runtime-ktx:2.9.0'
-    implementation 'androidx.hilt:hilt-work:1.2.0'
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
     //jackson
     implementation "com.fasterxml.jackson.core:jackson-core:$rootProject.jacksonVersion"
@@ -68,13 +71,13 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:$rootProject.jacksonVersion"
     //viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion")
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.7"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$rootProject.lifecycleVersion")
     //room
     implementation("androidx.room:room-runtime:$rootProject.roomVersion")
     annotationProcessor("androidx.room:room-compiler:$rootProject.roomVersion")
-    kapt("androidx.room:room-compiler:$rootProject.roomVersion")
+    ksp("androidx.room:room-compiler:$rootProject.roomVersion")
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
     //gson
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
@@ -84,19 +87,20 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpLoggingVersion"
     //hilt
     implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
-    kapt "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"
+    ksp "com.google.dagger:dagger-compiler:$rootProject.hiltVersion"
+    ksp "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"
     //fragment ktx
     implementation("androidx.navigation:navigation-fragment-ktx:$rootProject.navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$rootProject.navVersion")
     implementation("androidx.navigation:navigation-compose:$rootProject.navVersion")
 
-    implementation 'androidx.core:core-ktx:1.15.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation libs.androidx.core.ktx.v1150
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
 
 kapt {
