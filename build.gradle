@@ -12,7 +12,7 @@ buildscript {
     ext {
         gsonVersion = '2.12.1'
         retrofitVersion = '2.11.0'
-        navVersion = '2.7.7'
+        navVersion = '2.8.8'
         roomVersion = '2.6.1'
         hiltVersion = '2.55'
         okhttpLoggingVersion = '4.12.0'
