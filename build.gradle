@@ -16,8 +16,8 @@ buildscript {
         roomVersion = '2.6.1'
         hiltVersion = '2.55'
         okhttpLoggingVersion = '4.12.0'
-        lifecycleVersion = '2.7.0'
-        jacksonVersion = '2.17.0'
+        lifecycleVersion = '2.8.7'
+        jacksonVersion = '2.18.1'
         glideVersion = '4.16.0'
         googleplayVersion = '2.0.0'
     }
