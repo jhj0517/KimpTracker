@@ -1,10 +1,11 @@
 *.iml
 *.mp4
-.gradle
+**/.gradle
 /local.properties
-/.idea
+**/.idea
+**/build
+*.apk
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 .cxx
