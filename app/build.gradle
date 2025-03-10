@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.ksp)
     id 'kotlin-kapt'
 }
+hilt {
+    enableAggregatingTask = false
+}
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
