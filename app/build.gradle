@@ -1,15 +1,13 @@
 plugins {
-    id 'com.android.application'
-    //hilt
-    id 'com.google.dagger.hilt.android'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.android)
     id 'kotlin-parcelize'
-
-    // ksp
-    id "com.google.devtools.ksp"
-
-    // kapt (keep for data binding)
+    alias(libs.plugins.ksp)
     id 'kotlin-kapt'
+}
+hilt {
+    enableAggregatingTask = false
 }
 
 Properties properties = new Properties()
@@ -60,47 +58,49 @@ android {
 
 dependencies {
     //Worker
-    implementation 'androidx.work:work-runtime-ktx:2.10.0'
-    implementation 'androidx.hilt:hilt-work:1.2.0'
+    implementation libs.androidx.work.runtime
+    implementation libs.androidx.hilt.work
+    
     //Glide
-    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+    implementation libs.glide
+    annotationProcessor libs.glide.compiler
+    
     //jackson
-    implementation "com.fasterxml.jackson.core:jackson-core:$rootProject.jacksonVersion"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:$rootProject.jacksonVersion"
-    implementation "com.fasterxml.jackson.core:jackson-databind:$rootProject.jacksonVersion"
-    //viewmodel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion")
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.7"
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$rootProject.lifecycleVersion")
+    implementation libs.bundles.jackson
+    
+    //viewmodel and lifecycle
+    implementation libs.bundles.lifecycle
+    
     //room
-    implementation("androidx.room:room-runtime:$rootProject.roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$rootProject.roomVersion")
-    ksp("androidx.room:room-compiler:$rootProject.roomVersion")
-    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
+    ksp libs.room.compiler
+    implementation libs.room.ktx
+    
     //gson
-    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation libs.gson
+    
     //retrofit
-    implementation("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion")
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpLoggingVersion"
+    implementation libs.retrofit
+    implementation libs.retrofit.converter.gson
+    implementation libs.okhttp.logging
+    
     //hilt
-    implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
-    ksp "com.google.dagger:dagger-compiler:$rootProject.hiltVersion"
-    ksp "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"
-    //fragment ktx
-    implementation("androidx.navigation:navigation-fragment-ktx:$rootProject.navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$rootProject.navVersion")
-    implementation("androidx.navigation:navigation-compose:$rootProject.navVersion")
+    implementation libs.hilt.android
+    ksp libs.dagger.compiler
+    ksp libs.hilt.compiler
+    
+    //navigation
+    implementation libs.bundles.navigation
 
     implementation libs.androidx.core.ktx.v1150
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.constraintlayout
+    
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.ext
+    androidTestImplementation libs.androidx.test.espresso
 }
 
 kapt {
