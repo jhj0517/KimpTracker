@@ -4,7 +4,10 @@
 /local.properties
 **/.idea
 **/build
+**/__pycache__
+**/venv
 *.apk
+*.log
 .DS_Store
 /captures
 .externalNativeBuild
